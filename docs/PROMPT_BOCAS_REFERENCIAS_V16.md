@@ -1,0 +1,11 @@
+# Boca de despedida fiel a las referencias
+
+Atlas: `assets/capri-despedida-expresiones-v12.png` (3344 × 1882). Solo se integraron los retoques de boca sobre v11, conservando los píxeles fuera de esa zona.
+
+Las dos expresiones en reposo llevan una línea fina gris clara en zigzag. El habla y la sonrisa final tienen una silueta blanca triangular continua, con pequeñas muescas angulares en el borde superior. Sin dientes separados ni lengua. Se conserva el ritmo de apertura/cierre y las pausas de voz.
+
+Referencias aportadas por el usuario: `Capri_03_CPEDGEII (1).webp`, `capri-cyberpunk-edgerunners-2-v0-y22pevlp5nxh1.webp`, `images (8).jfif`, `images (7).jfif` y `r05BWOamk5HWX3ZTjcUmNFPKbMxDXKNnU5zhj_USaEabd1G5OVs0xXQn6m2RqUuNy5tnHUJ8nNElMFv4S__1PQ (1).webp`. Las referencias 1, 2 y 4 se pasaron directamente al editor junto a la hoja de recortes v11.
+
+## Instrucción de edición
+
+Edit ONLY the four MOUTHS in image 1, a four-panel facial expression sheet, using the canonical Capri mouth designs in reference images 2,3,4. The present mouths incorrectly look like big lightning bolt symbols. Correct them to Capri's actual mouth. Top-left and top-right: CLOSED mouth, a very thin pale gray angular zigzag LINE with two tiny steps, even line thickness around 1.5px at 400px panel width, NOT a filled bolt, no smile wedge. Reference 2 and 3 show the thin closed mouth exactly. Bottom-left speaking: OPEN mouth like reference 4: single solid WHITE INVERTED TRIANGULAR SMILE WEDGE (broad shallow upper edge with TWO SMALL angular zigzag notches, converging toward a low point), NOT a lightning bolt, no long side tails. Bottom-right happy: the same solid white inverted triangular smile, slightly shallower, still open grin. See reference 4 smiling face for correct shape. No separate teeth, no black divisions in white, no tongue, lips, gums, or red. Keep each mouth centered at the existing corrected position on the black lower face, rotate with tilted face, leave black space from green eye mask and purple jaw. Preserve every other part: eyes, hair, face contours, jawline, textures and exact four-panel layout. Sheet 800x600, seams x400,y300. Only mouth changes, not face/eyes. Remove old bolt mouths completely.

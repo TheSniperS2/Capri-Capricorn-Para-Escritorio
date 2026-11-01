@@ -108,7 +108,8 @@ class GrabacionDespedida:
 
     def expresion(self,tiempo,hablando=False,boca=False,finalizada=False):
         if finalizada:return 3
-        if hablando:return 2 if boca and int(tiempo*9)%3 else 1
+        # La actividad viene del reloj de audio; no imponer otro ritmo visual.
+        if hablando:return 2 if boca else 1
         if tiempo>1.35:return 3
         return 0 if tiempo<.55 else 1
 

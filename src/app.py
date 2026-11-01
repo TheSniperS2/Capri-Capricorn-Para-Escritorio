@@ -685,6 +685,7 @@ class Capri:
         self.pasar_clics_intro(False);self.ocultar_reubicacion_intro()
         self.intro_activa=True;self.dialogo.ocultar();self.entrada_compacta.pack_forget()
         self.intro_en_viaje=False;self.fragmentos_intro=None
+        self.intro_pausa_captura=None;self.intro_captura_hasta=0.
         self.escala_avatar=limitar_escala(self.cfg.get('escala_avatar',1));s=self.escala_avatar
         sw=self.root.winfo_screenwidth();sh=self.root.winfo_screenheight()
         self.frase_intro=ui(SALUDO);self.intro_audio=None;self.intro_generacion=None
@@ -709,7 +710,12 @@ class Capri:
     def animar_intro(self):
         from bienvenida import DURACION,SALIDA
         cuadro=time.perf_counter()
-        t=time.monotonic()-self.inicio_intro
+        ahora=time.monotonic()
+        # Recortes debe poder colocarse por encima y seleccionar un cuadro
+        # quieto, sin que el reloj de la intro se agote durante la captura.
+        if ahora-self.inicio_intro>=.34 and self.pausar_intro_para_captura(ahora):
+            self.root.after(30,self.animar);return
+        t=ahora-self.inicio_intro
         visual=self.bienvenida.tiempo(t)
         if visual>=DURACION:
             self.finalizar_intro();self.root.after(1,self.animar);return
@@ -718,6 +724,33 @@ class Capri:
         self.restaurar_reubicacion()
         demora=max(1,round(1000/60-(time.perf_counter()-cuadro)*1000))
         self.root.after(demora,self.animar)
+
+    def pausar_intro_para_captura(self,ahora):
+        from capturas_intro import captura_solicitada
+        if captura_solicitada():
+            self.intro_captura_hasta=ahora+.85
+            if self.intro_pausa_captura is None:
+                self.intro_pausa_captura=ahora
+                self.ceder_capa_para_captura()
+            return True
+        if self.intro_pausa_captura is not None:
+            if ahora<self.intro_captura_hasta:return True
+            self.inicio_intro+=ahora-self.intro_pausa_captura
+            # La notificación y el editor de Recortes pueden aparecer después
+            # de soltar el atajo. No recuperar la capa sobre esa vista previa.
+            self.intro_pausa_captura=None
+        return False
+
+    def ceder_capa_para_captura(self):
+        if not hasattr(self,'intro_topmost_captura'):
+            self.intro_topmost_captura=bool(self.root.attributes('-topmost'))
+            self.root.attributes('-topmost',False)
+
+    def restaurar_capa_intro(self):
+        if hasattr(self,'intro_topmost_captura'):
+            self.root.attributes('-topmost',self.intro_topmost_captura)
+            del self.intro_topmost_captura
+        self.intro_pausa_captura=None
 
     def finalizar_intro(self):
         if not self.intro_activa:return
@@ -731,6 +764,8 @@ class Capri:
         self.intro_hablando=False;self.intro_boca=False
         self.pasar_clics_intro(False)
         self.entrada_compacta.pack(fill='x');self.aplicar_escala(inicial=True);self.fragmentos_intro=None
+        # Recuperar la prioridad sólo después de reducir la ventana al panel.
+        self.restaurar_capa_intro()
 
     def ocultar_reubicacion_intro(self):
         # Evitar que Windows traslade durante un instante el último panel pintado.
@@ -756,7 +791,7 @@ class Capri:
             hwnd=u.GetParent(self.root.winfo_id()) or self.root.winfo_id()
             if activar:
                 if not hasattr(self,'intro_estilo'):self.intro_estilo=obtener(hwnd,-20)
-                poner(hwnd,-20,obtener(hwnd,-20)|0x20)
+                poner(hwnd,-20,obtener(hwnd,-20)|0x20|0x08000000)
             elif hasattr(self,'intro_estilo'):
                 poner(hwnd,-20,self.intro_estilo);del self.intro_estilo
         except (AttributeError,OSError):pass
@@ -1825,6 +1860,7 @@ class Capri:
 
     def iniciar_despedida(self):
         from despedida import Despedida
+        self.intro_pausa_captura=None
         self.descartar_reaccion()
         if self.llamada_ui and not self.llamada_ui.cerrada:self.llamada_ui.cerrar()
         self.saliendo=True;self.cerrar_radial();self.dialogo.ocultar();self.ocultar_entrada_personaje()
@@ -1839,7 +1875,7 @@ class Capri:
             if fotos:imagen=fotos[0]
         sw=self.root.winfo_screenwidth();sh=self.root.winfo_screenheight()
         self.salida_rostro=None;self.salida_camara=None;self.salida_traslado=None
-        ruta=next((b/'assets'/nombre for nombre in ('capri-despedida-expresiones-v9.png','capri-despedida-expresiones-v8.png','capri-despedida-expresiones-v7.png','capri-despedida-expresiones-v6.png','capri-despedida-expresiones-v5.png','capri-despedida-expresiones-v4.png')
+        ruta=next((b/'assets'/nombre for nombre in ('capri-despedida-expresiones-v12.png','capri-despedida-expresiones-v11.png','capri-despedida-expresiones-v10.png','capri-despedida-expresiones-v9.png','capri-despedida-expresiones-v8.png','capri-despedida-expresiones-v7.png','capri-despedida-expresiones-v6.png','capri-despedida-expresiones-v5.png','capri-despedida-expresiones-v4.png')
                    for b in (BASE,BASE.parent) if (b/'assets'/nombre).exists()),None)
         if ruta:
             from despedida_camara import GrabacionDespedida
@@ -1872,6 +1908,8 @@ class Capri:
         from fuentes import FAMILIA
         from despedida_camara import TRASLADO
         if self.cerrado:return
+        from capturas_intro import captura_solicitada
+        if captura_solicitada():self.ceder_capa_para_captura()
         ahora=time.monotonic();tiempo=ahora-self.inicio_salida
         traslado=TRASLADO if self.salida_traslado is not None else 0
         if tiempo<traslado:
@@ -1894,7 +1932,10 @@ class Capri:
         esperando=tiempo<1.8 or ahora<self.salida_sonrisa_hasta or (self.salida_audio is not None and not self.salida_voz_terminada)
         if esperando:
             if self.salida_camara:
-                self.salida_camara.dibujar(self.canvas,tiempo,self.frase_despedida,hablando=self.salida_voz_empezada and not self.salida_voz_terminada,boca=self.salida_boca_activa,finalizada=self.salida_voz_terminada,fondo=self.salida.cielo)
+                boca_audio=self.voz.boca_despedida(self.salida_generacion)
+                # Muestrear cada fotograma, incluso antes del siguiente poll.
+                hablando=(boca_audio is not None or self.salida_voz_empezada) and not self.salida_voz_terminada
+                self.salida_camara.dibujar(self.canvas,tiempo,self.frase_despedida,hablando=hablando,boca=self.salida_boca_activa if boca_audio is None else boca_audio,finalizada=self.salida_voz_terminada,fondo=self.salida.cielo)
             else:
                 self.canvas.delete('all');self.canvas.create_image(0,0,image=self.salida.cielo,anchor='nw',tags='cielo_despedida')
                 estrella(self.canvas,*self.salida.destino,.78*.28)

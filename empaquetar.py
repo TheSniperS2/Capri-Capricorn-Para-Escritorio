@@ -10,12 +10,16 @@ ARCHIVOS.append('menu_radial.py')
 ARCHIVOS.append('ajustes_ui.py')
 ARCHIVOS.extend(['tema_ui.py','disenos_pantalla.py'])
 ARCHIVOS.append('bienvenida.py')
+ARCHIVOS.append('capturas_intro.py')
 ARCHIVOS.extend(['assets/capri-intro-primer-plano-v2.png','PROMPT_INTRO_PRIMER_PLANO_V2.md'])
 ARCHIVOS.append('assets/capri-intro-vector-v3.json')
 ARCHIVOS.extend(['assets/capri-intro-vector-v4.json','assets/capri-despedida-expresiones-v5.png'])
 ARCHIVOS.extend(['assets/capri-intro-vector-v5.json','assets/capri-despedida-expresiones-v7.png'])
 ARCHIVOS.extend(['assets/capri-intro-vector-v6.json','assets/capri-despedida-expresiones-v8.png'])
 ARCHIVOS.extend(['assets/capri-intro-vector-v7.json','assets/capri-despedida-expresiones-v9.png'])
+ARCHIVOS.append('assets/capri-despedida-expresiones-v10.png')
+ARCHIVOS.append('assets/capri-despedida-expresiones-v11.png')
+ARCHIVOS.append('assets/capri-despedida-expresiones-v12.png')
 ARCHIVOS.append('PROMPT_DESPEDIDA_V5.md')
 ARCHIVOS.extend(['assets/capri-cielo-despedida-v2.png','assets/capri-despedida-expresiones-v6.png'])
 ARCHIVOS.append('PROMPTS_DESPEDIDA_V6.md')
@@ -25,6 +29,9 @@ ARCHIVOS.append('VOZ_Y_FLUIDEZ_V8.md')
 ARCHIVOS.append('PROMPTS_CAPRI_V11.md')
 ARCHIVOS.append('PROMPTS_CAPRI_V12.md')
 ARCHIVOS.append('PROMPTS_CAPRI_V13.md')
+ARCHIVOS.append('PROMPT_BOCA_DESPEDIDA_V14.md')
+ARCHIVOS.append('PROMPT_APERTURA_DESPEDIDA_V15.md')
+ARCHIVOS.append('PROMPT_BOCAS_REFERENCIAS_V16.md')
 ARCHIVOS.append('idiomas.py')
 ARCHIVOS.append('league.py')
 ARCHIVOS.extend(['apagado.py','discord_control.py'])
@@ -41,6 +48,9 @@ ARCHIVOS.append('REFERENCIAS_VOZ.md')
 ARCHIVOS.extend(['despedida.py','assets/capri-base-hd-v1.png','PROMPT_HD.md'])
 
 def origen(nombre):
+    if nombre=='PROMPT_BOCAS_REFERENCIAS_V16.md':return BASE/'docs'/nombre
+    if nombre=='PROMPT_APERTURA_DESPEDIDA_V15.md':return BASE/'docs'/nombre
+    if nombre=='PROMPT_BOCA_DESPEDIDA_V14.md':return BASE/'docs'/nombre
     if nombre=='PROMPTS_CAPRI_V13.md':return BASE/'docs'/nombre
     if nombre=='PROMPTS_CAPRI_V12.md':return BASE/'docs'/nombre
     if nombre=='PROMPTS_CAPRI_V11.md':return BASE/'docs'/nombre

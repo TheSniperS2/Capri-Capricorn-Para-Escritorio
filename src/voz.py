@@ -385,6 +385,7 @@ class Voz:
         self._control = threading.RLock()
         self._alias = None
         self.bandas_salida=(0.,)*28
+        self._reloj_boca=None
         self.destino_preparado=None
 
     def _vigente(self,token,cancelar):
@@ -404,6 +405,7 @@ class Voz:
     def parar(self):
         with self._control:
             self.bandas_salida=(0.,)*28
+            self._reloj_boca=None
             self.cancelar.set()
             self.generacion += 1
             proceso=self.proceso;self.proceso=None
@@ -500,9 +502,26 @@ class Voz:
             return self._reproducir_archivo_base(convertido,token,cancelar,volumen,marcas,texto,niveles)
         finally:convertido.unlink(missing_ok=True)
 
+    def boca_despedida(self,token):
+        """Lectura visual directa: no espera consultas MCI ni la cola de texto."""
+        reloj=self._reloj_boca
+        if reloj is None or reloj[0]!=token or token!=self.generacion:return None
+        from sincronia import boca_en_posicion
+        return boca_en_posicion(reloj[1],time.monotonic()-reloj[2])
+
     def _reproducir_archivo_base(self,archivo,token,cancelar,volumen=100,marcas=None,texto=None,niveles=None):
         import ctypes
         from sincronia import avance_texto
+        actividad_medida=None
+        # Solo la despedida: medir el archivo definitivo, incluida la pausa
+        # antes de choom, y consultar el mismo reloj que reproduce la voz.
+        if texto and es_despedida_choom(texto):
+            try:
+                from sincronia import actividad_boca
+                actividad_medida=actividad_boca(archivo) or None
+            except Exception:
+                # Si no se puede decodificar, conservar las marcas de palabras.
+                actividad_medida=None
         alias=f'capri_voice_{token}_{time.monotonic_ns()}'
         duracion=0;ultimo=-1;ultima_actividad=None
         with self._control:
@@ -521,11 +540,16 @@ class Voz:
             if self._mci(f'setaudio {alias} volume to {normalizar_volumen(volumen)*10}'):
                 self._mci('close '+alias);self._alias=None
                 raise RuntimeError('No se pudo ajustar el volumen de Capri.')
+            inicio_audio=time.monotonic()
             if self._mci('play '+alias):
                 self._mci('close '+alias);self._alias=None
                 raise RuntimeError('No se pudo iniciar la voz natural.')
+            if actividad_medida is not None:
+                self._reloj_boca=(token,actividad_medida,inicio_audio)
             self._emitir(True,token,cancelar)
-            if texto:self._emitir(('avance_voz',(texto,0,not bool(marcas))),token,cancelar)
+            if texto:
+                inicial=self.boca_despedida(token) if actividad_medida is not None else not bool(marcas)
+                self._emitir(('avance_voz',(texto,0,inicial)),token,cancelar)
         try:
             while not cancelar.wait(.04):
                 resultado=ctypes.create_unicode_buffer(40)
@@ -540,7 +564,11 @@ class Voz:
                                 self.bandas_salida=barras(niveles,segundos)
                             indice=avance_texto(texto,segundos,duracion,marcas or ()) if texto else 0
                         except ValueError:continue
-                        actividad=any(offset<=segundos<offset+largo for offset,largo,*_ in marcas) if marcas else True
+                        if actividad_medida is not None:
+                            from sincronia import boca_en_posicion
+                            actividad=boca_en_posicion(actividad_medida,segundos)
+                        else:
+                            actividad=any(offset<=segundos<offset+largo for offset,largo,*_ in marcas) if marcas else True
                         if texto and (indice!=ultimo or actividad!=ultima_actividad):
                             self._emitir(('avance_voz',(texto,indice,actividad)),token,cancelar)
                             ultimo=indice;ultima_actividad=actividad
@@ -548,7 +576,9 @@ class Voz:
         finally:
             with self._control:
                 self._mci('close '+alias)
-                if self._alias==alias:self._alias=None;self.bandas_salida=(0.,)*28
+                if self._alias==alias:
+                    self._alias=None;self.bandas_salida=(0.,)*28
+                    if actividad_medida is not None:self._reloj_boca=(token,(),time.monotonic())
         return True
 
     def _reproducir_windows(self,encoded,token,cancelar,emitir=True):

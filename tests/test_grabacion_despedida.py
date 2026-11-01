@@ -16,7 +16,7 @@ class Grabacion(PruebasTk):
         im=Image.new('L',(1024,64));im.putdata([255 if x%2 else 0 for y in range(64) for x in range(1024)])
         salida=aspecto_grabacion(im,im.size)
         self.assertGreater(salida.getpixel((501,20))[0]-salida.getpixel((500,20))[0],220)
-        ruta=Path(__file__).resolve().parents[1]/'assets/capri-despedida-expresiones-v9.png'
+        ruta=Path(__file__).resolve().parents[1]/'assets/capri-despedida-expresiones-v12.png'
         with Image.open(ruta) as atlas:
             self.assertGreaterEqual(atlas.width//2,1600)
             self.assertGreaterEqual(atlas.height//2,900)
@@ -104,6 +104,19 @@ class Grabacion(PruebasTk):
             self.assertGreater(c.salida_sonrisa_hasta,time.monotonic())
             c.salida_sonrisa_hasta=0;c.inicio_salida=time.monotonic()-TRASLADO-2
             c.pintar_despedida();self.assertIs(c.salida.imagen,cam.fotos[3])
+
+    def test_primer_fotograma_sigue_audio_sin_esperar_poll_de_eventos(self):
+        with self.capri() as (c,_):
+            c.iniciar_despedida()
+            c.salida_generacion=c.voz.generacion
+            c.voz._reloj_boca=(c.voz.generacion,(True,False,True),100.)
+            c.inicio_salida=100.-TRASLADO-.9
+            self.assertFalse(c.salida_voz_empezada)
+            self.assertFalse(c.salida_boca_activa)
+            for ahora,esperada in ((100.001,2),(100.021,1),(100.041,2)):
+                with patch('voz.time.monotonic',return_value=ahora):
+                    c.pintar_despedida()
+                    self.assertEqual(c.salida_camara.indice,esperada)
 
     def test_grano_animado_cacheado_sobre_imagen_de_camara(self):
         with self.capri() as (c,_):
