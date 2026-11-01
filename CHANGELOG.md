@@ -2,6 +2,12 @@
 
 ## En desarrollo
 
+### Presentación e interfaz pública
+
+- README renovado con la intro actual, controles reales de YouTube y Spotify, vigilancia de partidas de LoL, galería de aspectos y despedida con efecto de cámara. Medios WebP y procedencia de las capturas documentada.
+- Retirados de los menús y ajustes los controles de simulación de llamadas y asomos, la vista previa del apagado y las pruebas de voz y grabación. Las interacciones automáticas y sus preferencias siguen disponibles.
+- El micrófono conserva la selección de entrada y la sensibilidad automática o manual en un panel dedicado, sin controles de grabación o reproducción de prueba. Guías y traducciones actualizadas.
+
 ### Corregido
 
 - Restaurada la voz habitual de Capri al cerrar, con «Cuídate mucho, choom» y sin el tratamiento grave de grabación ni sustitución del nombre.

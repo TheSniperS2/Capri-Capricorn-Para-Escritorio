@@ -139,7 +139,7 @@ class DisenoEIdioma(PruebasTk):
 
     def test_umbral_sin_bloques_y_automatico_sin_slider_innecesario(self):
         with self.capri() as (c,_):
-            c.configurar();p=c.panel_prueba
+            c.configurar();p=c.sensibilidad_microfono
             self.assertEqual(str(p.escala.cget('bg')),str(p.cget('bg')))
             p.automatico.set(True);p.cambiar()
             self.assertFalse(p.escala.winfo_manager())

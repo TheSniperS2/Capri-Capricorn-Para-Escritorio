@@ -278,15 +278,14 @@ class Capri:
                  [('Violeta','violeta'),('Neón','neon'),('Hielo','hielo'),('Rojo','rojo'),('Sin sombra','ninguno')]]
         tamanos=[(f'{n}%',lambda n=n:self.guardar('escala_avatar',n/100)) for n in (75,100,125,150)]
         juegos=[('Desactivar asomos automáticos' if self.cfg.get('asomos_curiosos') else 'Activar asomos automáticos',lambda:self.guardar('asomos_curiosos',not self.cfg.get('asomos_curiosos'))),
-                ('Desactivar bromas de ventanas' if self.cfg.get('bromas_ventanas') else 'Activar bromas de ventanas',lambda:self.guardar('bromas_ventanas',not self.cfg.get('bromas_ventanas'))),
-                ('Simular asomo',self.simular_asomo),('Simular llamada',self.llamar_capri)]
+                ('Desactivar bromas de ventanas' if self.cfg.get('bromas_ventanas') else 'Activar bromas de ventanas',lambda:self.guardar('bromas_ventanas',not self.cfg.get('bromas_ventanas')))]
         voz=[('Hablar',self.hablar),('Activar voz' if not self.cfg.get('voz') else 'Silenciar voz',lambda:self.guardar('voz',not self.cfg.get('voz')))]
         lol=[(etiqueta,lambda orden=orden:self.enviar(orden)) for etiqueta,orden in
              [('Buscar partida','busca partida en lol'),('Buscar y aceptar','busca partida en lol y acepta por mi'),
               ('Aceptar partida','acepta partida en lol'),('Cancelar búsqueda','cancela la cola en lol')]]
         lol.insert(0,('Desactivar aceptación automática' if self.cfg.get('lol_aceptar_automatico',False) else 'Activar aceptación automática',
                       lambda:self.enviar('no aceptes mas partidas' if self.cfg.get('lol_aceptar_automatico',False) else 'activa la aceptacion automatica del lol')))
-        mas=[('Simular llamada',self.llamar_capri),('Simular asomo',self.simular_asomo),('YouTube',self.conectar_opera),('League of Legends',lol),('Cerrar Capri',self.cerrar)]
+        mas=[('YouTube',self.conectar_opera),('League of Legends',lol),('Cerrar Capri',self.cerrar)]
         opciones=[('Ajustes',self.configurar),('Chat',self.abrir_chat),('Juegos' if self.es_personaje() else 'Color',juegos if self.es_personaje() else self.abrir_colores),('Aspecto',self.abrir_aspectos),
                   ('Modo pantalla' if self.es_personaje() else 'Modo personaje',lambda:self.guardar('modo_visual','pantalla' if self.es_personaje() else 'personaje')),('Tamaño',tamanos),('Voz',voz),('Más',mas)]
         self.radial=MenuRadial(self.root,e.x_root,e.y_root,opciones,terminar=lambda:setattr(self,'radial',None),
@@ -548,12 +547,6 @@ class Capri:
             curioso.cerrar()
             if not self.es_personaje():self.entrada_compacta.pack(fill='x')
             self.aplicar_escala(inicial=False)
-
-    def simular_asomo(self):
-        self.interrumpir()
-        if self.ajustes and self.ajustes.winfo_exists():self.ajustes.destroy()
-        if self.transito:self.finalizar_transito()
-        self.iniciar_asomo()
 
     def iniciar_transito(self,tipo,anterior=None,salto=None):
         self.cerrar_radial()
@@ -1121,7 +1114,6 @@ class Capri:
     def hablar(self):
         self.ultima_interaccion=time.monotonic()
         if self.asomo and self.asomo.get('curioso'):self.terminar_asomo()
-        if hasattr(self,'panel_prueba') and not self.panel_prueba.cerrado:self.panel_prueba.stop.set()
         if self.escuchando:
             if self.capturando_activacion:self.activacion_fin.set()
             self.micro_stop.set(); self.estado='Terminando de escuchar…'; return
@@ -1416,8 +1408,8 @@ class Capri:
         self.marco_ajustes=VentanaCyber(p,'AJUSTES')
         self.panel_ajustes=ui=PanelAjustes(self.marco_ajustes.cuerpo)
         escritorio=ui.seccion('Escritorio','Forma, tamaño, movimiento y efectos de Capri.')
-        micro=ui.seccion('Micrófono','Elige tu entrada, comprueba el nivel y ajusta el reconocimiento local.')
-        voz=ui.seccion('Voz','Escucha y compara perfiles sin cambiar tu voz actual hasta elegir uno.')
+        micro=ui.seccion('Micrófono','Elige tu entrada y ajusta la sensibilidad y el reconocimiento local.')
+        voz=ui.seccion('Voz','Elige el idioma, el perfil y la velocidad de la voz de Capri.')
         ia=ui.seccion('IA y servicios','Modelo local, navegador y música.')
         permisos=ui.seccion('Permisos','Decide qué puede hacer Capri en tu computador.')
         from idiomas import IDIOMAS
@@ -1444,8 +1436,6 @@ class Capri:
         frecuencia=EscalaCyber(f,from_=3,to=60,resolution=1,orient='horizontal',bg=BG,fg=FG)
         frecuencia.set(self.cfg.get('intervalo_interacciones',15));frecuencia.pack(fill='x')
         frecuencia.bind('<ButtonRelease-1>',lambda e:self.guardar('intervalo_interacciones',int(frecuencia.get())))
-        self.boton(f,'Simular llamada',self.llamar_capri).pack(anchor='w',pady=(6,6))
-        self.boton(f,'Simular asomo',self.simular_asomo).pack(anchor='w',pady=(0,6))
         self.boton(f,'Ver aspectos de Capri',self.abrir_aspectos).pack(anchor='w',pady=(8,12))
         self.boton(f,'Color',self.abrir_colores).pack(anchor='w',pady=(0,12))
         f=permisos
@@ -1458,7 +1448,6 @@ class Capri:
             ('CON CONTROL AMPLIADO','Gestión de archivos y ventanas con tus permisos de Windows.'),
             ('TÚ CONFIRMAS','Las acciones sensibles piden confirmación. Los borrados van a la Papelera.')):
             TarjetaInfo(f,titulo,detalle).pack(fill='x',pady=6)
-        self.boton(f,'Vista previa del apagado',lambda:self.iniciar_apagado_animado(previa=True)).pack(anchor='w',pady=(10,0))
         f=escritorio
         tk.Label(f,text='A tu manera',font=('Chakra Petch',19,'bold'),fg=FG,bg=BG).pack(anchor='w',pady=(0,15))
         texto_tamaño=tk.StringVar(value=f'Tamaño de Capri: {round(self.escala_avatar*100)}%')
@@ -1483,9 +1472,9 @@ class Capri:
         self.micro_refrescar.pack(side='left',padx=(7,0))
         self.micro_estado=tk.StringVar(value='Buscando micrófonos…')
         tk.Label(f,textvariable=self.micro_estado,wraplength=460,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w',pady=(0,14))
-        from prueba_microfono import PanelPrueba
-        self.panel_prueba=PanelPrueba(f,self.micro,self.cfg,self.guardar,antes_grabar=self.parar)
-        self.panel_prueba.pack(fill='x',pady=(0,18))
+        from prueba_microfono import SensibilidadMicrofono
+        self.sensibilidad_microfono=SensibilidadMicrofono(f,self.cfg,self.guardar)
+        self.sensibilidad_microfono.pack(fill='x',pady=(0,18))
         tk.Label(f,text='Reconocimiento de voz',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w')
         motor=SelectorCyber(f,state='readonly',values=['Whisper · español y nombres en inglés','Rápido · Vosk español'],font=('Chakra Petch',10))
         motor.current(0 if self.cfg.get('reconocimiento','mixto') in ('preciso','mixto') else 1)
@@ -1539,8 +1528,6 @@ class Capri:
         self.perfil_voz_combo.current(perfiles.index(self.cfg.get('voz_perfil')) if self.cfg.get('voz_perfil') in perfiles else 0)
         self.perfil_voz_combo.bind('<<ComboboxSelected>>',lambda e:self.guardar('voz_perfil',perfiles[self.perfil_voz_combo.current()]))
         self.perfil_voz_combo.pack(fill='x',pady=(6,5))
-        self.boton(f,'Escuchar prueba',lambda:self.voz.hablar(texto_idioma('prueba',self.cfg.get('idioma')),True,
-                    perfil=self.cfg.get('voz_perfil','capri'),velocidad=self.cfg.get('velocidad_voz',1),volumen=self.cfg.get('volumen_voz',100))).pack(anchor='w')
         velocidad=normalizar_velocidad(self.cfg.get('velocidad_voz',1.0))
         texto_velocidad=tk.StringVar(value=f'Velocidad de voz: {velocidad:.2f}×')
         tk.Label(f,textvariable=texto_velocidad,bg=BG,fg=FG,font=('Chakra Petch',10)).pack(anchor='w',pady=(10,0))
@@ -1626,8 +1613,6 @@ class Capri:
         indice=self.micro_combo.current()
         if indice<0 or indice>=len(self.micro_opciones):return
         elegido=self.micro_opciones[indice]
-        if hasattr(self,'panel_prueba'):
-            self.panel_prueba.descartar()
         try:self.guardar('microfono',elegido)
         except OSError:
             self.micro_estado.set('No pude guardar la elección. Revisa los permisos de la carpeta de Capri.');return

@@ -2,7 +2,7 @@
 
 ## Voces en inglés
 
-En Ajustes → Voz hay dos alternativas sintéticas adicionales: **Inglés vivaz · Ana** (`en-US-AnaNeural`, tono neutro) y **Inglés cálido · Jenny** (`en-US-JennyNeural`, +12 Hz). Son voces de catálogo de [Microsoft](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=tts), no la voz oficial de la actriz ni una clonación del audio del anime. La similitud es subjetiva y se puede valorar con el botón de prueba de voz.
+En Ajustes → Voz hay dos alternativas sintéticas adicionales: **Inglés vivaz · Ana** (`en-US-AnaNeural`, tono neutro) y **Inglés cálido · Jenny** (`en-US-JennyNeural`, +12 Hz). Son voces de catálogo de [Microsoft](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=tts), no la voz oficial de la actriz ni una clonación del audio del anime. El perfil elegido se aplica a las siguientes respuestas habladas de Capri.
 
 Se aplican al inglés con acento automático o estadounidense. En otros idiomas se conserva el comportamiento de Capri clásica y los acentos explícitos tienen prioridad. No se cambia automáticamente la voz guardada del usuario. El clip de referencia se examinó localmente; no se envió a un servicio de clonación ni se distribuye.
 

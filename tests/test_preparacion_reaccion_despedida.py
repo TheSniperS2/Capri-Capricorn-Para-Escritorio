@@ -43,11 +43,23 @@ class ReaccionYDespedida(PruebasTk):
             c.reaccion_pendiente=(0,c.reaccion_pendiente[1]);c.revisar_interacciones()
             self.assertIs(hablar.call_args.kwargs['preparado'],audio);self.assertIsNone(c.audio_reaccion)
 
-    def test_simular_asomo_cierra_ajustes_sin_cambiar_forma_ni_config(self):
+    def test_ajustes_publicos_no_exponen_simulaciones_ni_pruebas(self):
         with self.capri() as (c,_):
-            c.configurar();config=dict(c.cfg);c.simular_asomo()
-            self.assertFalse(c.ajustes.winfo_exists());self.assertIsNotNone(c.asomo)
-            self.assertEqual(c.cfg,config);c.terminar_asomo()
+            with patch.object(c.micro,'probar') as grabar,patch.object(c.voz,'hablar') as hablar:
+                c.configurar();textos=[]
+                def recorrer(w):
+                    texto=getattr(w,'texto',None)
+                    if texto:textos.append(texto)
+                    if 'text' in w.keys():textos.append(str(w.cget('text')))
+                    for hijo in w.winfo_children():recorrer(hijo)
+                recorrer(c.ajustes)
+                for texto in ('Simular llamada','Simular asomo','Vista previa del apagado','Escuchar prueba','Grabar prueba · 5 s','Prueba de micrófono'):
+                    self.assertNotIn(texto,textos)
+                self.assertFalse(hasattr(c,'panel_prueba'))
+                self.assertTrue(c.sensibilidad_microfono.winfo_exists())
+                self.assertIn('Sensibilidad del micrófono',textos)
+                self.assertIn('Llamadas ocasionales de Capri',textos)
+                grabar.assert_not_called();hablar.assert_not_called()
 
     def test_propias_permitidas_excluyen_mascota_y_globo(self):
         for titulo in ('Capri · Ajustes','Capri // Aspectos','Capri · Conversación'):

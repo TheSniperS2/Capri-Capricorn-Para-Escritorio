@@ -14,7 +14,7 @@ La captura se inicializa en un hilo de audio propio de Windows. Evita WDM-KS y, 
 
 **Ajustes → Reconocimiento de voz** permite elegir **Whisper · español y nombres en inglés** o **Rápido · Vosk español**. Whisper usa el modelo multilingüe instalado con español fijado para evitar que frases breves se interpreten como italiano u otro idioma. Conserva nombres de aplicaciones y canciones en inglés y aporta Spotify, YouTube y Opera GX para favorecer su reconocimiento sin traducirlos. Este perfil está pensado para hablar en español. Al abrir aplicaciones también acepta variantes de pronunciación como «espotifai». Whisper hace una pausa breve al detectar el final de la frase y después la transcribe. Si el resultado es dudoso, aparece en el cuadro de texto para revisarlo antes de enviarlo. La precisión real depende del ruido y del micrófono. Su primera carga tarda más; el modelo queda en memoria para las siguientes frases.
 
-Prueba: «abre una pestaña en Opera GX», «puedes abrirme una pestaña», «me gustaría que abrieras una pestaña del Opera GX», «abre una pestaña y busca recetas de pasta», «abre la calculadora», «abre Spotify», «habla más rápido» o «qué hora es».
+Algunas órdenes: «abre una pestaña en Opera GX», «puedes abrirme una pestaña», «me gustaría que abrieras una pestaña del Opera GX», «abre una pestaña y busca recetas de pasta», «abre la calculadora», «abre Spotify», «habla más rápido» o «qué hora es».
 
 Las búsquedas admiten, por ejemplo, «búscame memes de Cyberpunk», «puedes buscarme memes de Cyberpunk», «quiero que busques memes de Cyberpunk» y «haz una búsqueda de memes de Cyberpunk». Abren la consulta en Opera GX. También puedes pedir «abre mis archivos», «abre Descargas», «abre Documentos», «abre Imágenes» o «abre el Escritorio»; las carpetas respetan las ubicaciones configuradas en Windows.
 
@@ -65,7 +65,7 @@ Si la canción no aparece dentro de la playlist o no se puede confirmar el contr
 
 Activa Control ampliado en Permisos y pide «apaga el computador». La orden directa no necesita interpretar la intención con un modelo. Después de **«sí, confirmo»**, se reproduce una secuencia de unos 6,6 segundos: interferencia, avisos narrativos cyberpunk, FLATLINE y compresión de la imagen hasta una línea. **Esc** durante esa secuencia cancela el efecto y no envía ninguna orden de apagado a Windows. Al terminar, se solicita `shutdown.exe /s /t 0`, sin `/f`: Windows conserva su gestión de programas con trabajo pendiente y su pantalla real de apagado. Una vez que Windows inicia esa fase, Esc ya no es la cancelación de Capri.
 
-**Vista previa del apagado** en Permisos simula el efecto a pantalla completa, sin retrato: interferencia, circuitos, avisos y cierre CRT. Usa dibujo nativo con un límite de 24 actualizaciones por segundo y deja tiempo al resto de la interfaz, sin ampliar imágenes por fotograma. Nunca solicita apagar el computador. Puedes cerrarla con Esc o la cruz y volver a iniciarla. El apagado real también usa la pantalla completa. Si el render falla, se cancela el apagado y se informa del error. Cerrar Capri normalmente conserva su despedida de la mano y la estrella.
+El apagado confirmado muestra una animación a pantalla completa. Puedes cancelarlo con Esc o la cruz antes de que termine. Si la animación falla, se cancela el apagado y se informa del error. Cerrar Capri normalmente conserva su despedida de la mano y la estrella.
 
 ### Discord
 
@@ -123,15 +123,13 @@ La activación aplica una ganancia limitada al audio de voz bajo antes de enviar
 
 Al activar por nombre, la barra muestra el nivel del micrófono durante la captura. El detector de voz local incluido con Whisper distingue habla de ruido continuo para cerrar tras aproximadamente un segundo sin voz; si no está disponible, se usa el umbral de volumen de respaldo. Decir solo «Capri» conserva una ventana para dar la orden. Al cerrar el micrófono, el estado cambia a «Reconociendo la frase» mientras se transcribe. El nombre de activación se quita del dictado antes de enviarlo al chat, también si se dijo usando F8; escribirlo manualmente conserva el texto escrito.
 
-Se prueban las órdenes, los argumentos de ejecución sin consola, las búsquedas, el paquete, la interfaz, el audio simulado, la revisión de transcripciones dudosas, el texto progresivo, la lectura continua y la interrupción durante la reproducción o preparación del audio. También se prueban la activación y transcripción de la orden con audio simulado, el descarte de órdenes canceladas y los resultados del adaptador de Spotify. Se comprobó que el vocabulario Vosk instalado incluye «capri» y que el controlador PowerShell de Spotify tiene sintaxis válida. Se comprobó la conversación real con el llama3.2:3b instalado, incluida su presentación como Capri y el tiempo de primer texto con el modelo cargado. La captura real, la precisión de Whisper con tu voz, la detección del nombre en tu ambiente, Spotify, las descargas nuevas y la voz sintética requieren comprobarse desde tu sesión normal fuera del entorno restringido de desarrollo.
-
 Una pausa sin voz finaliza la hipótesis pendiente de Vosk sin esperar varios segundos a su cierre interno. Una nueva frase descarta el audio de conversación anterior con un margen breve para conservar el comienzo del nombre. Todas las repeticiones consecutivas de «Capri» se quitan del dictado.
 
-## Probar el micrófono
+## Sensibilidad del micrófono
 
-En **Ajustes → Prueba de micrófono**, pulsa **Grabar prueba · 5 s** y habla normalmente. Verás el nivel de tu voz y una advertencia si satura. Después pulsa **Escuchar prueba** para oír el audio capturado por el micrófono seleccionado. La prueba no requiere decir Capri, no transcribe, no ejecuta órdenes ni envía audio a internet. Conserva una sola grabación temporal en memoria y la descarta al cambiar de micrófono o cerrar Ajustes. Grabar otra prueba reemplaza la anterior. No se graba automáticamente al abrir Ajustes. Puedes detener la grabación o reproducción con Detener prueba; F8 interrumpe la prueba para iniciar el dictado normal.
+En **Ajustes → Micrófono** puedes elegir la entrada de audio y ajustar su sensibilidad. Los cambios se guardan automáticamente.
 
-El **umbral automático** conserva el comportamiento previo. Para ajustar manualmente, desmárcalo y mueve el control: **izquierda = capta voz más baja; derecha = exige hablar más fuerte**. La línea roja indica el umbral y el color muestra si el volumen lo supera. El filtro se aplica al reconocimiento por nombre y al dictado F8; no cambia el volumen del micrófono de Windows. La reproducción de prueba conserva el audio original, sin ese filtro, para que puedas juzgar la señal y el ruido. Superar el umbral no demuestra que el nombre o las palabras se reconozcan correctamente.
+El **umbral automático** está recomendado. Para ajustar manualmente, desmárcalo y mueve el control: **izquierda = capta voz más baja; derecha = exige hablar más fuerte**. El filtro se aplica al reconocimiento por nombre y al dictado F8; no cambia el volumen del micrófono de Windows.
 
 ## Diálogos junto al personaje
 
@@ -153,21 +151,17 @@ La cabecera resume los estados como Conectando, Enlace activo, Escucha, Recibien
 
 Usa **Ctrl + rueda** sobre Capri, **clic derecho → Tamaño de Capri**, o el control en Ajustes para cambiar entre 75% y 160%. El tamaño se guarda; las imágenes se recalculan solo al cambiarlo. La fuente Chakra Petch se incluye con su licencia OFL y se carga de forma privada dentro del proceso de Capri, sin instalarla para otros programas.
 
-Al abrir normalmente se reproduce una intro visual de unos 6,8 segundos, ampliada hasta aproximadamente el 82% de la altura de la pantalla, con el nombre, barridos y la señal del personaje. No representa un porcentaje real de carga del modelo ni bloquea el micrófono. Escape, F8, enviar una petición o detectar el nombre la interrumpen. Puedes desactivarla en **Intro visual al abrir Capri** o repetirla desde el menú contextual. No reproduce un sonido de inicio.
+Al abrir se reproduce una intro visual con Capri sujetando la pantalla y el saludo «¡Hola! / Capricorn Desktop». Después se transforma en el visor del escritorio. Escape, F8, enviar una petición o detectar el nombre la interrumpen. Puedes desactivarla en **Intro visual al abrir Capri**. El saludo es mudo.
 
 ## Actualización de expresiones e interfaz
 
 La boca normal se retira antes de aplicar la expresión de habla o sonrisa. Los emojis permanecen en el chat, pero no se envían a la voz. El diálogo compacto muestra hasta seis líneas recientes de respuesta y una línea de pregunta; el historial conserva el texto completo.
 
-La intro comienza ampliada en el centro durante unos segundos. El cuadro se cuartea en su sitio: sus piezas se consumen con grietas rojas y dejan huecos transparentes antes del desplazamiento. La imagen de Capri se fragmenta en bandas irregulares que se tiñen de rojo, se dispersan y viajan con un barrido de energía hacia su posición habitual. Entre las descargas se dejan entrever partes del rostro; al llegar, los fragmentos recuperan sus colores y se recompone la imagen completa. La transición se inspira en la referencia animada de Steam, usando el avatar propio de la aplicación. La estela es transparente y deja pasar los clics. F8, Esc o una petición la interrumpen. La entrada reaparece al terminar y el tamaño elegido se conserva.
 
-La [comparación local de Llama y Qwen](COMPARACION_MODELOS.md) explica la recomendación para el equipo evaluado, los tiempos y sus límites.
-
-
-Voces (2026-10-29): Ajustes > Voz de Capri permite elegir Capri clasica (Dalia +16Hz), Latina suave (Dalia +6Hz), Vivaz (Ximena +8Hz) y Chilena (Catalina). Escuchar prueba reproduce una frase corta con el perfil seleccionado y respeta volumen y velocidad. Se conserva la eleccion actual al actualizar. Son voces sinteticas de Microsoft, no la actriz ni un modelo oficial de Capri. Catalogo: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=tts . Motor: https://github.com/rany2/edge-tts . Se verifico el catalogo del servicio y se sintetizaron pruebas reales de los tres perfiles alternativos; la disponibilidad requiere internet.
+En **Ajustes → Voz** puedes elegir el perfil, el volumen y la velocidad de la voz de Capri. La selección se conserva al actualizar. Las voces naturales son sintéticas y requieren internet.
 
 
-Actualizacion 29/10: Ajustes se organiza por canales Escritorio, Microfono, Voz, IA y servicios, Permisos. Las opciones se guardan al cambiarlas. Aspecto abre una galeria con previsualizaciones del personaje y cada sombra. La voz actual se conserva; Capri latina experimental queda como alternativa opcional. Consulta [investigacion de voz](REFERENCIAS_VOZ.md) para conocer sus referencias y limites.
+Ajustes se organiza en Escritorio, Micrófono, Voz, IA y servicios, y Permisos. Las opciones se guardan al cambiarlas. Aspecto abre una galería para elegir la apariencia de Capri.
 
 Con los viajes activados, Capri se teletransporta a distintas posiciones del escritorio y puede preferir el borde de una ventana cercana. Si queda en el aire, cae lentamente y a veces clava un anclaje temporal para sujetarse. El anclaje desaparece al viajar. Arrastrarla permite elegir el punto inicial sin bloquear sus viajes posteriores. Pausar viajes detiene tambien la caida y las sujeciones nuevas.
 
@@ -176,7 +170,7 @@ Diseño rojo y controles: Ajustes, Aspectos y Conversación usan marcos angulare
 
 La rueda desplaza la sección de ajustes incluso sobre selectores o deslizadores, sin modificar sus valores. Los selectores se abren con un clic y las barras de desplazamiento solo aparecen cuando el contenido no cabe. Permisos reúne la información y su interruptor al principio de la sección. Ambos modos de Capri comparten el menú radial al hacer clic derecho. Las transformaciones mantienen la paleta roja del panel.
 
-En **Ajustes > Voz > Idioma de Capri** puedes elegir español, inglés, portugués de Brasil o japonés. Se aplica a menús, ajustes, ayudas, estados, campos y a las siguientes respuestas escritas y habladas. La interfaz se traduce con un catálogo incluido, sin esperar una petición al modelo. No traduce retroactivamente los mensajes del historial ni cambia el modelo, micrófono o reconocimiento de voz. Las voces naturales son Aria para inglés, Francisca para portugués y Nanami para japonés; al volver al español recuperas tu perfil guardado. «Escuchar prueba» usa el idioma seleccionado. Sin voz natural se necesita una voz de Windows instalada en ese idioma.
+En **Ajustes > Voz > Idioma de Capri** puedes elegir español, inglés, portugués de Brasil o japonés. Se aplica a menús, ajustes, ayudas, estados, campos y a las siguientes respuestas escritas y habladas. La interfaz se traduce con un catálogo incluido, sin esperar una petición al modelo. No traduce retroactivamente los mensajes del historial ni cambia el modelo, micrófono o reconocimiento de voz. Las voces naturales son Aria para inglés, Francisca para portugués y Nanami para japonés; al volver al español recuperas tu perfil guardado. Sin voz natural se necesita una voz de Windows instalada en ese idioma.
 
 Las conversaciones y la traducción de resultados detallados utilizan Ollama local. Los saludos y avisos comunes tienen traducciones incluidas. Si la IA no puede traducir un resultado, Capri lo indica en el idioma elegido y conserva el resultado original para no ocultar un fallo ni inventar una ejecución. Las rutas, URL y títulos entre comillas se conservan literalmente, incluyendo las frases exactas de confirmación de operaciones.
 

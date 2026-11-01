@@ -1,4 +1,24 @@
 {
+  "Sensibilidad del micrófono": [
+    "Microphone sensitivity",
+    "Sensibilidade do microfone",
+    "マイクの感度"
+  ],
+  "Elige tu entrada y ajusta la sensibilidad y el reconocimiento local.": [
+    "Choose your input and adjust sensitivity and local speech recognition.",
+    "Escolha a entrada e ajuste a sensibilidade e o reconhecimento local.",
+    "入力を選び、感度とローカル音声認識を調整します。"
+  ],
+  "Elige el idioma, el perfil y la velocidad de la voz de Capri.": [
+    "Choose Capri's language, voice profile and speaking speed.",
+    "Escolha o idioma, o perfil e a velocidade da voz da Capri.",
+    "Capriの言語、声のプロフィール、話す速度を選びます。"
+  ],
+  "Izquierda: capta voz más baja. Derecha: exige hablar más fuerte. No cambia el volumen del micrófono de Windows.": [
+    "Left: picks up quieter speech. Right: requires louder speech. This does not change the Windows microphone volume.",
+    "Esquerda: capta voz mais baixa. Direita: exige falar mais alto. Não altera o volume do microfone no Windows.",
+    "左：小さな声を拾います。右：大きな声が必要になります。Windowsのマイク音量は変更しません。"
+  ],
   "Activar asomos automáticos": [
     "Enable random peeks",
     "Ativar aparições nos cantos",

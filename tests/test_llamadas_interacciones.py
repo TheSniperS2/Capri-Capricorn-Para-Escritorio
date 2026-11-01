@@ -32,10 +32,11 @@ class Interacciones(PruebasTk):
             c.abrir_menu_radial(Mock(x_root=500,y_root=300));opciones=dict(c.radial.opciones)
             mas=[t for t,_ in opciones['Más']]
             self.assertNotIn('Escribir',mas);self.assertNotIn('Repetir intro',mas);self.assertNotIn('Pausar viajes',mas)
-            self.assertIn('Simular llamada',mas);c.cerrar_radial()
+            self.assertNotIn('Simular llamada',mas);self.assertNotIn('Simular asomo',mas);c.cerrar_radial()
             c.cfg['modo_visual']='personaje';c.companera.redimensionar(1);c.abrir_menu_radial(Mock(x_root=500,y_root=300))
             juegos=[t for t,_ in dict(c.radial.opciones)['Juegos']]
             self.assertNotIn('Atrápame',juegos)
+            self.assertNotIn('Simular llamada',juegos);self.assertNotIn('Simular asomo',juegos)
             self.assertIn('Desactivar asomos automáticos',juegos);self.assertNotIn('Probar asomo',juegos)
 
     def test_simulacion_muestra_llamada_y_respuesta_tiene_contexto_sin_efectos(self):

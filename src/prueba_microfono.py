@@ -67,6 +67,36 @@ def reproducir(muestra,detener):
 
 from ajustes_ui import BotonCyber,InterruptorCyber,EscalaCyber
 
+class SensibilidadMicrofono(tk.Frame):
+    """Ajuste de sensibilidad sin grabaciones, reproducciones ni tareas de prueba."""
+    def __init__(self,padre,cfg,guardar):
+        super().__init__(padre,bg=padre.cget('bg'))
+        self.cfg=cfg;self.guardar=guardar;bg=self.cget('bg');fg='#f6eff1'
+        tk.Label(self,text='Sensibilidad del micrófono',bg=bg,fg=fg,
+                 font=('Chakra Petch',11,'bold')).pack(anchor='w')
+        self.automatico=tk.BooleanVar(value=umbral_db(cfg.get('umbral_microfono_db')) is None)
+        InterruptorCyber(self,text='Umbral automático (recomendado)',variable=self.automatico,command=self.cambiar,
+                         bg=bg,fg=fg,selectcolor='#10090d',activebackground=bg).pack(anchor='w',pady=(8,0))
+        self.escala=EscalaCyber(self,from_=-75,to=-20,resolution=1,orient='horizontal',bg=bg,fg=fg,
+                               highlightthickness=0,troughcolor='#10090d',label='Umbral manual · dB')
+        self.escala.set(umbral_db(cfg.get('umbral_microfono_db')) or -56)
+        self.escala.bind('<ButtonRelease-1>',self.cambiar);self.escala.bind('<KeyRelease>',self.cambiar)
+        self.ayuda_umbral=tk.Label(self,bg=bg,fg='#bb929f',wraplength=425,justify='left')
+        self.ayuda_umbral.pack(anchor='w',pady=(6,0));self.actualizar()
+
+    def actualizar(self):
+        automatico=self.automatico.get()
+        self.escala.configure(state='disabled' if automatico else 'normal')
+        if automatico:self.escala.pack_forget()
+        elif not self.escala.winfo_manager():self.escala.pack(fill='x',pady=(6,0),before=self.ayuda_umbral)
+        self.ayuda_umbral.configure(text='El umbral se ajusta automáticamente a tu voz.' if automatico else
+            'Izquierda: capta voz más baja. Derecha: exige hablar más fuerte. No cambia el volumen del micrófono de Windows.')
+
+    def cambiar(self,event=None):
+        self.actualizar()
+        self.guardar('umbral_microfono_db',None if self.automatico.get() else float(self.escala.get()))
+
+
 class PanelPrueba(tk.Frame):
     def __init__(self,padre,micro,cfg,guardar,antes_grabar=None):
         super().__init__(padre,bg='#211018',padx=12,pady=12)

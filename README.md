@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/media/readme/portada.png" width="100%" alt="CAPRI — Tu escritorio tiene una nueva choom. Voz, IA local y una buena dosis de caos.">
+  <img src="docs/media/readme/capri-intro.webp" width="100%" alt="Capri aparece sujetando la pantalla y saluda: ¡Hola! Capricorn Desktop.">
 </p>
 
 <p align="center">
@@ -10,79 +10,74 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/C%C3%B3digo-MIT-FF365E?style=flat-square" alt="Código original bajo licencia MIT"></a>
 </p>
 
+<h1 align="center">Capri, de Cyberpunk a tu escritorio.</h1>
+
 <p align="center">
-  <b>Una compañera que habla contigo, explora tus ventanas y aparece cuando menos lo esperas.</b><br>
-  Inspirada en Capri y la estética de <i>Cyberpunk: Edgerunners</i>, hecha para vivir en tu escritorio de Windows.
+  <b>Habla con ella. Pon tu música. Que no se te pase la partida.</b><br>
+  Voz, conversación con IA local y una compañera de escritorio con la estética de <i>Cyberpunk: Edgerunners</i>.
 </p>
 
 <p align="center">
-  <a href="#empieza-a-usarla"><b>Empezar</b></a> ·
-  <a href="#así-se-ve-capri">Verla en acción</a> ·
+  <a href="#empieza-a-usarla"><b>Instalar Capri</b></a> ·
+  <a href="#capri-en-acción">Verla en acción</a> ·
   <a href="#componentes-mínimos-y-recomendados">Requisitos</a> ·
-  <a href="docs/README.md">Guías</a> ·
+  <a href="docs/README.md">Documentación</a> ·
   <a href="https://github.com/TheSniperS2/Capri-Capricorn-Para-Escritorio/releases">Releases</a>
 </p>
 
 ---
 
-## Qué puedes hacer con Capri
+## Capri en acción
 
-Capri combina **personaje de escritorio, voz y conversación con IA local**. Puedes pedirle que abra una aplicación, controle la música o te silencie en Discord. También tiene su propia forma de acompañarte: se asoma por un borde, se sube a las ventanas y te llama para soltar una broma.
+### Tu música, con tu voz
 
-La conversación funciona con **Ollama en tu equipo**. La IA es opcional: puedes empezar con el personaje y las órdenes directas, y activar un modelo local cuando quieras. La configuración incluida no necesita una clave de API.
+**«Capri, reanuda YouTube».** Controla el vídeo que tienes abierto o elige un resultado de búsqueda. El [puente de Opera y Opera GX](docs/CONECTAR_OPERA.md) conecta Capri con el reproductor y los resultados de YouTube.
 
-| Función | Lo que puedes hacer |
+<p align="center">
+  <a href="docs/media/readme/capri-youtube.webp"><img src="docs/media/readme/capri-youtube.webp" width="100%" alt="YouTube con un vídeo musical abierto y la respuesta real de Capri: Reanudé el vídeo de YouTube."></a>
+</p>
+
+**«Pausa Spotify». «Siguiente canción». «Pon mi playlist Cyberpunk».** Usa Spotify desde Capri y [vincula tus playlists](docs/USO.md#elegir-dónde-reproducir-y-qué-resultado-abrir) para pedirlas por su nombre.
+
+<p align="center">
+  <a href="docs/media/readme/capri-spotify.webp"><img src="docs/media/readme/capri-spotify.webp" width="100%" alt="Playlist abierta en Spotify y respuesta real de Capri a la orden Pausa Spotify."></a>
+</p>
+
+### Sale partida. Capri la acepta.
+
+Activa la **aceptación automática de LoL** y busca desde Capri o desde el propio cliente. Vigila las próximas colas mientras esté abierta; puedes desactivarla cuando quieras. También admite buscar, aceptar y cancelar por voz. [Cómo configurarlo](docs/LEAGUE_OF_LEGENDS.md).
+
+<p align="center">
+  <a href="docs/media/readme/capri-lol.webp"><img src="docs/media/readme/capri-lol.webp" width="100%" alt="Cliente de League of Legends abierto y Capri confirmando la activación de la vigilancia de partidas."></a>
+  <br><sub>Vigilancia activada en el cliente real. La captura no muestra una partida aceptada. Capri no juega ni selecciona campeones.</sub>
+</p>
+
+### Una compañera con su propio estilo
+
+Elige **pantalla flotante o personaje de escritorio** desde el clic derecho. Personaliza el aspecto, el tamaño y los colores. En modo personaje puede moverse, caer y sujetarse a ventanas compatibles; también se asoma por los bordes y tiene llamadas con bromas e invitados. Las interacciones y las travesuras se configuran por separado en **Ajustes → Escritorio**.
+
+<p align="center">
+  <img src="docs/media/readme/visor-actual.webp" width="43%" alt="Interfaz actual de Capri en modo pantalla, con su entrada de voz y texto.">
+  <img src="docs/media/readme/aspectos-actuales.webp" width="49%" alt="Galería de aspectos de Capri disponible desde los ajustes.">
+</p>
+
+La intro aparece sujetando la pantalla y se transforma en el visor. Al cerrar, la despedida llena la pantalla con su efecto de cámara, sincroniza la boca con la voz y da paso a la mano y la estrella. Puedes desactivar las animaciones desde Ajustes.
+
+<p align="center">
+  <img src="docs/media/readme/capri-despedida.webp" width="100%" alt="Capri se despide con cielo nocturno, efecto de cámara y el subtítulo Cuídate mucho, choom.">
+</p>
+
+<p align="center"><sub>Composiciones con capturas de la aplicación y de los servicios abiertos. <a href="docs/media/readme/README.md">Procedencia y alcance de las imágenes</a>.</sub></p>
+
+## También puedes…
+
+| | Con Capri |
 | :--- | :--- |
-| **Dos modos visuales** | Pantalla flotante o personaje, con transformaciones, teletransporte, glitch y sombras de color. |
-| **Voz a tu manera** | Habla diciendo «Capri» o usando una tecla. Cambia el perfil, el acento, la velocidad y el volumen. |
-| **Cuatro idiomas** | Español, inglés, portugués de Brasil y japonés. El idioma y la voz se eligen por separado. |
-| **Conversación local** | Elige entre tus modelos de Ollama y conversa sin enviar el chat a un servicio de IA remoto. |
-| **Música y navegador** | Órdenes para Spotify, sitios web y YouTube con la integración de Opera/Opera GX. |
-| **Discord y League of Legends** | Controles de voz en Discord y acciones sobre la cola del cliente de LoL. |
-| **Un poco de caos** | Asomos que siguen el cursor, llamadas con bromas e invitados, y travesuras opcionales. |
-| **Control del equipo** | Aplicaciones, ventanas, archivos y apagado animado mediante permisos y acciones definidas. |
-
-## Así se ve Capri
-
-### Dos formas de acompañarte
-
-Haz clic derecho para cambiar de modo. En pantalla, Capri mantiene su enlace flotante; como personaje, puede moverse por el escritorio, caer y sujetarse a ventanas compatibles, incluidas algunas de sus propias ventanas.
-
-<p align="center">
-  <img src="docs/media/readme/modo-pantalla.png" width="430" alt="Modo pantalla: Capri dentro de su marco flotante con estética cyberpunk">
-  <img src="docs/media/readme/modo-personaje.png" width="430" alt="Modo personaje: Capri de cuerpo completo, con su silueta roja, verde y violeta">
-</p>
-
-### Tiene sus propias ocurrencias
-
-El **asomo curioso** aparece en los bordes y sigue tu cursor con los ojos. Un clic lo mantiene ahí; arrástrala para desprenderla y recuperar su forma habitual. Las **llamadas** traen bromas de Capri o invitados como King, D, Roman y Talia, con voces sintéticas y subtítulos dentro del enlace.
-
-<p align="center">
-  <img src="docs/media/readme/asomo.gif" width="430" alt="Animación del asomo: los ojos de Capri siguen el cursor hacia ambos lados">
-  <img src="docs/media/readme/llamada.png" width="430" alt="Una llamada de Talia con el módulo CALL y su diálogo dentro del aviso">
-</p>
-
-Puedes activar o desactivar estas interacciones en **Ajustes → Escritorio**, ajustar el intervalo de llamadas y probarlas con **Simular llamada** o **Simular asomo**. Las llamadas se aplazan cuando Capri detecta un juego o una aplicación a pantalla completa en primer plano. Las bromas que minimizan ventanas son opcionales y vienen desactivadas.
-
-### Personalidad hasta el último fotograma
-
-Al cerrar, Capri viaja al centro, cambia de expresión y dice **«Cuídate mucho, choom»** con su voz habitual. Después se transforma en una mano y una descarga que llega hasta la estrella.
-
-<p align="center">
-  <img src="docs/media/readme/despedida.gif" width="860" alt="Despedida animada: teletransporte al centro, sonrisa en el visor, mano roja y viaje hacia la estrella">
-  <br><sub>Vista de la secuencia visual, sin audio. La frase se adapta al idioma elegido.</sub>
-</p>
-
-### Todo a mano. Y un apagado con estilo.
-
-El menú radial reúne voz, tamaño, modos y ajustes. Si habilitas el control ampliado y confirmas una orden de apagado, Capri muestra una secuencia de interferencia y cierre CRT antes de solicitar el apagado a Windows. Puedes probarla sin apagar el equipo desde **Ajustes → Permisos → Vista previa del apagado**.
-
-<p align="center">
-  <img src="docs/media/readme/menu-radial.png" width="430" alt="Menú radial real de Capri con sus accesos a ajustes, chat, modos y voz">
-  <img src="docs/media/readme/apagado.png" width="430" alt="Vista de la secuencia de apagado con interferencia roja y el mensaje FLATLINE">
-</p>
-
-<p align="center"><sub>Galería generada con los renderizadores de la aplicación sobre fondos de presentación. <a href="docs/media/readme/README.md">Origen y reproducción de los medios</a>.</sub></p>
+| **Conversar** | Usa texto o voz y elige un modelo de **Ollama local**. Las órdenes directas funcionan también sin IA. |
+| **Hablar en cuatro idiomas** | Español, inglés, portugués de Brasil y japonés. El idioma y la voz se eligen por separado. |
+| **Controlar Discord** | Silencia tu micrófono o pide entrar en un canal de voz del servidor abierto. |
+| **Moverte por el escritorio** | Abre aplicaciones y sitios, controla ventanas y gestiona archivos con los permisos correspondientes. |
+| **Elegir sus límites** | El control ampliado es opcional; las acciones sensibles piden confirmación. Las bromas de ventanas vienen desactivadas. |
 
 ## Empieza a usarla
 
@@ -99,7 +94,7 @@ python empaquetar.py
 pythonw ".\dist\Abrir Capri.pyw"
 ```
 
-4. Espera la preparación inicial. En **Ajustes → Micrófono**, selecciona y prueba tu entrada.
+4. Espera la preparación inicial. En **Ajustes → Micrófono**, selecciona tu entrada y ajusta la sensibilidad.
 5. Di **«Capri, abre la calculadora»** o pulsa **F8** para hablar. Para conversar, activa Ollama desde **Ajustes → IA y servicios**.
 
 El lanzador instala la aplicación en `%LOCALAPPDATA%\Capri`, crea un acceso directo y conserva las preferencias al actualizar. No requiere administrador ni se añade automáticamente al inicio de Windows.
@@ -142,6 +137,7 @@ Di «Capri» y la petición en una misma frase, o utiliza la tecla para hablar. 
 | Elegir un vídeo | «Reproduce el segundo resultado en YouTube». |
 | Silenciarte en Discord | «Mutéame el Discord» o «desmutéame en Discord». |
 | Entrar en un canal de voz | «Únete al canal de voz General del servidor Amigos en Discord». |
+| Vigilar partidas de LoL | «Activa la aceptación automática del LoL». |
 | Usar la cola de LoL | «Busca partida en LoL» o «acepta partida en LoL». |
 | Conversar | «Cuéntame algo» — con IA local activada. |
 | Apagar el equipo | «Apaga el computador» — con control ampliado y confirmación. |
@@ -220,10 +216,10 @@ En Windows con Python 3.12:
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe empaquetar.py
-.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+.\.venv\Scripts\python.exe scripts/ejecutar_pruebas.py
 ```
 
-Modifica los módulos de `src/`; `dist/` es una salida generada y no se versiona. Las pruebas automatizadas no sustituyen las comprobaciones de micrófono e integraciones reales. Los medios del README pueden regenerarse con `python scripts/generar_medios_readme.py` desde ese entorno.
+Modifica los módulos de `src/`; `dist/` es una salida generada y no se versiona. Las pruebas automatizadas no sustituyen las comprobaciones de micrófono e integraciones reales. La [procedencia de los medios](docs/media/readme/README.md) distingue las capturas actuales de los recursos históricos generados por script.
 
 </details>
 

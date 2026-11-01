@@ -1,21 +1,28 @@
-# Medios de la portada
+# Imágenes del README
 
-Esta galería corresponde al código actual de `main`. Los fondos y títulos son una composición de presentación; los personajes, controles y animaciones proceden de los recursos y renderizadores del proyecto. No se capturó el escritorio ni se incluyeron datos de una sesión real del usuario.
+## Galería actual · noviembre de 2026
 
-| Archivo | Procedencia |
+Las imágenes de portada son **composiciones de capturas reales**, distribuidas sobre un fondo de presentación. No representan un único pantallazo simultáneo del escritorio. El visor de Capri y los diálogos se capturaron por separado; el visor procede de la misma versión de la aplicación. Las preferencias y conversaciones de la instalación principal no se utilizaron para las tomas de Capri.
+
+| Archivo | Contenido |
 | --- | --- |
-| `portada.png` | Composición tipográfica con la ilustración activa `capri-asomo-fiel-v3.png`. |
-| `modo-pantalla.png` | Canvas del modo pantalla, mediante `Capri.animar`. |
-| `modo-personaje.png` | Sprite del personaje preparado por `Companera`. |
-| `asomo.gif` | `AsomoCurioso.dibujar`, con dos posiciones de cursor simuladas. |
-| `llamada.png` | `LlamadaCapri`, con un guion incluido de Talia y la voz desactivada. |
-| `menu-radial.png` | Menú real `MenuRadial` en modo personaje. |
-| `apagado.png` | `LienzoApagado` en un fotograma de la secuencia. No solicita un apagado. |
-| `despedida.gif` | Traslado, cámara con gestos y mano/estrella, usando los renderizadores de la aplicación y actividad de habla simulada. No contiene audio. |
+| `capri-intro.webp` | Fotograma del renderizador nativo de la intro aprobada, con el saludo y la transformación al visor. |
+| `capri-youtube.webp` | Reproductor real de YouTube después de enviar «Reanuda YouTube» a Capri, con la respuesta de la aplicación. |
+| `capri-spotify.webp` | Playlist real de Spotify en pausa y respuesta de Capri a «Pausa Spotify». |
+| `capri-lol.webp` | Cliente real de LoL y confirmación de la activación del monitor de aceptación automática. No había un ready-check pendiente: no se inició ni aceptó una partida para esta imagen. |
+| `visor-actual.webp` | Ventana de Capri en modo pantalla. |
+| `aspectos-actuales.webp` | Galería nativa de aspectos. |
+| `capri-despedida.webp` | Fotograma de la despedida con el renderizador nativo, efecto de cámara y subtítulo. |
 
-Las ventanas de trabajo se mantienen ocultas. No se controlan otras aplicaciones, se consulta el cliente de LoL ni se reproduce sonido. Se usan ajustes temporales de prueba, no las preferencias instaladas.
+Las órdenes de las tomas se introdujeron por escrito en el intérprete de Capri, el mismo que recibe las transcripciones de voz. **Estas imágenes no documentan una prueba del reconocimiento por micrófono.** Las respuestas de control no se inventaron ni se retocaron. La reproducción de YouTube se confirmó mediante la sesión multimedia; en Spotify se eligió mostrar la pausa con su estado visible. El monitor temporal de LoL se detuvo después de la toma y ambas canciones quedaron en pausa.
 
-## Regenerar
+Las capturas de servicios se recortaron para excluir pestañas del navegador, controles de cuenta y el panel de amigos de LoL. La playlist pública y los títulos musicales conservan el contenido visible. Las tomas se exportaron como imágenes estáticas y se codificaron a WebP para reducir el peso del repositorio; no contienen audio ni vídeo.
+
+## Recursos históricos
+
+Los PNG y GIF anteriores se conservan para los enlaces y las guías existentes. Se obtuvieron con los renderizadores de Capri y fondos de presentación; no son capturas de la versión actual. `scripts/generar_medios_readme.py` regenera **esos recursos históricos**, no las nuevas composiciones WebP.
+
+### Regenerar los recursos históricos
 
 Desde el repositorio en Windows, con Python 3.12 y las dependencias de `requirements.txt` instaladas:
 

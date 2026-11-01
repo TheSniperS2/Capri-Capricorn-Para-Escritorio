@@ -61,7 +61,7 @@ if(!$e.muted){[void](Invocar $e.boton $true)}
 class VistaPreviaReal(PruebasTk):
     capri=fixtures.ModoPersonaje.capri
 
-    def test_boton_abre_toplevel_real_con_imagen_y_sin_apagado(self):
+    def test_vista_interna_abre_toplevel_real_con_imagen_y_sin_apagado(self):
         original=tk.Toplevel
         class FueraDePantalla(original):
             def geometry(self,valor=None):
@@ -74,12 +74,7 @@ class VistaPreviaReal(PruebasTk):
         with self.capri() as (c,_),patch('apagado.tk.Toplevel',FueraDePantalla),patch.object(c.control_pc,'apagar_ahora') as apagar:
             errores=[];c.root.report_callback_exception=lambda *e:errores.append(str(e[1]))
             c.configurar();c.panel_ajustes.mostrar('Permisos');c.root.update_idletasks()
-            def buscar(widget):
-                if getattr(widget,'texto','')=='Vista previa del apagado':return widget
-                for hijo in widget.winfo_children():
-                    encontrado=buscar(hijo)
-                    if encontrado:return encontrado
-            boton=buscar(c.ajustes);self.assertIsNotNone(boton);boton.invoke()
+            c.iniciar_apagado_animado(previa=True)
             c.root.update_idletasks();s=c.apagado_ui
             self.assertTrue(s.previa);self.assertTrue(s.v.winfo_ismapped())
             self.assertEqual(str(s.v.transient()),str(c.ajustes))
