@@ -9,6 +9,22 @@ from despedida_camara import TRASLADO
 class Grabacion(PruebasTk):
     capri=fixtures.ModoPersonaje.capri
 
+    def test_traslado_incluye_optica_grano_y_visor_desde_sus_primeras_piezas(self):
+        from PIL import Image,ImageTk,ImageChops
+        with self.capri() as (c,_):
+            c.iniciar_despedida();cam=c.salida_camara
+            m=cam.margen_sensor
+            limpio=ImageTk.getimage(cam.fotos[0]).crop((m,m,m+cam.w,m+cam.h)).convert('RGBA')
+            esperado=Image.alpha_composite(limpio,cam.optica_pil)
+            esperado=Image.alpha_composite(esperado,ImageTk.getimage(cam.grano[0]))
+            esperado=Image.alpha_composite(esperado,cam.hud_pil)
+            self.assertIsNone(ImageChops.difference(cam.imagen,esperado).getbbox())
+            self.assertIsNotNone(ImageChops.difference(cam.imagen.convert('RGB'),limpio.convert('RGB')).getbbox())
+            for fotos,_,fila,col in c.salida_traslado.piezas:
+                caja=(col*cam.w//6,fila*cam.h//8,(col+1)*cam.w//6,(fila+1)*cam.h//8)
+                destino=ImageTk.getimage(fotos[3]).convert('RGBA')
+                self.assertIsNone(ImageChops.difference(destino,esperado.crop(caja)).getbbox())
+
     def test_camara_conserva_detalle_nativo_y_grano_sutil(self):
         from PIL import Image,ImageTk
         from despedida_camara import aspecto_grabacion

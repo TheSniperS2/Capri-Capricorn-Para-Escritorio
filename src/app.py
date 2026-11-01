@@ -705,7 +705,13 @@ class Capri:
         self.bienvenida=Bienvenida(self.avatar.estados_hd or self.avatar.estados,destino,fin,sw,sh,self.frase_intro,
                                    pantalla=not self.es_personaje())
         self.canvas.configure(width=sw,height=sh);self.root.geometry(f'{sw}x{sh}+0+0')
-        self.root.update_idletasks();self.pasar_clics_intro(True);self.inicio_intro=time.monotonic()
+        # Inicializa las superficies nativas antes de mostrar la entrada.
+        self.bienvenida.dibujar(self.canvas,.11)
+        self.root.update_idletasks()
+        # Presenta el primer cuadro ya dibujado; el reloj arranca despues de pintarlo.
+        self.bienvenida.dibujar(self.canvas,0)
+        self.root.update_idletasks();self.pasar_clics_intro(True);self.restaurar_reubicacion()
+        self.inicio_intro=time.monotonic()
 
     def animar_intro(self):
         from bienvenida import DURACION,SALIDA
@@ -1875,20 +1881,21 @@ class Capri:
             if fotos:imagen=fotos[0]
         sw=self.root.winfo_screenwidth();sh=self.root.winfo_screenheight()
         self.salida_rostro=None;self.salida_camara=None;self.salida_traslado=None
+        from idiomas import frase_despedida
+        self.frase_despedida=frase_despedida(self.cfg.get('idioma'))
         ruta=next((b/'assets'/nombre for nombre in ('capri-despedida-expresiones-v12.png','capri-despedida-expresiones-v11.png','capri-despedida-expresiones-v10.png','capri-despedida-expresiones-v9.png','capri-despedida-expresiones-v8.png','capri-despedida-expresiones-v7.png','capri-despedida-expresiones-v6.png','capri-despedida-expresiones-v5.png','capri-despedida-expresiones-v4.png')
                    for b in (BASE,BASE.parent) if (b/'assets'/nombre).exists()),None)
         if ruta:
             from despedida_camara import GrabacionDespedida
             from intro import TrasladoTeselas
             self.salida_camara=GrabacionDespedida(ruta,sw,sh)
+            self.salida_camara.imagen=self.salida_camara.fotograma(0,self.frase_despedida)
             self.salida_rostro=self.salida_camara.foto
             fuente=ImageTk.getimage(imagen).convert('RGBA') if imagen is not None else self.avatar.vistas[0]
             self.salida_traslado=TrasladoTeselas(fuente,self.salida_camara.imagen,origen,self.salida_camara.centro,tamanos_propios=True)
             self.salida=Despedida(sw,sh,self.salida_camara.centro,self.salida_rostro)
         else:self.salida=Despedida(sw,sh,origen,imagen)
         self.salida_audio=None;self.salida_generacion=None;self.salida_voz_empezada=False;self.salida_voz_terminada=False;self.salida_reanudar=None
-        from idiomas import frase_despedida
-        self.frase_despedida=frase_despedida(self.cfg.get('idioma'))
         if self.salida_camara:
             from despedida_camara import ContraccionCamara
             from despedida import silueta_mano

@@ -49,7 +49,6 @@ class GrabacionDespedida:
             for fila,col in ((0,0),(0,1),(1,0),(1,1)):
                 cuadro=hoja.crop((col*iw//2,fila*ih//2,(col+1)*iw//2,(fila+1)*ih//2))
                 cuadro=aspecto_grabacion(cuadro,(self.w,self.h))
-                if not self.fotos:self.imagen=cuadro
                 m=self.margen_sensor
                 # Margen oscuro de cinta: no volver a remuestrear todo el
                 # retrato sólo para obtener unos píxeles de protección.
@@ -70,6 +69,9 @@ class GrabacionDespedida:
         self.centro=(ancho_pantalla/2,alto_pantalla/2)
         self.luz=(ancho_pantalla*.5,alto_pantalla*.09)
         self.hud=None;self.hud_frase=None
+        # El traslado tambien debe transportar la imagen con la optica y el
+        # grano ya aplicados, nunca el retrato limpio durante su primer segundo.
+        self.imagen=self.fotograma(0)
 
     def preparar_hud(self,frase):
         if self.hud_frase==frase:return
@@ -98,13 +100,18 @@ class GrabacionDespedida:
         d.text((self.w/2,y),frase,font=subtitulo,anchor='ms',fill='#eef3f5',stroke_width=1,stroke_fill='#10151d')
         self.hud_pil=capa;self.hud=ImageTk.PhotoImage(capa);self.hud_frase=frase
 
-    def fotograma_final(self,frase):
-        self.preparar_hud(frase)
+    def fotograma(self,indice,frase=None):
         m=self.margen_sensor
-        im=ImageTk.getimage(self.fotos[3]).crop((m,m,m+self.w,m+self.h)).convert('RGBA')
+        im=ImageTk.getimage(self.fotos[indice]).crop((m,m,m+self.w,m+self.h)).convert('RGBA')
         im=Image.alpha_composite(im,self.optica_pil)
         im=Image.alpha_composite(im,ImageTk.getimage(self.grano[0]))
-        return Image.alpha_composite(im,self.hud_pil)
+        if frase is not None:
+            self.preparar_hud(frase)
+            im=Image.alpha_composite(im,self.hud_pil)
+        return im
+
+    def fotograma_final(self,frase):
+        return self.fotograma(3,frase)
 
     def expresion(self,tiempo,hablando=False,boca=False,finalizada=False):
         if finalizada:return 3

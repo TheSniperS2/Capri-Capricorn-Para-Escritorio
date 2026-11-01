@@ -20,6 +20,8 @@ ARCHIVOS.extend(['assets/capri-intro-vector-v7.json','assets/capri-despedida-exp
 ARCHIVOS.append('assets/capri-despedida-expresiones-v10.png')
 ARCHIVOS.append('assets/capri-despedida-expresiones-v11.png')
 ARCHIVOS.append('assets/capri-despedida-expresiones-v12.png')
+ARCHIVOS.extend(['retrato_intro.py','assets/capri-intro-abrazo-v1.png'])
+ARCHIVOS.append('PROMPT_INTRO_ABRAZO.md')
 ARCHIVOS.append('PROMPT_DESPEDIDA_V5.md')
 ARCHIVOS.extend(['assets/capri-cielo-despedida-v2.png','assets/capri-despedida-expresiones-v6.png'])
 ARCHIVOS.append('PROMPTS_DESPEDIDA_V6.md')
@@ -48,6 +50,7 @@ ARCHIVOS.append('REFERENCIAS_VOZ.md')
 ARCHIVOS.extend(['despedida.py','assets/capri-base-hd-v1.png','PROMPT_HD.md'])
 
 def origen(nombre):
+    if nombre=='PROMPT_INTRO_ABRAZO.md':return BASE/'docs'/nombre
     if nombre=='PROMPT_BOCAS_REFERENCIAS_V16.md':return BASE/'docs'/nombre
     if nombre=='PROMPT_APERTURA_DESPEDIDA_V15.md':return BASE/'docs'/nombre
     if nombre=='PROMPT_BOCA_DESPEDIDA_V14.md':return BASE/'docs'/nombre

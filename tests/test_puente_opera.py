@@ -91,7 +91,9 @@ class PuenteOpera(unittest.TestCase):
     @unittest.skipUnless(shutil.which('node'),'Prueba JavaScript requiere Node de desarrollo')
     def test_flujo_http_real_y_control_video_en_javascript(self):
         self.peticion('GET','/siguiente');salida=[]
-        t=threading.Thread(target=lambda:salida.append(self.p.ejecutar('volumen',{'operacion':'fijar:50','restaurar':40})))
+        # La tarea debe sobrevivir al arranque en frio de Node (proceso limitado a 10 s).
+        # Este caso comprueba HTTP/JavaScript, no el plazo de produccion de 4 s.
+        t=threading.Thread(target=lambda:salida.append(self.p.ejecutar('volumen',{'operacion':'fijar:50','restaurar':40},espera=15)))
         t.start()
         codigo=r'''
 const assert=require('node:assert/strict');
@@ -120,7 +122,8 @@ const headers={'X-Capri-Puente':id,'Origin':'chrome-extension://'+id};
     @unittest.skipUnless(shutil.which('node'),'Prueba JavaScript requiere Node de desarrollo')
     def test_worker_real_entrega_al_video_aunque_otra_pagina_tenga_foco(self):
         self.peticion('GET','/siguiente');salida=[]
-        t=threading.Thread(target=lambda:salida.append(self.p.ejecutar('volumen',{'operacion':'fijar:25','restaurar':40})))
+        # Mismo margen para el arranque de Node; el proceso sigue limitado a 10 s.
+        t=threading.Thread(target=lambda:salida.append(self.p.ejecutar('volumen',{'operacion':'fijar:25','restaurar':40},espera=15)))
         t.start()
         codigo=r'''
 const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');

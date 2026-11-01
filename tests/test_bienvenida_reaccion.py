@@ -20,40 +20,61 @@ class BienvenidaYReaccion(PruebasTk):
                 preparar.assert_not_called();hablar.assert_not_called();micro.assert_not_called()
                 self.assertFalse(c.intro_esperando_fin);self.assertFalse(c.dialogo.sincronizada)
 
-    def test_intro_anima_mirada_sonrisa_y_parpadeo_sin_raster_ampliado(self):
+    def test_intro_pose_propia_con_cuerpo_estable_y_expresiones(self):
+        from PIL import Image,ImageChops,ImageDraw
+        from retrato_intro import recurso,ATLAS
         with self.capri() as (c,_):
-            c.iniciar_intro();b=c.bienvenida;canvas=c.canvas
-            b.dibujar(canvas,1.4)
-            pupilas=[canvas.coords(i) for i in canvas.find_withtag('intro_pupilas')]
-            boca=[canvas.coords(i) for i in canvas.find_withtag('intro_boca')]
-            self.assertTrue(pupilas)
-            self.assertTrue(all(canvas.type(i)=='polygon' for i in canvas.find_withtag('intro_retrato')))
-            b.dibujar(canvas,2.7)
-            self.assertNotEqual(pupilas,[canvas.coords(i) for i in canvas.find_withtag('intro_pupilas')])
-            self.assertNotEqual(boca,[canvas.coords(i) for i in canvas.find_withtag('intro_boca')])
-            b.dibujar(canvas,1.86)
-            self.assertFalse(canvas.find_withtag('intro_pupilas'))
-            self.assertFalse(canvas.find_withtag('intro_subtitulo'))
-            self.assertEqual(b.tiempo(9,True),9)
+            c.iniciar_intro();b=c.bienvenida;r=b.retrato_aprobado
+            with Image.open(recurso(ATLAS)) as atlas:
+                w,h=atlas.width//2,atlas.height//2
+                for i,(fila,col) in enumerate(((0,0),(0,1),(1,0),(1,1))):
+                    esperado=atlas.crop((col*w,fila*h,(col+1)*w,(fila+1)*h)).convert('RGB')
+                    self.assertIsNone(ImageChops.difference(r.originales[i].convert('RGB'),esperado).getbbox())
+                    self.assertEqual(r.originales[i].getchannel('A').getextrema(),(0,255))
+                    cambios=ImageChops.difference(r.originales[i].convert('RGB'),r.originales[2].convert('RGB'))
+                    ImageDraw.Draw(cambios).rectangle((670,380,1030,670),fill=0)
+                    self.assertIsNone(cambios.getbbox())
+            b.dibujar(c.canvas,1.4)
+            item=c.canvas.find_withtag('intro_retrato')[-1]
+            expresion_abierta=c.canvas.itemcget(item,'image')
+            b.dibujar(c.canvas,1.86)
+            self.assertNotEqual(expresion_abierta,c.canvas.itemcget(c.canvas.find_withtag('intro_retrato')[-1],'image'))
+            self.assertEqual(b.tiempo(2,True),2)
 
-    def test_intro_mangas_cuello_y_palmas_permanecen_solidos_al_moverse(self):
+    def test_intro_encuadre_deja_las_manos_fuera_y_conserva_el_arte(self):
+        from PIL import ImageChops
+        with self.capri() as (c,_):
+            c.iniciar_intro();r=c.bienvenida.retrato_aprobado
+            im=r.originales[2];w,h=im.size
+            izq,arr,der,ab=r.ventana_fuente
+            self.assertGreater(izq,w*.11);self.assertLess(der,w*.89)
+            self.assertEqual((arr,ab),(0,h))
+            for original,vista in zip(r.originales,r.vistas):
+                self.assertIsNone(ImageChops.difference(vista,original.crop(r.ventana_fuente)).getbbox())
+            self.assertLessEqual(abs(r.base[0]-c.bienvenida.w),1)
+
+    def test_intro_conserva_detalle_hd_y_saludo_encima_del_pelo(self):
         with self.capri() as (c,_):
             c.iniciar_intro();b=c.bienvenida
-            # Zonas de manga y uniones que antes mostraban el escritorio.
-            for t in (1.4,2.7,4.2):
-                b.dibujar(c.canvas,t)
-                for x,y in ((350,580),(800,580),(580,455),(559,550),(174,526),(925,480)):
-                    px,py=b.punto(x,y,t,b.encuadre(t))
-                    items=c.canvas.find_overlapping(px,py,px,py)
-                    solidos=[i for i in items if 'intro_retrato' in c.canvas.gettags(i)
-                             and c.canvas.itemcget(i,'state')!='hidden']
-                    self.assertTrue(solidos,(t,x,y))
+            for t in (.45,1.4,2.7):b.dibujar(c.canvas,t)
+            r=b.retrato_aprobado
+            self.assertGreaterEqual(r.originales[0].width,1600)
+            self.assertGreaterEqual(r.originales[0].height,900)
+            orden=list(c.canvas.find_all())
+            self.assertGreater(orden.index(c.canvas.find_withtag('intro_saludo')[-1]),orden.index(c.canvas.find_withtag('intro_retrato')[-1]))
+            subtitulo=c.canvas.find_withtag('intro_subtitulo')
+            self.assertTrue(subtitulo)
+            self.assertEqual(c.canvas.itemcget(subtitulo[-1],'text'),'Capricorn Desktop')
+            saludo=next(i for i in c.canvas.find_withtag('intro_saludo') if c.canvas.type(i)=='text')
+            sx,sy,sr,sb=c.canvas.bbox(saludo);lx,ly,lr,lb=c.canvas.bbox(subtitulo[-1])
+            self.assertGreaterEqual(sx,0);self.assertLessEqual(sr,b.w)
+            self.assertLess(sb,ly);self.assertLessEqual(lr,b.w);self.assertLessEqual(lb,b.h)
 
-    def test_intro_materializa_fragmentos_destello_y_rgb_en_el_mismo_centro(self):
+    def test_intro_materializa_fragmentos_e_interferencia_sin_fogonazo(self):
         with self.capri() as (c,_):
             c.iniciar_intro();b=c.bienvenida;canvas=c.canvas
             centro=None
-            for t,tag in ((0,'intro_aparicion_fragmentos'),(.08,'intro_aparicion_destello'),(.16,'intro_aparicion_rgb')):
+            for t,tag in ((0,'intro_aparicion_fragmentos'),(.08,'intro_aparicion_interferencia'),(.16,'intro_aparicion_interferencia')):
                 b.dibujar(canvas,t)
                 self.assertTrue(canvas.find_withtag(tag))
                 if centro is None:centro=b.rig[5:7]
@@ -61,7 +82,7 @@ class BienvenidaYReaccion(PruebasTk):
                 self.assertFalse(canvas.find_withtag('intro_llegada'))
             b.dibujar(canvas,.4)
             self.assertTrue(canvas.find_withtag('intro_retrato'))
-            for tag in ('intro_aparicion_fragmentos','intro_aparicion_destello','intro_aparicion_rgb'):
+            for tag in ('intro_aparicion_fragmentos','intro_aparicion_interferencia','intro_aparicion_destello'):
                 self.assertFalse(canvas.find_withtag(tag))
             izq,arr,der,ab=canvas.bbox('intro_retrato')
             self.assertGreater(der-izq,b.w*.85);self.assertLess(arr,b.h*.15)
@@ -90,7 +111,8 @@ class BienvenidaYReaccion(PruebasTk):
                 b.dibujar(canvas,SALIDA+u*(DURACION-SALIDA))
                 self.assertTrue(canvas.find_withtag('intro_retrato'))
             self.assertEqual(tamanos,sorted(tamanos,reverse=True))
-            self.assertLessEqual(len(b.marcos),4)
+            self.assertLessEqual(len(b.retrato_aprobado.fotos),181)
+            self.assertLessEqual(len(b.retrato_aprobado.futuros),5)
             imagen=canvas.find_withtag('intro_llegada')[0]
             self.assertEqual(canvas.coords(imagen),list(b.fin))
             datos=canvas.tk.call(canvas.itemcget(imagen,'image'),'data','-format','png')

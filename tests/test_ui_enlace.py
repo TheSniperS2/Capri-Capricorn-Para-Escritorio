@@ -12,6 +12,17 @@ from test_capri import PruebasTk
 import app
 
 class Enlace(PruebasTk):
+    def preparar_cuadros_intro(self,c):
+        """Carga real de cuadros antes de adelantar el reloj de reproduccion."""
+        from retrato_intro import PASOS
+        retrato=c.bienvenida.retrato_aprobado
+        limite=time.monotonic()+45
+        while not retrato.preparado:
+            retrato.preparar()
+            if time.monotonic()>=limite:self.fail('No termino la preparacion de la intro')
+            time.sleep(.001)
+        self.assertEqual(len(retrato.fotos),PASOS+1)
+
     def test_texto_largo_no_invade_etiqueta_y_cabe_en_panel_pequeno(self):
         with self.capri() as (c,_):
             c.root.update_idletasks()
@@ -40,12 +51,18 @@ class Enlace(PruebasTk):
             c.inicio_intro=time.monotonic()-.4;c.animar()
             self.assertTrue(c.canvas.find_withtag('intro_retrato'))
             self.assertFalse(c.canvas.find_withtag('intro_tarjeta'))
-            self.assertTrue(all(c.canvas.type(i)=='polygon' for i in c.canvas.find_withtag('intro_retrato')))
+            self.assertTrue(all(c.canvas.type(i)=='image' for i in c.canvas.find_withtag('intro_retrato')))
+            caja=c.canvas.bbox('intro_retrato')
+            self.assertGreater(caja[2]-caja[0],c.root.winfo_screenwidth()*.85)
             c.inicio_intro=time.monotonic()-2.3;c.animar()
             textos=[c.canvas.itemcget(i,'text') for i in c.canvas.find_all() if c.canvas.type(i)=='text']
             self.assertIn(c.frase_intro,textos);self.assertTrue(c.canvas.find_withtag('intro_retrato'))
+            self.preparar_cuadros_intro(c)
             c.inicio_intro=time.monotonic()-6.7;c.animar()
-            self.assertTrue(c.intro_en_viaje);self.assertTrue(c.canvas.find_withtag('intro_llegada'))
+            self.assertTrue(c.intro_en_viaje);self.assertTrue(c.canvas.find_withtag('intro_retrato'))
+            retrato=c.bienvenida.retrato_aprobado
+            self.assertGreater(retrato.ultimo,0)
+            self.assertLess(retrato.fotos[retrato.ultimo][0].width(),c.bienvenida.w)
             c.parar();self.assertEqual(c.entrada_compacta.winfo_manager(),'pack')
             self.assertIsNone(c.fragmentos_intro);self.assertIsNone(c.bienvenida)
             c.animar();self.assertEqual(float(c.root.attributes('-alpha')),1.0)
@@ -87,6 +104,7 @@ class Enlace(PruebasTk):
         with self.capri() as (c,_),patch.object(c.micro,'escuchar') as escuchar:
             c.iniciar_intro();c.inicio_intro=time.monotonic()-.7;c.animar()
             self.assertTrue(c.intro_activa)
+            self.preparar_cuadros_intro(c)
             c.inicio_intro=time.monotonic()-__import__('intro').DURACION-.1;c.animar();self.assertFalse(c.intro_activa)
             c.iniciar_intro();c.parar();self.assertFalse(c.intro_activa)
             escuchar.assert_not_called()

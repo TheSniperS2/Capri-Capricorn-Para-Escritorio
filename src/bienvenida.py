@@ -1,9 +1,6 @@
-"""Intro muda: ilustración vectorial con mirada, párpados, sonrisa y gesto propios."""
-import json,math
-import numpy as np
-from concurrent.futures import ThreadPoolExecutor
-from pathlib import Path
-from PIL import Image,ImageTk,ImageDraw
+"""Intro muda con el retrato aprobado, sus expresiones y el saludo visual."""
+import math
+from PIL import Image,ImageTk
 from fuentes import FAMILIA
 from idiomas import ui
 from intro import suave,DURACION
@@ -12,7 +9,6 @@ from tema_ui import color
 SALIDA=5.2
 PASOS_MARCO=120
 SALUDO='¡Hola!'
-ARTE='capri-intro-vector-v6.json'
 TRANSPARENTE='#010203'
 
 
@@ -23,11 +19,12 @@ class LienzoAnimado:
     """Reutiliza primitivas Tk en lugar de destruir y reconstruir toda la escena."""
     def __init__(self,canvas):
         self.canvas=canvas;self.items={};self.opciones={};self.ocultos=set();self.usados=set();self.contadores={}
+        self.coordenadas={};self.orden=[];self.orden_anterior=()
 
     def delete(self,tag):
         if self.items and not self.canvas.type(next(iter(self.items.values()))):
-            self.items.clear();self.opciones.clear();self.ocultos.clear()
-        self.usados.clear();self.contadores.clear()
+            self.items.clear();self.opciones.clear();self.ocultos.clear();self.coordenadas.clear();self.orden_anterior=()
+        self.usados.clear();self.contadores.clear();self.orden=[]
 
     def crear(self,tipo,p,kw):
         tag=str(kw.get('tags',''));grupo=(tipo,tag);n=self.contadores.get(grupo,0);self.contadores[grupo]=n+1
@@ -35,13 +32,13 @@ class LienzoAnimado:
         if clave not in self.items:
             item=getattr(self.canvas,tipo)(*p,**kw);self.items[clave]=item;self.opciones[clave]=dict(kw)
         else:
-            item=self.items[clave];self.canvas.coords(item,*p)
+            item=self.items[clave]
+            if self.coordenadas.get(clave)!=p:self.canvas.coords(item,*p)
             cambios={k:v for k,v in kw.items() if self.opciones[clave].get(k)!=v}
             if clave in self.ocultos:cambios.update(state='normal',tags=kw.get('tags',()));self.ocultos.remove(clave)
             if cambios:self.canvas.itemconfigure(item,**cambios)
             self.opciones[clave]=dict(kw)
-        # La creación inicial fija el orden; la transición necesita el marco por encima.
-        if tipo=='create_image':self.canvas.tag_raise(item)
+        self.coordenadas[clave]=p;self.orden.append(item)
         return item
 
     def create_polygon(self,*p,**kw):return self.crear('create_polygon',p,kw)
@@ -51,6 +48,10 @@ class LienzoAnimado:
     def terminar(self):
         for clave in self.items.keys()-self.usados-self.ocultos:
             self.canvas.itemconfigure(self.items[clave],state='hidden',tags=());self.ocultos.add(clave)
+        orden=tuple(self.orden)
+        if orden!=self.orden_anterior:
+            for item in orden:self.canvas.tag_raise(item)
+            self.orden_anterior=orden
 
 
 class Bienvenida:
@@ -60,198 +61,57 @@ class Bienvenida:
         self.f=max(.55,alto/1080)
         self.pantalla=pantalla;self.destino_tamano=destino.size;self.recorte=None
         self.lienzo=None
-        ruta=next((r for r in (Path(__file__).parent/'assets'/ARTE,Path(__file__).parents[1]/'assets'/ARTE) if r.exists()),None)
-        self.formas=json.loads(ruta.read_text(encoding='utf8'))['formas'] if ruta else []
-        self.pesos={(x,y):self.peso(x,y) for _,p in self.formas for x,y in zip(p[::2],p[1::2])}
-        self.preparar_geometria()
         self.llegada=[]
         for i in range(1 if pantalla else 21):
             zoom=1 if pantalla else 1+.28*(1-i/20)
             im=destino.resize((max(1,round(destino.width*zoom)),max(1,round(destino.height*zoom))),Image.Resampling.LANCZOS)
             self.llegada.append(ImageTk.PhotoImage(im))
-        self.marcos={};self.destino=destino.copy();self.apertura_salida=0
+        self.marcos={};self.destino=destino.copy();self.apertura_salida=0;self.progreso_salida=0
         self.aparicion_t=None;self.numero_forma=0
-        self.pendientes={};self.worker=ThreadPoolExecutor(max_workers=1,thread_name_prefix="CapriIntro") if pantalla else None
-        if pantalla:self.pedir_marcos(0)
-
-    def imagen_marco(self,indice):
-        u=.32+.68*indice/PASOS_MARCO
-        _,_,_,_,factor=self.geometria_salida(u)
-        return Bienvenida.raster_marco(self.destino,indice,factor)
-
-    @staticmethod
-    def raster_marco(destino,indice,factor):
-        # Solo datos Pillow: el trabajador nunca retiene objetos Tk ni la animación.
-        u=.32+.68*indice/PASOS_MARCO
-        im=destino.copy();d=ImageDraw.Draw(im)
-        # El marco se construye alrededor de la cara; nunca contiene una segunda Capri.
-        limite=round(im.height*suave((u-.32)/.38))
-        if limite<im.height:d.rectangle((0,limite,im.width,im.height),fill=(0,0,0,0))
-        escala=im.width/360;izq,arr,der,ab=(round(v*escala) for v in (20,55,340,265))
-        foto=suave((u-.78)/.22)
-        if foto<1:d.rectangle((izq+round((der-izq)*foto),arr,der-1,ab-1),fill=(0,0,0,0))
-        tam=(max(1,round(im.width*factor)),max(1,round(im.height*factor)))
-        if tam!=im.size:im=im.resize(tam,Image.Resampling.BILINEAR)
-        if indice<PASOS_MARCO:im.putalpha(im.getchannel('A').point(lambda v:255 if v>=128 else 0))
-        return im
-
-    def pedir_marcos(self,indice):
-        for viejo in list(self.pendientes):
-            if viejo<indice:
-                self.pendientes.pop(viejo).cancel()
-        for i in range(indice,min(PASOS_MARCO+1,indice+5)):
-            if i not in self.pendientes and i not in self.marcos:
-                factor=self.geometria_salida(.32+.68*i/PASOS_MARCO)[4]
-                self.pendientes[i]=self.worker.submit(Bienvenida.raster_marco,self.destino,i,factor)
-
-    def marco(self,indice):
-        self.pedir_marcos(indice)
-        if indice not in self.marcos:
-            futuro=self.pendientes.get(indice)
-            if futuro is not None and futuro.done():
-                im=futuro.result();self.pendientes.pop(indice)
-            elif self.marcos and indice<PASOS_MARCO:
-                # No detener el movimiento si el procesador a?n prepara un marco.
-                return self.marcos[max(self.marcos)]
-            else:im=self.imagen_marco(indice)
-            self.marcos[indice]=ImageTk.PhotoImage(im)
-            while len(self.marcos)>4:del self.marcos[next(iter(self.marcos))]
-        return self.marcos[indice]
+        self.espera_preparacion=None;self.pausa_preparacion=0.
+        from retrato_intro import RetratoIntro
+        self.retrato_aprobado=RetratoIntro(self)
 
     def detener(self):
-        if self.worker is not None:self.worker.shutdown(wait=False,cancel_futures=True)
-        self.pendientes.clear()
+        self.retrato_aprobado.detener()
+        self.marcos.clear()
 
     def tiempo(self,t,esperando_voz=False):
         # La bienvenida no depende de un sintetizador ni de eventos de audio.
-        return t
-
-    @staticmethod
-    def peso(x,y):
-        cabeza=limitar((470-y)/90)*limitar((x-260)/100)*limitar((930-x)/150)
-        mano=limitar((x-815)/110)*limitar((650-y)/170) if y>350 else 0
-        return cabeza,mano
-
-    def punto(self,x,y,t,zoom,dx=0,dy=0):
-        # Deformación continua compartida por el dibujo y los rasgos de la cara.
-        pesos=self.pesos.get((x,y))
-        cabeza,mano=pesos if pesos is not None else self.peso(x,y)
-        co,si,cm,sm,s,ox,oy,respirar=self.rig
-        px,py=x-564,y-410
-        x+=(px*(co-1)-py*si)*cabeza;y+=(px*si+py*(co-1))*cabeza
-        if mano:
-            px,py=x-860,y-570
-            x+=(px*(cm-1)-py*sm)*mano;y+=(px*sm+py*(cm-1))*mano
-        y+=respirar*(1-cabeza)
-        return (ox+(x-559)*s,oy+(y-275)*s)
-
-    def poligono(self,c,puntos,tono,t,z,dx,dy,tag='intro_retrato'):
-        coords=[]
-        for x,y in zip(puntos[::2],puntos[1::2]):coords.extend(self.punto(x,y,t,z,dx,dy))
-        self.pintar_poligono(c,coords,tono,tag)
-
-    def pintar_poligono(self,c,coords,tono,tag='intro_retrato'):
-        if self.recorte:coords=recortar(coords,self.recorte)
-        if len(coords)<6:return
-        instante=self.aparicion_t;n=self.numero_forma;self.numero_forma+=1
-        if instante is not None:
-            if instante<.060:
-                # Restos de señal en el lugar exacto donde se materializa la silueta.
-                if (n*7)%19>1:return
-                xs=coords[::2];ys=coords[1::2];cx=sum(xs)/len(xs);cy=sum(ys)/len(ys)
-                k=.24+.18*instante/.060;salto=(1-instante/.060)*18*self.f
-                coords=[v for x,y in zip(xs,ys) for v in (cx+(x-cx)*k+salto*(-1 if n%2 else 1),cy+(y-cy)*k)]
-                c.create_polygon(*coords,fill=('#49f6ff','#ff1761','#ae62ff','#fff7ed')[n%4],outline='',
-                                 tags=(tag,'intro_aparicion_fragmentos'))
-                return
-            if instante<.110:
-                c.create_polygon(*coords,fill='#fff5e5',outline='',tags=(tag,'intro_aparicion_destello'))
-                return
-            intensidad=(1-suave((instante-.110)/.230))
-            if intensidad>0 and n%5==0:
-                # Dos ecos de color, calculados sobre la geometría ya transformada.
-                distancia=18*self.f*intensidad
-                for direccion,tinta in ((-1,'#20eaff'),(1,'#ff145b')):
-                    eco=[v+direccion*distancia if i%2==0 else v for i,v in enumerate(coords)]
-                    c.create_polygon(*eco,fill=tinta,outline='',tags='intro_aparicion_rgb')
-        c.create_polygon(*coords,fill=tono,outline='',tags=tag)
-
-    def preparar_geometria(self):
-        """Vértices y pesos estáticos; toda la ilustración se mueve en un solo lote."""
-        puntos=[];self.tramos=[]
-        for tono,p in self.formas:
-            inicio=len(puntos);puntos.extend(zip(p[::2],p[1::2]));self.tramos.append((tono,inicio,len(puntos)))
-        self.vertices=np.asarray(puntos,dtype=np.float64).reshape((-1,2))
-        pesos=np.asarray([self.peso(x,y) for x,y in puntos],dtype=np.float64).reshape((-1,2))
-        self.peso_cabeza=pesos[:,0];self.peso_mano=pesos[:,1]
-
-    def proyectar_geometria(self):
-        co,si,cm,sm,s,ox,oy,respirar=self.rig
-        x,y=self.vertices[:,0],self.vertices[:,1];px=x-564;py=y-410
-        x=x+(px*(co-1)-py*si)*self.peso_cabeza
-        y=y+(px*si+py*(co-1))*self.peso_cabeza
-        px=x-860;py=y-570
-        x=x+(px*(cm-1)-py*sm)*self.peso_mano
-        y=y+(px*sm+py*(cm-1))*self.peso_mano+respirar*(1-self.peso_cabeza)
-        return np.column_stack((ox+(x-559)*s,oy+(y-275)*s))
-
-    def ovalo(self,c,x,y,rx,ry,tono,t,z,dx,dy,tag):
-        # Polígonos de 40 segmentos: círculos suaves también al inclinar la cara.
-        p=[]
-        for i in range(40):
-            a=i*math.tau/40;p.extend((x+rx*math.cos(a),y+ry*math.sin(a)))
-        self.poligono(c,p,tono,t,z,dx,dy,tag)
-
-    def rostro(self,c,t,z,dx,dy):
-        mirar_x=math.sin(t*1.9)*3.5;mirar_y=math.sin(t*1.1)*2
-        # Parpadeos breves y sonrisa sostenida al principio y al despedirse.
-        cerrado=suave((t-.18)/.10)*(1-suave((t-.55)/.25))
-        for inicio in (1.86,3.28):
-            cerrado=max(cerrado,max(0,1-abs(t-inicio)/.115))
-        cerrado=max(cerrado,suave((t-4.35)/.40))*(1-self.apertura_salida)
-        for x,y,r in ((495,332,34),(626,293,40)):
-            self.ovalo(c,x,y,r+3,r+3,'#0d0913',t,z,dx,dy,'intro_ojos')
-            abierto=1-cerrado
-            if abierto>.12:
-                self.ovalo(c,x,y,r-1,(r-1)*abierto,'#08eb37',t,z,dx,dy,'intro_ojos')
-                self.ovalo(c,x,y,r-3,(r-3)*abierto,'#0d0913',t,z,dx,dy,'intro_ojos')
-                self.ovalo(c,x+mirar_x,y+mirar_y,r*.72,r*.72*abierto,'#2fb9f6',t,z,dx,dy,'intro_ojos')
-                self.ovalo(c,x+mirar_x,y+mirar_y,r*.33,r*.33*abierto,'#effcff',t,z,dx,dy,'intro_pupilas')
-            else:
-                p=[]
-                for i in range(17):
-                    v=i/16;p.extend(self.punto(x-r+2*r*v,y-9*math.sin(math.pi*v)+4,t,z,dx,dy))
-                c.create_line(*p,fill='#09ef38',width=max(2,self.w*z/1086*5),smooth=True,tags='intro_ojos')
-        # Gesto silencioso: pasa de una sonrisa ladeada a una sonrisa abierta.
-        self.poligono(c,[510,379,628,337,614,396,600,429,545,410],'#0d0913',t,z,dx,dy,'intro_boca')
-        abrir=.28+.72*suave((t-.90)/.65)
-        abrir-=.16*math.sin(t*2.5)**2
-        self.poligono(c,[519,381,535,373,543,381,555,365,568,371,582,356,591,362,621,344,
-                        609,377+14*abrir,596,380+39*abrir,553,388+18*abrir],
-                      '#f1f7ff',t,z,dx,dy,'intro_boca')
+        if t>=.45:self.retrato_aprobado.preparar()
+        visual=t-self.pausa_preparacion
+        if visual>=SALIDA and not self.retrato_aprobado.preparado:
+            if self.espera_preparacion is None:self.espera_preparacion=t
+            return SALIDA-.001
+        if self.espera_preparacion is not None:
+            self.pausa_preparacion+=t-self.espera_preparacion
+            self.espera_preparacion=None
+            visual=t-self.pausa_preparacion
+        return visual
 
     def retrato(self,c,t,z,dx=0,dy=0):
-        self.numero_forma=0
-        giro=math.sin(t*1.65)*.022+.025*math.sin(t*.75);mano=.055*math.sin(t*3.8)
-        self.rig=(math.cos(giro),math.sin(giro),math.cos(mano),math.sin(mano),
-                  self.w*z/1086,self.w*.5+dx,self.h*.42+dy,math.sin(t*2.1)*3)
-        puntos=self.proyectar_geometria()
-        for tono,inicio,fin in self.tramos:
-            tono={'#ff598e':'#ff256d','#b10061':'#d00051'}.get(tono,tono)
-            self.pintar_poligono(c,puntos[inicio:fin].ravel().tolist(),tono)
-        self.rostro(c,t,z,dx,dy)
+        self.rig=(1,0,1,0,self.w*z/1086,self.w*.5+dx,self.h*.42+dy,0)
+        self.retrato_aprobado.dibujar(c,self,t)
 
     def cartel(self,c,t):
-        q=suave((t-.7)/.22)*(1-suave((t-4.65)/.25))
+        q=suave((t-.24)/.20)
         if q<=0:return
-        x=self.w*.81+(1-q)*60*self.f;y=self.h*.16+math.sin(t*2)*5*self.f
-        w=130*self.f;h=76*self.f
-        c.create_polygon(x+10,y+9,x+w+14,y+9,x+w+4,y+h+10,x,y+h+10,
-                         fill='#5a1cc7',outline='',tags='intro_saludo')
-        c.create_polygon(x,y,x+w,y,x+w-10,y+h,x-10,y+h,
-                         fill='#ff0054',outline='',tags='intro_saludo')
-        c.create_text(x+w/2-4,y+h/2,text=self.saludo,fill='#ffffff',
-                      font=(FAMILIA,-max(20,round(37*self.f)),'bold'),tags='intro_saludo')
+        f=min(self.f,self.w/960);w=312*f
+        x=self.w-w-70*f+(1-q)*24*f;y=self.h*.15
+        def placa(puntos,**kw):
+            return c.create_polygon(*[v for px,py in puntos for v in (x+px*f,y+py*f)],tags='intro_saludo',**kw)
+        # Cian y tinta oscura para contrastar con el pelo rosa.
+        ancho=w/f
+        placa(((19,8),(ancho+9,8),(ancho-9,123),(0,123)),fill='#0c0813',outline='')
+        placa(((15,5),(ancho+5,5),(ancho-13,117),(-3,117)),fill='#2463bf',outline='')
+        placa(((12,0),(ancho,0),(ancho-18,110),(-6,110)),fill='#62e7f5',outline='#0c0813',width=max(1,round(2*f)))
+        placa(((5,121),(ancho-15,121),(ancho-23,166),(-3,166)),fill='#0c0813',outline='')
+        c.create_line(x+24*f,y+7*f,x+86*f,y+7*f,fill='#d7fbff',width=max(1,round(2*f)),tags='intro_saludo')
+        c.create_line(x-13*f,y+20*f,x-19*f,y+52*f,fill='#62e7f5',width=max(2,round(3*f)),tags='intro_saludo')
+        c.create_text(x+w/2-3*f,y+54*f,text=self.saludo,fill='#08131f',
+                      font=(FAMILIA,-max(26,round(58*f)),'bold'),tags='intro_saludo')
+        c.create_text(x+w/2-11*f,y+142*f,text='Capricorn Desktop',fill='#ffffff',
+                      font=(FAMILIA,-max(14,round(21*f)),'bold'),tags=('intro_saludo','intro_subtitulo'))
 
     def dibujar(self,c,t,hablando=False,boca=False,bandas=()):
         if hasattr(c,'tk'):
@@ -266,21 +126,13 @@ class Bienvenida:
             self.cartel(c,t)
             if isinstance(c,LienzoAnimado):c.terminar()
             return
-        u=limitar((t-SALIDA)/(DURACION-SALIDA));q=suave(max(0,(u-.08)/.92))
+        u=limitar((t-SALIDA)/(DURACION-SALIDA));self.progreso_salida=u
+        q=suave(max(0,(u-.08)/.92))
         if self.pantalla:
             self.apertura_salida=suave(u/.22)
             z,ox,oy,caja,factor=self.geometria_salida(u)
-            recorte=suave((u-.22)/.40)
-            # La silueta se recoge dentro del visor mientras el marco toma forma.
-            exterior=(-self.w,-self.h,self.w*2,self.h*2)
-            self.recorte=tuple(a+(b-a)*recorte for a,b in zip(exterior,caja)) if recorte else None
+            # El retrato y el marco comparten un solo fotograma compuesto.
             self.retrato(c,SALIDA,z,ox-self.w*.5,oy-self.h*.42)
-            if u>=.32:
-                indice=min(PASOS_MARCO,round((u-.32)/.68*PASOS_MARCO))
-                escala=self.destino_tamano[0]/360
-                cx=(caja[0]+caja[2])/2
-                cy=(caja[1]+caja[3])/2+(23-14*escala)*factor
-                c.create_image(cx,cy,image=self.marco(indice),tags='intro_llegada')
             self.recorte=None
             if isinstance(c,LienzoAnimado):c.terminar()
             return
@@ -297,16 +149,19 @@ class Bienvenida:
         if isinstance(c,LienzoAnimado):c.terminar()
 
     @staticmethod
-    def encuadre(t):return 1.04+.10*suave((t-1)/1.2)+.005*math.sin(t*1.9)+.085*math.exp(-max(0,t)/.065)
+    def encuadre(t):
+        from retrato_intro import ZOOM
+        return ZOOM
 
     def geometria_salida(self,u):
-        q=suave(u);escala=self.destino_tamano[0]/360
+        from retrato_intro import ENCOGER
+        q=suave((u-ENCOGER)/(1-ENCOGER));escala=self.destino_tamano[0]/360
         s0=self.w*self.encuadre(SALIDA)/1086;s1=320*escala/600
         s=s0+(s1-s0)*q
         # Mantiene un único centro de proyección desde el primer plano hasta la cámara.
-        ox=self.w*.5+(self.fin[0]-self.w*.5)*suave((u-.12)/.88)
+        ox=self.w*.5+(self.fin[0]-self.w*.5)*q
         fin_y=self.fin[1]-(23-14*escala)-55*s1
-        oy=self.h*.42+(fin_y-self.h*.42)*suave((u-.12)/.88)
+        oy=self.h*.42+(fin_y-self.h*.42)*q
         factor=s/s1;cx=ox;cy=oy+55*s
         caja=(cx-160*escala*factor,cy-105*escala*factor,cx+160*escala*factor,cy+105*escala*factor)
         return s*1086/self.w,ox,oy,caja,factor
