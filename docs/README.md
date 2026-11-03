@@ -4,7 +4,8 @@
 
 | Guía | Para qué sirve |
 | --- | --- |
-| [Primeros pasos](../README.md#empieza-a-usarla) | Instalar una Release o preparar el código de `main`. |
+| [Primeros pasos](../README.md#empieza-a-usarla) | Instalar Python 3.12, extraer el ZIP y preparar la versión actual de Capri. |
+| [Problemas de instalación](INSTALACION.md) | Lanzador ausente, consola equivocada, entorno de Python, registros y actualizaciones. |
 | [Uso y solución de problemas](USO.md) | Micrófono, voz, idiomas, modelos, preferencias y diagnósticos. |
 | [Personaje y control del equipo](PERSONAJE_Y_CONTROL.md) | Modos visuales, movimientos y permisos opcionales. |
 | [YouTube y Opera](CONECTAR_OPERA.md) | Configurar y comprobar el puente del navegador. |

@@ -81,32 +81,62 @@ La intro aparece sujetando la pantalla y se transforma en el visor. Al cerrar, l
 
 ## Empieza a usarla
 
-Necesitas **Windows 10/11 y Python 3.12 de 64 bits con Tcl/Tk**. La primera preparación requiere internet para descargar las dependencias y los modelos de reconocimiento.
+Necesitas **Windows 10/11 y Python 3.12 de 64 bits**. La primera preparación requiere internet. **Para obtener la versión que muestran las capturas, usa el ZIP de `main` y genera su lanzador con los pasos siguientes.** Un lanzador descargado anteriormente contiene la versión de cuando se publicó; volver a abrirlo no descarga el código nuevo.
 
-### La versión actual del repositorio
+### 1. Instala Python 3.12
 
-1. Instala [Python 3.12 para Windows](https://www.python.org/downloads/windows/), con Tcl/Tk y acceso a `python` desde la terminal.
-2. [Descarga el código de `main`](https://github.com/TheSniperS2/Capri-Capricorn-Para-Escritorio/archive/refs/heads/main.zip), extrae el ZIP y abre PowerShell en la carpeta del proyecto.
-3. Genera y abre el lanzador:
+Abre la [página oficial de Python 3.12.10](https://www.python.org/downloads/release/python-31210/) y, en **Files**, elige **Windows installer (64-bit)**. Es el instalador tradicional que utiliza esta guía; evita elegir otra versión o el paquete de Microsoft Store. Hemos recibido un fallo de creación del entorno con la versión de Store y su redirección de carpetas.
+
+Ejecuta el instalador, marca **Add python.exe to PATH** y deja activados el lanzador de Python, `pip` y Tcl/Tk. No basta con descargar el archivo: hay que completar la instalación.
+
+Cierra las terminales que tengas abiertas. Pulsa **Windows + R**, escribe `powershell` y pulsa Enter. En esa ventana pega:
 
 ```powershell
-python empaquetar.py
-pythonw ".\dist\Abrir Capri.pyw"
+py -3.12 --version
 ```
 
-4. Espera la preparación inicial. En **Ajustes → Micrófono**, selecciona tu entrada y ajusta la sensibilidad.
-5. Di **«Capri, abre la calculadora»** o pulsa **F8** para hablar. Para conversar, activa Ollama desde **Ajustes → IA y servicios**.
+Debe responder **Python 3.12.x**. Si dice que `py` no se reconoce o **No suitable Python runtime found**, revisa la [ayuda de instalación](docs/INSTALACION.md) antes de continuar. Los comandos van en PowerShell, donde aparece `PS C:\...>`; si ves `>>>`, estás dentro de Python: cierra esa ventana.
 
-El lanzador instala la aplicación en `%LOCALAPPDATA%\Capri`, crea un acceso directo y conserva las preferencias al actualizar. No requiere administrador ni se añade automáticamente al inicio de Windows.
+### 2. Descarga y extrae Capri
 
-> **Las imágenes y funciones de esta página corresponden a `main`.** Las Releases pueden ir por detrás; el método anterior prepara el código actual.
+[Descarga el ZIP actualizado de `main`](https://github.com/TheSniperS2/Capri-Capricorn-Para-Escritorio/archive/refs/heads/main.zip). En el Explorador, pulsa **Extraer todo** y abre la carpeta extraída. Entra hasta ver **`empaquetar.py`**, junto a `assets`, `docs` y `src`. Si Windows oculta las extensiones, el archivo aparece como **empaquetar**.
+
+Haz clic en la **barra de dirección del Explorador**, escribe `powershell` y pulsa Enter. Así abres la terminal en la carpeta correcta. Si todavía ves **Herramientas de carpeta comprimida**, vuelve a la carpeta extraída.
+
+### 3. Genera el lanzador
+
+Pega **solo este comando** y espera a que termine:
+
+```powershell
+py -3.12 empaquetar.py
+```
+
+Se creará la carpeta **`dist`** con **`Abrir Capri.pyw`**. Es normal que ese lanzador no aparezca antes de ejecutar el comando. Si hay un error, detente y consulta la [guía de solución de problemas](docs/INSTALACION.md).
+
+### 4. Instala y abre Capri
+
+En la misma ventana de PowerShell, ejecuta ahora este otro comando:
+
+```powershell
+py -3.12 ".\dist\Abrir Capri.pyw"
+```
+
+Espera la preparación inicial: instala las dependencias y descarga los modelos de reconocimiento. Después crea el acceso directo **Capri** en el escritorio. No requiere administrador ni se añade automáticamente al inicio de Windows.
+
+En **Ajustes → Micrófono**, selecciona tu entrada y ajusta la sensibilidad. Di **«Capri, abre la calculadora»** o pulsa **F8** para hablar. Para conversar, activa Ollama desde **Ajustes → IA y servicios**.
+
+**Para actualizar:** cierra Capri, descarga y extrae de nuevo el ZIP de `main` y repite los pasos 3 y 4 desde esa carpeta nueva. Usa el lanzador recién generado en `dist`, no el antiguo de Descargas. Al actualizar sobre la misma instalación conserva las preferencias.
 
 <details>
-<summary><b>Prefiero descargar una Release</b></summary>
+<summary><b>¿Prefieres una Release ya empaquetada?</b></summary>
 
-Abre [Releases](https://github.com/TheSniperS2/Capri-Capricorn-Para-Escritorio/releases), revisa sus notas y descarga **Abrir Capri.pyw**; GitHub puede mostrarlo como `Abrir.Capri.pyw`. Ábrelo con Python. Si el doble clic no funciona, ejecuta `pythonw "Abrir.Capri.pyw"` desde la carpeta donde lo descargaste. También necesitas Python y conexión para la preparación inicial.
+Las [Releases](https://github.com/TheSniperS2/Capri-Capricorn-Para-Escritorio/releases) pueden ir por detrás de `main`. Comprueba la fecha y sus notas: las capturas de esta página corresponden a `main`.
+
+Con Python 3.12 ya instalado, descarga **Abrir Capri.pyw** de la Release elegida; GitHub puede llamarlo `Abrir.Capri.pyw`. Abre PowerShell en la carpeta donde lo descargaste y ejecuta `py -3.12 "Abrir.Capri.pyw"`, usando el nombre exacto del archivo. No necesitas `empaquetar.py` para esa descarga. Ese lanzador instala la versión de esa Release y también requiere internet para la primera preparación.
 
 </details>
+
+¿Aparece **«No se pudo completar la preparación»**? Consulta [errores frecuentes y cómo abrir el registro](docs/INSTALACION.md#no-se-pudo-completar-la-preparación).
 
 ## Componentes mínimos y recomendados
 
