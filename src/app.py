@@ -96,6 +96,9 @@ class Capri:
         self.control_pc.energia_animada=self.solicitar_apagado_animado
         from league import ControlLoL
         self.lol=ControlLoL(avisar=lambda mensaje:self.eventos.put(('lol_aviso',mensaje)))
+        from lol_seleccion import ControlSeleccion
+        self.lol_seleccion=ControlSeleccion();self.lol_panel=None
+        self.lol_seleccion.configurar(self.cfg.get('lol_seleccion',{}),iniciar=hotkeys)
         self.entrada_personaje=False;self.ventana_entrada=None;self.entrada_lateral=None;self.transito=None
         self.cfg.setdefault('llamadas_capri',True);self.cfg.setdefault('asomos_automaticos',False);self.cfg.setdefault('bromas_ventanas',False)
         self.cfg.setdefault('intervalo_interacciones',15)
@@ -285,6 +288,7 @@ class Capri:
               ('Aceptar partida','acepta partida en lol'),('Cancelar búsqueda','cancela la cola en lol')]]
         lol.insert(0,('Desactivar aceptación automática' if self.cfg.get('lol_aceptar_automatico',False) else 'Activar aceptación automática',
                       lambda:self.enviar('no aceptes mas partidas' if self.cfg.get('lol_aceptar_automatico',False) else 'activa la aceptacion automatica del lol')))
+        lol.insert(0,('Configurar League of Legends',self.abrir_lol))
         mas=[('YouTube',self.conectar_opera),('League of Legends',lol),('Cerrar Capri',self.cerrar)]
         opciones=[('Ajustes',self.configurar),('Chat',self.abrir_chat),('Juegos' if self.es_personaje() else 'Color',juegos if self.es_personaje() else self.abrir_colores),('Aspecto',self.abrir_aspectos),
                   ('Modo pantalla' if self.es_personaje() else 'Modo personaje',lambda:self.guardar('modo_visual','pantalla' if self.es_personaje() else 'personaje')),('Tamaño',tamanos),('Voz',voz),('Más',mas)]
@@ -1557,6 +1561,7 @@ class Capri:
         self.boton(f,'Activar IA local',self.activar_ia,RED).pack(anchor='w')
         self.boton(f,'Vincular playlist de Spotify',self.vincular_playlist).pack(anchor='w',pady=(12,0))
         tk.Label(f,text='League of Legends',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(22,7))
+        self.boton(f,'Configurar League of Legends',self.abrir_lol,RED).pack(anchor='w',pady=(0,7))
         aceptar_lol=self.lol_auto_var=tk.BooleanVar(value=bool(self.cfg.get('lol_aceptar_automatico',False)))
         InterruptorCyber(f,text='Aceptar partidas automáticamente, también desde LoL',variable=aceptar_lol,
                          command=lambda:self.guardar('lol_aceptar_automatico',aceptar_lol.get()),bg=BG,fg=FG,font=('Chakra Petch',10)).pack(anchor='w')
@@ -1632,7 +1637,17 @@ class Capri:
         subprocess.Popen([str(pythonw if pythonw.exists() else sys.executable),str(lanzador)],creationflags=HIDDEN)
         self.cerrar()
 
+    def abrir_lol(self):
+        if self.lol_panel and not self.lol_panel.cerrado and self.lol_panel.ventana.winfo_exists():
+            self.lol_panel.ventana.deiconify();self.lol_panel.ventana.lift();return
+        from lol_ui import PanelLoL
+        self.lol_panel=PanelLoL(self.root,self.cfg.get('lol_seleccion',{}),self.guardar,self.enviar,
+                               self.lol,self.lol_seleccion,self.cfg.get('lol_aceptar_automatico',False))
+
     def guardar(self,k,v):
+        if k=='lol_seleccion':
+            from lol_seleccion import normalizar
+            v=normalizar(v);self.lol_seleccion.configurar(v)
         if k=='color_interfaz':
             from tema_ui import normalizar,activar
             v=normalizar(v);activar(v)
@@ -1844,6 +1859,8 @@ class Capri:
         distribuir(SimpleNamespace(width=w-60));ventana.update_idletasks();minimo();ventana.deiconify()
 
     def cerrar(self):
+        self.lol_seleccion.cerrar()
+        if self.lol_panel and not self.lol_panel.cerrado:self.lol_panel.cerrar()
         if self.asomo and self.asomo.get('curioso'):self.terminar_asomo()
         if self.animacion_cierre and self.cfg.get('animaciones',True) and self.cfg.get('despedida_cierre',True) and not self.saliendo:
             self.iniciar_despedida();return
@@ -1964,6 +1981,8 @@ class Capri:
         if self.transito and self.transito.get('morfosis'):self.transito['morfosis'].detener()
         self.cerrar_radial()
         self.lol.cerrar()
+        self.lol_seleccion.cerrar()
+        if self.lol_panel and not self.lol_panel.cerrado:self.lol_panel.cerrar()
         if self.activacion_permitida:
             from puente_opera import cerrar
             cerrar()

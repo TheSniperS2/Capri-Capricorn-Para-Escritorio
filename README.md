@@ -49,7 +49,7 @@ Activa la **aceptación automática de LoL** y busca desde Capri o desde el prop
 
 <p align="center">
   <a href="docs/media/readme/capri-lol.webp"><img src="docs/media/readme/capri-lol.webp" width="100%" alt="Cliente de League of Legends abierto y Capri confirmando la activación de la vigilancia de partidas."></a>
-  <br><sub>Vigilancia activada en el cliente real. La captura no muestra una partida aceptada. Capri no juega ni selecciona campeones.</sub>
+  <br><sub>Vigilancia activada en el cliente real. La captura no muestra una partida aceptada. El nuevo panel permite configurar picks y baneos por línea; Capri no juega por ti.</sub>
 </p>
 
 ### Una compañera con su propio estilo
@@ -185,7 +185,7 @@ Las órdenes dependen de la aplicación y de sus controles disponibles. Capri in
 | **Spotify** | Aplicación de escritorio y sesión iniciada. | [Uso y reproducción](docs/USO.md#elegir-dónde-reproducir-y-qué-resultado-abrir) |
 | **YouTube** | Opera/Opera GX; el puente amplía los controles del reproductor y de resultados. | [Conectar Opera](docs/CONECTAR_OPERA.md) |
 | **Discord** | Cliente de escritorio y sesión iniciada. Sus controles deben ser accesibles; para unirte, deja abierto el servidor. | [Discord](docs/USO.md#discord) |
-| **League of Legends** | Cliente abierto y una sala preparada. La aceptación automática es opcional. No juega ni elige campeones. | [Colas y aceptación](docs/LEAGUE_OF_LEGENDS.md) |
+| **League of Legends** | Cliente abierto y una sala preparada. Panel de picks y baneos por línea, búsqueda y aceptación automática opcionales. | [Configurar LoL](docs/LEAGUE_OF_LEGENDS.md) |
 
 ## Tus datos y tus permisos
 

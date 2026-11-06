@@ -2333,5 +2333,225 @@
     "See you, choom.",
     "Até mais, choom.",
     "またね、チューム。"
+  ],
+  "Tu próxima partida": [
+    "Your next match",
+    "Sua próxima partida",
+    "次の試合"
+  ],
+  "Tu línea. Tus campeones.": [
+    "Your role. Your champions.",
+    "Sua rota. Seus campeões.",
+    "自分のロール。自分のチャンピオン。"
+  ],
+  "PICKS": [
+    "PICKS",
+    "ESCOLHAS",
+    "ピック"
+  ],
+  "BANEOS": [
+    "BANS",
+    "BANIMENTOS",
+    "バン"
+  ],
+  "Prioridad 1": [
+    "Priority 1",
+    "Prioridade 1",
+    "優先順位 1"
+  ],
+  "Prioridad 2": [
+    "Priority 2",
+    "Prioridade 2",
+    "優先順位 2"
+  ],
+  "Prioridad 3": [
+    "Priority 3",
+    "Prioridade 3",
+    "優先順位 3"
+  ],
+  "Elegir campeón": [
+    "Choose champion",
+    "Escolher campeão",
+    "チャンピオンを選ぶ"
+  ],
+  "Cambiar campeón": [
+    "Change champion",
+    "Trocar campeão",
+    "チャンピオンを変更"
+  ],
+  "Sin configurar": [
+    "Not configured",
+    "Não configurado",
+    "未設定"
+  ],
+  "Buscar campeón…": [
+    "Search champions…",
+    "Buscar campeão…",
+    "チャンピオンを検索…"
+  ],
+  "Sin resultados": [
+    "No results",
+    "Nenhum resultado",
+    "結果なし"
+  ],
+  "Quitar campeón": [
+    "Remove champion",
+    "Remover campeão",
+    "チャンピオンを外す"
+  ],
+  "Confirmar picks automáticamente": [
+    "Automatically lock in picks",
+    "Confirmar escolhas automaticamente",
+    "ピックを自動確定"
+  ],
+  "Confirmar baneos automáticamente": [
+    "Automatically confirm bans",
+    "Confirmar banimentos automaticamente",
+    "バンを自動確定"
+  ],
+  "Configurar League of Legends": [
+    "Configure League of Legends",
+    "Configurar League of Legends",
+    "League of Legends の設定"
+  ],
+  "Perfiles por línea": [
+    "Role profiles",
+    "Perfis por rota",
+    "ロール別プロフィール"
+  ],
+  "Se usa la línea que te asigne LoL. Si una opción no está disponible, pasa a la siguiente.": [
+    "Uses the role assigned by LoL. If an option is unavailable, moves to the next one.",
+    "Usa a rota atribuída pelo LoL. Se uma opção não estiver disponível, passa para a próxima.",
+    "LoLが割り当てたロールを使用。候補が使えなければ次の候補に進みます。"
+  ],
+  "Tus cambios se guardan al instante": [
+    "Changes are saved instantly",
+    "Alterações salvas na hora",
+    "変更はすぐに保存されます"
+  ],
+  "Cancelar detiene la búsqueda. Capri no vuelve a iniciarla.": [
+    "Cancel stops matchmaking. Capri will not restart it.",
+    "Cancelar interrompe a busca. Capri não a reinicia.",
+    "キャンセルすると検索を停止し、再開しません。"
+  ],
+  "Abre LoL para conectar": [
+    "Open LoL to connect",
+    "Abra o LoL para conectar",
+    "接続するにはLoLを開いてください"
+  ],
+  "Conectando con LoL…": [
+    "Connecting to LoL…",
+    "Conectando ao LoL…",
+    "LoLに接続中…"
+  ],
+  "Sala preparada": [
+    "Lobby ready",
+    "Sala pronta",
+    "ロビー準備完了"
+  ],
+  "Buscando partida": [
+    "Finding a match",
+    "Buscando uma partida",
+    "マッチ検索中"
+  ],
+  "Partida encontrada": [
+    "Match found",
+    "Partida encontrada!",
+    "マッチが見つかりました"
+  ],
+  "Selección de campeón": [
+    "Champion select",
+    "Seleção de campeão",
+    "チャンピオン選択"
+  ],
+  "En partida": [
+    "In game",
+    "Em partida",
+    "試合中"
+  ],
+  "Cliente conectado": [
+    "Client connected",
+    "Cliente conectado!",
+    "クライアント接続済み"
+  ],
+  "Este catálogo se incluye con Capri; no necesita descargas al abrir el panel.": [
+    "This catalog is included with Capri; opening the panel requires no downloads.",
+    "Este catálogo vem com Capri; abrir o painel não requer downloads.",
+    "カタログはCapriに同梱されており、パネルを開く際のダウンロードは不要です。"
+  ],
+  "Capri no está avalado por Riot Games. League of Legends y Riot Games son marcas de Riot Games, Inc.": [
+    "Capri is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc.",
+    "Capri não é endossado pela Riot Games e não reflete as opiniões da Riot Games ou de qualquer pessoa oficialmente envolvida na produção ou gestão de suas propriedades. Riot Games e suas propriedades são marcas da Riot Games, Inc.",
+    "CapriはRiot Gamesによる承認を受けておらず、Riot Gamesまたはその関係者の見解を反映しません。Riot Gamesおよび関連する名称はRiot Games, Inc.の商標です。"
+  ],
+  "Top": [
+    "Top lane",
+    "Topo",
+    "トップ"
+  ],
+  "Jungla": [
+    "Jungle",
+    "Selva",
+    "ジャングル"
+  ],
+  "Medio": [
+    "Mid",
+    "Meio",
+    "ミッド"
+  ],
+  "ADC": [
+    "Bot / ADC",
+    "Atirador",
+    "ADC（ボット）"
+  ],
+  "Soporte": [
+    "Support",
+    "Suporte",
+    "サポート"
+  ],
+  "Picks y baneos automáticos desactivados": [
+    "Automatic picks and bans disabled",
+    "Escolhas e banimentos automáticos desativados",
+    "自動ピックとバンは無効です"
+  ],
+  "Esperando tu turno en selección de campeón": [
+    "Waiting for your turn in champion select",
+    "Aguardando seu turno na seleção de campeão",
+    "チャンピオン選択の自分のターンを待機中"
+  ],
+  "Esta selección no tiene una línea asignada; elige desde LoL": [
+    "No role assigned in this draft; choose in LoL",
+    "Esta seleção não tem rota atribuída; escolha no LoL",
+    "ロールが未割り当てです。LoLで選択してください"
+  ],
+  "No quedan opciones disponibles; elige desde LoL": [
+    "No configured options available; choose in LoL",
+    "Nenhuma opção disponível; escolha no LoL",
+    "使える候補がありません。LoLで選択してください"
+  ],
+  "Selección manual detectada; continúa desde LoL": [
+    "Manual selection detected; continue in LoL",
+    "Seleção manual detectada; continue no LoL",
+    "手動選択を検出しました。LoLで続けてください"
+  ],
+  "Confirmación enviada; comprueba el resultado en LoL": [
+    "Confirmation sent; check the result in LoL",
+    "Confirmação enviada; confira o resultado no LoL",
+    "確定を送信しました。LoLで結果を確認してください"
+  ],
+  "LoL confirmó tu selección": [
+    "LoL confirmed your selection",
+    "LoL confirmou sua seleção",
+    "LoLで選択が確定しました"
+  ],
+  "Esperando conexión con el cliente de LoL": [
+    "Waiting for the LoL client connection",
+    "Aguardando conexão com o cliente do LoL",
+    "LoLクライアントへの接続を待機中"
+  ],
+  "LoL no confirmó la acción; continúa desde el cliente": [
+    "LoL did not confirm the action; continue in the client",
+    "LoL não confirmou a ação; continue pelo cliente",
+    "LoLで確定を確認できませんでした。クライアントで続けてください"
   ]
 }

@@ -2,6 +2,13 @@
 
 ## En desarrollo
 
+### League of Legends
+
+- Corregida la detección de campeones baneables cuando LoL devuelve solo `[-1]`: consulta de respaldo a sus fichas, sin cambiar los picks ni ignorar campeones deshabilitados, seleccionados, baneados o señalados por aliados.
+
+- Nuevo panel de perfiles por línea con tres picks y tres baneos priorizados, selector con retratos y búsqueda, guardado automático y catálogo local de Data Dragon.
+- Búsqueda, cancelación, aceptación y aceptación automática reunidas en el panel. Confirmación opcional de picks y baneos exclusivamente durante el turno local y según la línea asignada, respetando selecciones manuales y hovers aliados. Cancelar no reinicia la cola.
+
 ### Presentación e interfaz pública
 
 - Instalación documentada para principiantes: instalador tradicional de Python 3.12, comprobación de versión, extracción del ZIP, comandos separados y actualización desde `main`. Nueva guía para errores de preparación y registros, incluida la redirección de Microsoft Store.

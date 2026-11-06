@@ -12,6 +12,12 @@ Las referencias visuales usadas por el programa proceden de la [galería de Capr
 
 ## Dependencias y servicios
 
+### Catálogo de League of Legends
+
+`assets/lol/campeones.json` y `assets/lol/champion*.png` contienen nombres, identificadores y retratos oficiales de campeones procedentes de [Data Dragon de Riot Games](https://developer.riotgames.com/docs/lol#data-dragon), versión indicada en el JSON. Estos recursos pertenecen a Riot Games y quedan excluidos de la licencia MIT de Capri. No se incluyen estadísticas de jugadores ni datos privados. iTero se consultó como referencia funcional; no se distribuyen sus diseños, datos ni software.
+
+Capri is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
+
 Cada dependencia conserva su propia licencia y condiciones. Los modelos se descargan por separado; no se redistribuyen sus pesos en este repositorio.
 
 - [Python](https://www.python.org/) y Tcl/Tk.

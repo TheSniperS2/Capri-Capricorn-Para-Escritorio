@@ -94,8 +94,15 @@ class ClienteLCU:
         contexto.check_hostname=False;contexto.verify_mode=ssl.CERT_NONE
         self.abridor=urllib.request.build_opener(urllib.request.ProxyHandler({}),SinRedireccion(),urllib.request.HTTPSHandler(context=contexto))
 
-    def pedir(self,metodo,ruta):
-        if (metodo,ruta) not in PERMITIDOS:raise ValueError('Acción LCU no permitida.')
+    def pedir(self,metodo,ruta,datos=None):
+        seleccion=metodo=='GET' and ruta in ('/lol-champ-select/v1/session','/lol-champ-select/v1/pickable-champion-ids','/lol-champ-select/v1/bannable-champion-ids')
+        ficha=metodo=='GET' and re.fullmatch(r'/lol-champ-select/v1/grid-champions/[1-9][0-9]{0,4}',ruta)
+        confirmar=(metodo=='PATCH' and re.fullmatch(r'/lol-champ-select/v1/session/actions/[0-9]{1,10}',ruta)
+                   and isinstance(datos,dict) and set(datos)=={'championId','completed'}
+                   and type(datos['championId']) is int and 0<datos['championId']<100000
+                   and datos['completed'] is True)
+        if not ((metodo,ruta) in PERMITIDOS or seleccion or ficha or confirmar) or (datos is not None and not confirmar):
+            raise ValueError('Acción LCU no permitida.')
         # Las credenciales duran hasta cerrar el cliente. No volver a lanzar
         # PowerShell durante un ready-check si la conexión sigue funcionando.
         if self._credenciales is None:
@@ -103,7 +110,8 @@ class ClienteLCU:
         cred=self._credenciales
         autorizacion=base64.b64encode(('riot:'+cred.secreto).encode()).decode()
         peticion=urllib.request.Request(f'https://127.0.0.1:{cred.puerto}{ruta}',method=metodo,
-            headers={'Authorization':'Basic '+autorizacion,'Accept':'application/json'},data=b'' if metodo=='POST' else None)
+            headers={'Authorization':'Basic '+autorizacion,'Accept':'application/json','Content-Type':'application/json'},
+            data=json.dumps(datos).encode() if confirmar else (b'' if metodo=='POST' else None))
         try:
             with self.abridor.open(peticion,timeout=3) as respuesta:
                 cuerpo=respuesta.read(1024*1024)

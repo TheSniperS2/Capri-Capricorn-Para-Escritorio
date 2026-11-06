@@ -71,6 +71,10 @@ assets/fonts/*
 !assets/fonts/ChakraPetch-Regular.ttf
 !assets/fonts/ChakraPetch-Bold.ttf
 !assets/fonts/OFL.txt
+!assets/lol/
+assets/lol/*
+!assets/lol/campeones.json
+!assets/lol/champion*.png
 build/
 dist/
 *.part
