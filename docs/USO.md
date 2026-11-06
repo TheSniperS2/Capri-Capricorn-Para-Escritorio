@@ -1,6 +1,6 @@
 # Capri
 
-Para LoL, abre **Más → League of Legends → Configurar League of Legends** en el menú radial, o el botón de LoL en **Ajustes → IA y servicios**. En un mismo panel puedes buscar, aceptar y cancelar partidas, activar la aceptación automática y guardar tres picks y tres baneos por cada línea. La confirmación automática de campeones se activa por separado y viene apagada. Consulta la [guía de LoL](LEAGUE_OF_LEGENDS.md).
+Para LoL, abre **Más → League of Legends** en el menú radial para entrar directamente al panel, o pulsa el botón de LoL en **Ajustes → IA y servicios**. En un mismo panel puedes buscar, aceptar y cancelar partidas, activar la aceptación automática y guardar tres picks y tres baneos por cada línea. La confirmación automática de campeones se activa por separado y viene apagada. Consulta la [guía de LoL](LEAGUE_OF_LEGENDS.md).
 
 ¿Todavía no tienes el lanzador o falla la preparación? Consulta la [instalación paso a paso](../README.md#empieza-a-usarla) y los [errores frecuentes](INSTALACION.md).
 
