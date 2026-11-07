@@ -2,6 +2,14 @@
 
 ## En desarrollo
 
+### Monitor del computador
+
+- Diseño unificado del visor, los recursos y la escritura: chasis continuo y misma paleta, sin tres tarjetas separadas. Al desactivar el monitor se conserva el aspecto habitual.
+
+- Monitor opcional, desactivado por defecto: franja de iconos vectoriales entre el visor y la barra de escritura, del ancho del visor, CPU/RAM/GPU con barras y VRAM utilizada. Detalles al pasar el puntero. Integrado en la misma ventana para moverse junto a Capri sin temporizador de seguimiento. Actualización de datos cada dos segundos y pausa al ocultar Capri o cambiar al modo personaje.
+- Lectura mediante APIs de Windows, sin programas adicionales. Las métricas de GPU dependen del controlador; los datos ausentes se indican como tales. La GPU muestra el motor más ocupado y las memorias gráficas se suman entre adaptadores.
+- Se puede arrastrar junto al visor y activar/desactivar desde Ajustes → Escritorio → Monitor del computador, conservando la preferencia. Se integra en la apertura y en las transformaciones mediante una instantánea del mismo diseño; el panel vivo se restaura al terminar, sin aparición tardía. La despedida conserva su animación propia.
+
 ### Valorant
 
 - Protección de la presentación del mapa antes de elegir agente: mapa identificado, selección activa con tiempo restante y jugador incorporado, más seis segundos de seguridad. Revalida antes de seleccionar y confirmar; reinicia la espera al cambiar de mapa o perder la preparación.

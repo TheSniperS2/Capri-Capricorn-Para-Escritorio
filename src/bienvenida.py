@@ -160,7 +160,8 @@ class Bienvenida:
         s=s0+(s1-s0)*q
         # Mantiene un único centro de proyección desde el primer plano hasta la cámara.
         ox=self.w*.5+(self.fin[0]-self.w*.5)*q
-        fin_y=self.fin[1]-(23-14*escala)-55*s1
+        desplazamiento=self.destino_tamano[1]/2-160*escala
+        fin_y=self.fin[1]-desplazamiento-55*s1
         oy=self.h*.42+(fin_y-self.h*.42)*q
         factor=s/s1;cx=ox;cy=oy+55*s
         caja=(cx-160*escala*factor,cy-105*escala*factor,cx+160*escala*factor,cy+105*escala*factor)

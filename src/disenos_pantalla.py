@@ -17,6 +17,14 @@ def ancho_entrada(diseno,w):
     reserva=90 if normalizar(diseno)=='compacto' else (98 if normalizar(diseno)=='minimal' else 78)
     return max(110,w-reserva)
 
+def base_entrada_unida(c,w,escala=1,tinta_activa=None):
+    izq=8*escala;der=w-izq
+    c.create_polygon(izq,0,der,0,der,34,der-8,42,izq+8,42,izq,34,
+                     fill=color('#120b10'),outline='',tags='marco')
+    c.create_line(izq,0,izq,34,izq+8,42,der-8,42,der,34,der,0,
+                  fill=color(tinta_activa or '#8e304a'),tags='marco')
+    c.create_rectangle(izq+7,4,der-7,34,fill=color('#170c12'),outline='',tags='marco')
+
 def superficie(c,diseno,w,h,chat=False):
     diseno=normalizar(diseno);fondo=color('#170c12' if chat else '#120b10');borde=color('#8e304a');acento=color('#ff4267')
     tags='marco'

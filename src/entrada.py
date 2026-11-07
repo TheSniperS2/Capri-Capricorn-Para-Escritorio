@@ -11,6 +11,7 @@ class Entrada(CanvasUI):
     def __init__(self,padre,enviar,menu,aspecto='original'):
         super().__init__(padre,width=360,height=46,bg=TRANS,highlightthickness=0)
         self.enviar=enviar;self.menu=menu;self.placeholder=True;self.activa=False;self.hablando=False;self.nivel=0
+        self.unida=False;self.escala_marco=1
         self.texto_placeholder='Di «Capri» o escribe…';self.foco_cambio=None;self.antes_foco=None;self.activacion=True
         self.entrada=tk.Entry(self,bg='#170c12',fg='#768b96',insertbackground='#ff9eaf',relief='flat',
                               highlightthickness=0,font=(FAMILIA,12))
@@ -82,7 +83,10 @@ class Entrada(CanvasUI):
         w=max(200,self.winfo_width(),int(self.cget('width')));self.delete('marco')
         color=self.acento if self.activa else (self.color_voz if self.hablando else self.borde)
         from disenos_pantalla import superficie,ancho_entrada
-        superficie(self,self.diseno,w,46,chat=True)
+        if self.unida:
+            from disenos_pantalla import base_entrada_unida
+            base_entrada_unida(self,w,self.escala_marco,color if self.activa or self.hablando else None)
+        else:superficie(self,self.diseno,w,46,chat=True)
         if self.activa or self.hablando:
             for item in self.find_withtag('borde_entrada'):self.itemconfigure(item,outline=color)
         self.tag_lower('marco');self.itemconfigure(self.ventana,width=ancho_entrada(self.diseno,w))

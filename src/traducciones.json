@@ -2788,5 +2788,50 @@
     "Ctrl+Alt+C to show or hide Capri.",
     "Ctrl+Alt+C para mostrar ou ocultar a Capri.",
     "Ctrl+Alt+CでCapriを表示・非表示にします。"
+  ],
+  "Monitor del computador": [
+    "Computer monitor",
+    "Monitor do computador",
+    "コンピューターのモニター"
+  ],
+  "Mostrar recursos del computador": [
+    "Show computer resources",
+    "Mostrar recursos do computador",
+    "コンピューターの使用状況を表示"
+  ],
+  "CPU, RAM, GPU y VRAM entre el visor y la barra de escritura. Disponible en modo pantalla.": [
+    "CPU, RAM, GPU and VRAM between the display and the input bar. Available in screen mode.",
+    "CPU, RAM, GPU e VRAM entre o visor e a barra de escrita. Disponível no modo tela.",
+    "画面と入力欄の間にCPU、RAM、GPU、VRAMを表示します。画面モードで利用できます。"
+  ],
+  "GB dedicados": [
+    "Dedicated GB",
+    "GB dedicados",
+    "専用GB"
+  ],
+  "CPU · Uso total del procesador": [
+    "CPU · Total processor usage",
+    "CPU · Uso total do processador",
+    "CPU · プロセッサー全体の使用率"
+  ],
+  "RAM · Memoria del computador": [
+    "RAM · Computer memory",
+    "RAM · Memória do computador",
+    "RAM · コンピューターのメモリ"
+  ],
+  "GPU · Motor gráfico más ocupado": [
+    "GPU · Busiest graphics engine",
+    "GPU · Motor gráfico mais ocupado",
+    "GPU · 最も使用率の高いグラフィックスエンジン"
+  ],
+  "VRAM · Memoria gráfica dedicada utilizada": [
+    "VRAM · Dedicated graphics memory in use",
+    "VRAM · Memória gráfica dedicada em uso",
+    "VRAM · 使用中の専用グラフィックスメモリ"
+  ],
+  "RAM compartida: {0} GB · aparte de la VRAM": [
+    "Shared RAM: {0} GB · separate from VRAM",
+    "RAM compartilhada: {0} GB · separada da VRAM",
+    "共有RAM：{0} GB · VRAMとは別です"
   ]
 }

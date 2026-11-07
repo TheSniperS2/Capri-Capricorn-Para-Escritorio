@@ -58,7 +58,7 @@ def plan_transicion(b,u,fuente=(1238,941)):
     apertura=tuple(x+(y-x)*a for x,y in zip((0,0,b.w,b.h),caja))
     return {'u':u,'escala':escala,'posicion':posicion,'apertura':apertura,
             'caja':caja,'factor':factor,'pantalla':(b.w,b.h),
-            'marco_centro':((caja[0]+caja[2])/2,(caja[1]+caja[3])/2+(23-14*b.destino_tamano[0]/360)*factor)}
+            'marco_centro':((caja[0]+caja[2])/2,(caja[1]+caja[3])/2+(b.destino_tamano[1]/2-160*b.destino_tamano[0]/360)*factor)}
 
 
 def renderizar_transicion(im,destino,p,tinta):

@@ -136,17 +136,34 @@ class LienzoRaster:
         self.d.text((x*self.s,y*self.s+self.dy),texto,font=fuente,fill=kw['fill'],anchor=anchor)
 
 
-def panel_pantalla(vista,aspecto,escala=3,con_entrada=False,escala_avatar=1,texto_entrada='Di «Capri» o escribe…',placeholder=True):
+def tamano_panel(escala=1,monitor=False):
+    return round(360*escala),round((274 if monitor else 292)*escala)+(round(62*escala) if monitor else 0)+46
+
+
+def panel_pantalla(vista,aspecto,escala=3,con_entrada=False,escala_avatar=1,texto_entrada='Di «Capri» o escribe…',placeholder=True,monitor=None):
     from disenos_pantalla import cabecera
-    alto=292*escala+(46*escala/escala_avatar if con_entrada else 0)
+    unido=monitor is not None
+    alto_visor=274 if unido else 292
+    alto=(alto_visor+(62 if unido else 0))*escala+(46*escala/escala_avatar if con_entrada else 0)
     im=Image.new('RGBA',(round(360*escala),round(alto)))
     c=LienzoRaster(im,escala);superficie(c,aspecto,360,292);cabecera(c,aspecto)
     foto=vista.resize((round(320*escala),round(210*escala)),Image.Resampling.LANCZOS)
     im.alpha_composite(foto,(round(20*escala),round(55*escala)))
+    if unido:
+        from tema_ui import color
+        c.create_rectangle(8,270,352,274,fill=color('#120b10'),outline='')
+        c.create_line(8,270,8,274,fill=color('#8e304a'))
+        c.create_line(352,270,352,274,fill=color('#8e304a'))
+        from monitor_diseno import dibujar_recursos
+        dibujar_recursos(LienzoRaster(im,escala,dy=274*escala),monitor)
     if con_entrada:
         from tema_ui import color
-        k=escala/escala_avatar;ancho=360*escala_avatar;dy=292*escala
-        entrada=LienzoRaster(im,k,dy);superficie(entrada,aspecto,ancho,46,chat=True)
+        k=escala/escala_avatar;ancho=360*escala_avatar;dy=(alto_visor+(62 if unido else 0))*escala
+        entrada=LienzoRaster(im,k,dy)
+        if unido:
+            from disenos_pantalla import base_entrada_unida
+            base_entrada_unida(entrada,ancho,escala_avatar)
+        else:superficie(entrada,aspecto,ancho,46,chat=True)
         entrada.create_line(16,20,23,23,16,26,fill=color('#ec3c62'),width=2)
         entrada.create_line(ancho-28,28,ancho-18,18,fill=color('#9d3b52'),width=1.5)
         entrada.create_line(ancho-26,18,ancho-18,18,ancho-18,26,fill=color('#9d3b52'),width=1.5)
@@ -211,9 +228,15 @@ class Avatar:
         self.glitch_activo=glitch and ahora<self.glitch_hasta
         return self.glitches[indice][int(ahora*28)%len(self.glitches[indice])] if self.glitch_activo else (self.senales[indice][int(ahora*8)%3] if glitch else self.fotos[indice])
 
-def dibujar_marco(c,fase,color,estado,nivel=0,glitch=False,escala=1,aspecto='clasico'):
+def dibujar_marco(c,fase,color,estado,nivel=0,glitch=False,escala=1,aspecto='clasico',unido=False):
     from disenos_pantalla import cabecera
     superficie(c,aspecto,360,292)
+    if unido:
+        from tema_ui import color as tinta
+        # El chasis continúa hacia los recursos y la entrada, sin cerrar otra tarjeta.
+        c.create_rectangle(8,270,352,292,fill=tinta('#120b10'),outline='')
+        c.create_line(8,270,8,292,fill=tinta('#8e304a'))
+        c.create_line(352,270,352,292,fill=tinta('#8e304a'))
     cabecera(c,aspecto,estado,color,escala)
     if glitch:
         c.create_line(17,49,135,49,fill='#ff3c72',width=3)
