@@ -99,6 +99,9 @@ class Capri:
         from lol_seleccion import ControlSeleccion
         self.lol_seleccion=ControlSeleccion();self.lol_panel=None
         self.lol_seleccion.configurar(self.cfg.get('lol_seleccion',{}),iniciar=hotkeys)
+        from valorant import ControlValorant
+        self.valorant=ControlValorant();self.valorant_panel=None
+        self.valorant.configurar(self.cfg.get('valorant',{}),iniciar=hotkeys)
         self.entrada_personaje=False;self.ventana_entrada=None;self.entrada_lateral=None;self.transito=None
         self.cfg.setdefault('llamadas_capri',True);self.cfg.setdefault('asomos_automaticos',False);self.cfg.setdefault('bromas_ventanas',False)
         self.cfg.setdefault('intervalo_interacciones',15)
@@ -160,7 +163,10 @@ class Capri:
         self.dialogo.entrada=self.entrada_compacta.entrada;self.dialogo.control_entrada=self.entrada_compacta;self.dialogo.menu=self.menu
         self.aplicar_escala(inicial=True)
         if self.intro_activa:self.iniciar_intro()
+        from visibilidad import VisibilidadCapri
+        self.visibilidad=VisibilidadCapri(self.root,self.preparar_minimizar,self.recuperar_capri)
         self.atajo = Atajo(lambda: self.eventos.put(('micro', None)), lambda t: self.eventos.put(('aviso', t)),self.cfg.get('tecla_hablar','F8')) if hotkeys else None
+        self.atajo_visibilidad=self.crear_atajo_visibilidad() if hotkeys else None
         self.root.bind('<Escape>', lambda e:self.interrumpir())
         self.root.protocol('WM_DELETE_WINDOW',self.cerrar)
         self.root.protocol('WM_DELETE_WINDOW', self.cerrar)
@@ -283,7 +289,7 @@ class Capri:
         juegos=[('Desactivar asomos automáticos' if self.cfg.get('asomos_curiosos') else 'Activar asomos automáticos',lambda:self.guardar('asomos_curiosos',not self.cfg.get('asomos_curiosos'))),
                 ('Desactivar bromas de ventanas' if self.cfg.get('bromas_ventanas') else 'Activar bromas de ventanas',lambda:self.guardar('bromas_ventanas',not self.cfg.get('bromas_ventanas')))]
         voz=[('Hablar',self.hablar),('Activar voz' if not self.cfg.get('voz') else 'Silenciar voz',lambda:self.guardar('voz',not self.cfg.get('voz')))]
-        mas=[('YouTube',self.conectar_opera),('League of Legends',self.abrir_lol),('Cerrar Capri',self.cerrar)]
+        mas=[('YouTube',self.conectar_opera),('League of Legends',self.abrir_lol),('Valorant',self.abrir_valorant),('Minimizar Capri',self.minimizar_capri),('Cerrar Capri',self.cerrar)]
         opciones=[('Ajustes',self.configurar),('Chat',self.abrir_chat),('Juegos' if self.es_personaje() else 'Color',juegos if self.es_personaje() else self.abrir_colores),('Aspecto',self.abrir_aspectos),
                   ('Modo pantalla' if self.es_personaje() else 'Modo personaje',lambda:self.guardar('modo_visual','pantalla' if self.es_personaje() else 'personaje')),('Tamaño',tamanos),('Voz',voz),('Más',mas)]
         self.radial=MenuRadial(self.root,e.x_root,e.y_root,opciones,terminar=lambda:setattr(self,'radial',None),
@@ -409,6 +415,7 @@ class Capri:
             self.ocultar_entrada_personaje();self.entrada_compacta.pack_forget()
 
     def juego_ocupada(self,ignorar_asomo=False):
+        if getattr(getattr(self,'visibilidad',None),'oculta',False):return True
         asomo=self.asomo and not (ignorar_asomo and self.asomo.get('curioso'))
         return bool(getattr(self,'radial',None) or self.transito or self.intro_activa or asomo or self.ocupada or self.escuchando or self.hablando or self.voz_ticket is not None or self.drag or self.escribiendo() or self.control_pc.pendiente or (self.ajustes and self.ajustes.winfo_exists()) or (self.llamada_ui and not self.llamada_ui.cerrada) or (self.apagado_ui and not self.apagado_ui.cerrada))
 
@@ -439,6 +446,7 @@ class Capri:
 
     def llamar_capri(self,tipo='llamada',invitado='azar'):
         if self.cerrado or self.saliendo:return
+        if self.visibilidad.oculta:return
         if self.llamada_ui and not self.llamada_ui.cerrada:return
         if self.asomo and self.asomo.get('curioso'):self.terminar_asomo()
         from escritorio import proteger_foco
@@ -488,6 +496,7 @@ class Capri:
         self.llamada_ui.mascara=mascara;self.llamada_ui.invitado=invitado
 
     def revisar_interacciones(self):
+        if self.visibilidad.oculta:return
         if self.cerrado or self.saliendo:return
         voz_ocupada=self.ocupada or self.escuchando or self.hablando or self.voz_ticket is not None or self.transito or self.intro_activa or self.escribiendo() or (self.apagado_ui and not self.apagado_ui.cerrada)
         if self.mensaje_llamada_pendiente and not voz_ocupada:
@@ -841,6 +850,8 @@ class Capri:
 
     def animar(self):
         if self.cerrado or self.saliendo: return
+        if self.visibilidad.oculta:
+            self.root.after(100,self.animar);return
         if self.apagado_ui and not self.apagado_ui.cerrada:
             self.root.after(100,self.animar);return
         if self.asomo and self.asomo.get('curioso'):
@@ -883,7 +894,28 @@ class Capri:
             self.root.attributes('-alpha',self.intro_alpha);del self.intro_alpha
         self.root.after(66, self.animar)
 
+    def crear_atajo_visibilidad(self):
+        eventos=self.eventos
+        return Atajo(lambda:eventos.put(('visibilidad',None)),lambda texto:eventos.put(('aviso',texto)),'Ctrl+Alt+C')
+
+    def preparar_minimizar(self):
+        self.cerrar_radial();self.finalizar_intro()
+        if self.transito:self.finalizar_transito()
+        if self.asomo and self.asomo.get('curioso'):self.terminar_asomo()
+        self.ocultar_entrada_personaje();self.dialogo.ocultar();self.restaurar_broma(activar=False)
+
+    def minimizar_capri(self):self.visibilidad.ocultar()
+
+    def recuperar_capri(self):
+        if self.cerrado or self.saliendo:return
+        self.cerrar_radial()
+        # Recuperar el avatar no es una petición de abrir el chat ni de darle foco.
+        self.root.attributes('-topmost',True)
+        self.root.lift()
+
     def abrir_chat(self):
+        if self.visibilidad.oculta:
+            self.visibilidad.mostrar()
         if self.panel and self.panel.winfo_exists():
             self.panel.deiconify(); self.panel.lift(); self.entrada.focus_set(); return
         p = self.panel = tk.Toplevel(self.root)
@@ -893,14 +925,21 @@ class Capri:
         x = max(0,self.root.winfo_x()-485); y = max(0,min(self.root.winfo_y()-140,self.root.winfo_screenheight()-690))
         p.geometry(f'+{x}+{y}')
         from ajustes_ui import VentanaCyber,MarcoTransmision,BarraCyber
-        self.marco_chat=VentanaCyber(p,'CONVERSACIÓN');contenido=self.marco_chat.cuerpo
+        self.marco_chat=VentanaCyber(p,'CONVERSACIÓN',minimizar=self.minimizar_capri);contenido=self.marco_chat.cuerpo
         cabeza = tk.Frame(contenido,bg=BG); cabeza.pack(fill='x',padx=20,pady=(18,8))
         tk.Label(cabeza,text='CAPRI',bg=BG,fg=FG,font=('Chakra Petch',20,'bold')).pack(side='left')
         self.boton(cabeza,'Ajustes',self.configurar).pack(side='right')
         tk.Label(contenido,text='Di «Capri» para hablar o escribe una transmisión.',bg=BG,fg=MUTED,font=('Chakra Petch',10)).pack(anchor='w',padx=21,pady=(0,12))
+        from ajustes_ui import SelectorCyber
+        fila_juego=tk.Frame(contenido,bg=BG);fila_juego.pack(fill='x',padx=21,pady=(0,8))
+        tk.Label(fila_juego,text='Juego para buscar',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(side='left',padx=(0,10))
+        self.juego_combo=SelectorCyber(fila_juego,values=('Automático','League of Legends','Valorant'),width=215)
+        self.juego_combo.pack(side='right',fill='x',expand=True)
+        self.juego_combo.current(('auto','lol','valorant').index(self.cfg.get('juego_busqueda','auto') if self.cfg.get('juego_busqueda') in ('auto','lol','valorant') else 'auto'))
+        self.juego_combo.bind('<<ComboboxSelected>>',lambda e:self.guardar('juego_busqueda',('auto','lol','valorant')[self.juego_combo.current()]))
+        tk.Label(contenido,text='Ctrl+Alt+C para mostrar u ocultar Capri.',bg=BG,fg=MUTED,font=('Chakra Petch',8)).pack(anchor='w',padx=21,pady=(0,7))
         from idiomas import fuente
         self.marco_historial=MarcoTransmision(contenido,'REGISTRO // TRANSMISIONES',height=240)
-        self.marco_historial.pack(fill='both',expand=True,padx=12)
         self.chat = tk.Text(self.marco_historial.cuerpo,height=8,bg='#180d13',fg=FG,relief='flat',borderwidth=0,highlightthickness=0,wrap='word',font=(fuente(self.cfg.get('idioma')),11),padx=5,pady=8,spacing1=0,spacing3=0,selectbackground='#6a2038',selectforeground=FG,state='disabled')
         barra_chat=BarraCyber(self.marco_historial.cuerpo,self.chat.yview)
         self.chat.configure(yscrollcommand=barra_chat.set);barra_chat.pack(side='right',fill='y',padx=(6,0))
@@ -912,9 +951,11 @@ class Capri:
         self.chat.tag_configure('aviso',foreground=MUTED)
         self.chat.bind('<Configure>',lambda e:self.chat.yview_moveto(1))
         self.pintar_historial()
-        tk.Label(contenido,textvariable=self.subtitulo,bg=BG,fg=MUTED,wraplength=430,font=('Chakra Petch',9)).pack(fill='x',padx=20,pady=9)
+        self.etiqueta_estado_chat=tk.Label(contenido,textvariable=self.subtitulo,bg=BG,fg=MUTED,wraplength=430,font=('Chakra Petch',9))
         self.marco_entrada=MarcoTransmision(contenido,'NUEVA TRANSMISIÓN // ESCRIBE AQUÍ',height=94)
-        self.marco_entrada.pack(fill='x',padx=12,pady=(0,8))
+        self.marco_entrada.pack(side='bottom',fill='x',padx=12,pady=(0,8))
+        self.etiqueta_estado_chat.pack(side='bottom',fill='x',padx=20,pady=9)
+        self.marco_historial.pack(fill='both',expand=True,padx=12)
         caja=self.marco_entrada.cuerpo
         self.campo_entrada=LienzoUI(caja,bg='#180d13',highlightthickness=0,width=160,height=40)
         self.campo_entrada.pack(side='left',fill='both',expand=True,padx=(2,10))
@@ -996,6 +1037,21 @@ class Capri:
         self.dialogo.recibir_usuario(texto)
         self.poner_chat('Tú',texto)
         orden = interpretar(texto)
+        if orden and orden.tipo.startswith('valorant_') and self.cfg.get('juego_busqueda')!='valorant':
+            self.guardar('juego_busqueda','valorant')
+        elif orden and orden.tipo.startswith('lol_') and re.search(r'\b(?:lol|league(?: of legends)?)\b',texto,re.I) and self.cfg.get('juego_busqueda')!='lol':
+            self.guardar('juego_busqueda','lol')
+        contexto_valorant=self.cfg.get('juego_busqueda')=='valorant'
+        if origen=='voz' and self.cfg.get('juego_busqueda','auto')=='auto':
+            from escritorio import valorant_en_primer_plano
+            contexto_valorant=valorant_en_primer_plano()
+        if contexto_valorant:
+            from valorant import interpretar_valorant
+            from core import limpiar_peticion,Orden
+            contextual=interpretar_valorant(limpiar_peticion(texto).strip(' .!?¿¡')+' en valorant')
+            if contextual:orden=Orden(*contextual)
+            elif orden and orden.tipo in ('lol_buscar','lol_cancelar'):
+                orden=Orden('valorant_'+orden.tipo.removeprefix('lol_'))
         orden = self.interprete.ajustar_orden(texto,orden,bool(self.cfg.get('control_ampliado')))
         from core import normalizar
         juego=normalizar(texto).strip(' .!¡¿?')
@@ -1064,6 +1120,8 @@ class Capri:
                     from control_pc import ACCIONES as PC
                     if resuelta.tipo.startswith('lol_'):
                         respuesta=self.lol.ejecutar(resuelta.tipo,resuelta.valor,automatico=self.cfg.get('lol_aceptar_automatico',False),cancelar=cancelar)
+                    elif resuelta.tipo.startswith('valorant_'):
+                        respuesta=self.valorant.ejecutar(resuelta.tipo,resuelta.valor,cancelar=cancelar)
                     elif resuelta.tipo in PC:
                         respuesta=self.control_pc.ejecutar(resuelta.tipo,resuelta.valor)
                         if cancelar.is_set():self.control_pc.cancelar();return
@@ -1148,7 +1206,10 @@ class Capri:
         if self.apagado_ui and not self.apagado_ui.cerrada:return
         if not self.activacion_permitida or not self.cfg.get('activacion_voz') or self.cerrado:return
         # Evitar que su propia voz active otra conversación. F8 siempre interrumpe.
-        if self.escuchando or self.hablando or (self.ajustes and self.ajustes.winfo_exists()):return
+        if self.escuchando or self.hablando:return
+        if self.ajustes and self.ajustes.winfo_exists() and not self.visibilidad.oculta:
+            from escritorio import valorant_en_primer_plano
+            if not valorant_en_primer_plano():return
         if self.activacion_hilo and self.activacion_hilo.is_alive():return
         if time.monotonic()<self.activacion_reintento:return
         self.activacion_stop=threading.Event()
@@ -1264,6 +1325,7 @@ class Capri:
                     if self.apagado_ui:self.apagado_ui.cerrar()
                     self.poner_chat('Capri',ui(valor))
             elif tipo=='micro':self.hablar()
+            elif tipo=='visibilidad':self.visibilidad.alternar()
             elif tipo=='lol_aviso':
                 # Ready-check no interrumpe una respuesta o dictado en curso.
                 self.poner_chat('Capri',ui(valor,codigo_idioma(self.cfg.get('idioma'))),
@@ -1563,6 +1625,8 @@ class Capri:
         tk.Label(f,textvariable=self.lol_estado,wraplength=460,justify='left',bg=BG,fg=GREEN,font=('Chakra Petch',9,'bold')).pack(anchor='w',pady=(7,0))
         tk.Label(f,text='Actívalo una vez y busca desde LoL o Capri. Aceptaré al aparecer la partida sin esperar una orden. La vigilancia se conserva al reiniciar Capri y vuelve a conectarse si abres LoL después.',
                  wraplength=460,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w',pady=(7,0))
+        tk.Label(f,text='Valorant',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(22,7))
+        self.boton(f,'Configurar Valorant',self.abrir_valorant,RED).pack(anchor='w',pady=(0,7))
         tk.Label(f,text='No se guarda el audio ni el historial del chat.\nArrastra la imagen para mover a Capri. Clic para chatear.\nTecla configurable en Voz · Esc: detener voz.',wraplength=420,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',10)).pack(anchor='w',pady=20)
         for widget in (self.micro_combo,self.whisper_combo,self.perfil_voz_combo,self.modelo_combo,motor,forma):widget.configure(style='Capri.TCombobox')
         ui.conectar_rueda()
@@ -1632,13 +1696,27 @@ class Capri:
         self.cerrar()
 
     def abrir_lol(self):
+        self.guardar('juego_busqueda','lol')
+        if self.visibilidad.oculta:self.visibilidad.mostrar()
         if self.lol_panel and not self.lol_panel.cerrado and self.lol_panel.ventana.winfo_exists():
             self.lol_panel.ventana.deiconify();self.lol_panel.ventana.lift();return
         from lol_ui import PanelLoL
         self.lol_panel=PanelLoL(self.root,self.cfg.get('lol_seleccion',{}),self.guardar,self.enviar,
-                               self.lol,self.lol_seleccion,self.cfg.get('lol_aceptar_automatico',False))
+                               self.lol,self.lol_seleccion,self.cfg.get('lol_aceptar_automatico',False),ocultar=self.minimizar_capri)
+
+    def abrir_valorant(self):
+        self.guardar('juego_busqueda','valorant')
+        if self.visibilidad.oculta:self.visibilidad.mostrar()
+        if self.valorant_panel and not self.valorant_panel.cerrado and self.valorant_panel.ventana.winfo_exists():
+            self.valorant_panel.ventana.deiconify();self.valorant_panel.ventana.lift();return
+        from valorant_ui import PanelValorant
+        self.valorant_panel=PanelValorant(self.root,self.cfg.get('valorant',{}),self.guardar,self.enviar,self.valorant,ocultar=self.minimizar_capri)
 
     def guardar(self,k,v):
+        if k=='juego_busqueda' and v not in ('auto','lol','valorant'):return
+        if k=='valorant':
+            from valorant import normalizar
+            v=normalizar(v);self.valorant.configurar(v)
         if k=='lol_seleccion':
             from lol_seleccion import normalizar
             v=normalizar(v);self.lol_seleccion.configurar(v)
@@ -1665,6 +1743,7 @@ class Capri:
         if k=='escala_avatar':v=limitar_escala(v)
         anterior=self.cfg.get(k)
         self.cfg[k]=v
+        if k=='juego_busqueda' and getattr(self,'juego_combo',None):self.juego_combo.current(('auto','lol','valorant').index(v))
         if k=='asomos_curiosos':
             self.proximo_asomo=time.monotonic()+random.uniform(180,360)
             if not v:self.terminar_asomo()
@@ -1718,6 +1797,8 @@ class Capri:
             self.detener_activacion();self.activacion_reintento=0
 
     def suspender_atajo(self):
+        self.atajo_visibilidad_suspendido=bool(self.atajo_visibilidad)
+        if self.atajo_visibilidad:self.atajo_visibilidad.cerrar();self.atajo_visibilidad=None
         self.atajo_suspendido=bool(self.atajo)
         if self.atajo:self.atajo.cerrar();self.atajo=None
 
@@ -1728,6 +1809,9 @@ class Capri:
             if getattr(self,'atajo_suspendido',False) and not self.cerrado and not self.saliendo:
                 self.atajo=Atajo(lambda:self.eventos.put(('micro',None)),lambda t:self.eventos.put(('aviso',t)),self.cfg.get('tecla_hablar','F8'))
             self.atajo_suspendido=False
+            if getattr(self,'atajo_visibilidad_suspendido',False) and not self.cerrado and not self.saliendo:
+                self.atajo_visibilidad=self.crear_atajo_visibilidad()
+            self.atajo_visibilidad_suspendido=False
 
     def elegir_modelo_ia(self,nombre):
         if nombre not in self.modelo_combo.cget('values'):return
@@ -1853,6 +1937,10 @@ class Capri:
         distribuir(SimpleNamespace(width=w-60));ventana.update_idletasks();minimo();ventana.deiconify()
 
     def cerrar(self):
+        if self.visibilidad.oculta:
+            self.cerrar_inmediato();return
+        self.valorant.cerrar()
+        if self.valorant_panel and not self.valorant_panel.cerrado:self.valorant_panel.cerrar()
         self.lol_seleccion.cerrar()
         if self.lol_panel and not self.lol_panel.cerrado:self.lol_panel.cerrar()
         if self.asomo and self.asomo.get('curioso'):self.terminar_asomo()
@@ -1975,6 +2063,8 @@ class Capri:
         if self.transito and self.transito.get('morfosis'):self.transito['morfosis'].detener()
         self.cerrar_radial()
         self.lol.cerrar()
+        self.valorant.cerrar()
+        if self.valorant_panel and not self.valorant_panel.cerrado:self.valorant_panel.cerrar()
         self.lol_seleccion.cerrar()
         if self.lol_panel and not self.lol_panel.cerrado:self.lol_panel.cerrar()
         if self.activacion_permitida:
@@ -1983,6 +2073,7 @@ class Capri:
         self.detener_activacion()
         self.cerrado=True;self.respuesta_stop.set();self.micro_stop.set()
         if self.atajo:self.atajo.cerrar()
+        if self.atajo_visibilidad:self.atajo_visibilidad.cerrar()
         for pendiente in self.root.tk.splitlist(self.root.tk.call('after','info')):
             try:self.root.after_cancel(pendiente)
             except tk.TclError:pass

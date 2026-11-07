@@ -36,7 +36,9 @@ ARCHIVOS.append('PROMPT_APERTURA_DESPEDIDA_V15.md')
 ARCHIVOS.append('PROMPT_BOCAS_REFERENCIAS_V16.md')
 ARCHIVOS.append('idiomas.py')
 ARCHIVOS.append('league.py')
+ARCHIVOS.append('visibilidad.py')
 ARCHIVOS.extend(['lol_ui.py','lol_seleccion.py','assets/lol/campeones.json'])
+ARCHIVOS.extend(['valorant_cliente.py','valorant.py','valorant_ui.py','assets/valorant/agentes.json','assets/valorant/agentes.png','VALORANT.md'])
 ARCHIVOS.append('LEAGUE_OF_LEGENDS.md')
 ARCHIVOS.extend('assets/lol/'+p.name for p in sorted((BASE/'assets/lol').glob('champion*.png')))
 ARCHIVOS.extend(['apagado.py','discord_control.py'])
@@ -53,6 +55,7 @@ ARCHIVOS.append('REFERENCIAS_VOZ.md')
 ARCHIVOS.extend(['despedida.py','assets/capri-base-hd-v1.png','PROMPT_HD.md'])
 
 def origen(nombre):
+    if nombre=='VALORANT.md':return BASE/'docs'/nombre
     if nombre=='LEAGUE_OF_LEGENDS.md':return BASE/'docs'/nombre
     if nombre=='PROMPT_INTRO_ABRAZO.md':return BASE/'docs'/nombre
     if nombre=='PROMPT_BOCAS_REFERENCIAS_V16.md':return BASE/'docs'/nombre

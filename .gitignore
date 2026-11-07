@@ -75,6 +75,10 @@ assets/fonts/*
 assets/lol/*
 !assets/lol/campeones.json
 !assets/lol/champion*.png
+!assets/valorant/
+assets/valorant/*
+!assets/valorant/agentes.json
+!assets/valorant/agentes.png
 build/
 dist/
 *.part

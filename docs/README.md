@@ -10,6 +10,7 @@
 | [Personaje y control del equipo](PERSONAJE_Y_CONTROL.md) | Modos visuales, movimientos y permisos opcionales. |
 | [YouTube y Opera](CONECTAR_OPERA.md) | Configurar y comprobar el puente del navegador. |
 | [League of Legends](LEAGUE_OF_LEGENDS.md) | Buscar, cancelar y aceptar partidas desde el cliente local. |
+| [Valorant](VALORANT.md) | Buscar y cancelar partidas, configurar tres agentes por prioridad y activar la selección opcional. |
 | [Comparación de modelos](COMPARACION_MODELOS.md) | Comparar reconocimiento y conversación sin perder preferencias. |
 
 ## Desarrollar

@@ -45,13 +45,13 @@ class Catalogo:
 
 
 class PanelLoL:
-    def __init__(self,padre,config,guardar,enviar,control,seleccion,auto_aceptar=False,consultar=True):
+    def __init__(self,padre,config,guardar,enviar,control,seleccion,auto_aceptar=False,consultar=True,ocultar=None):
         self.config=normalizar(config);self.guardar=guardar;self.enviar=enviar;self.control=control;self.seleccion=seleccion
         self.rol=ROLES[0];self.cerrado=False;self.selector=None;self._stop=threading.Event();self._eventos=queue.Queue()
         self.ventana=w=tk.Toplevel(padre);w.withdraw();w.title('Capri · League of Legends')
         ancho=min(980,w.winfo_screenwidth()-64);alto=min(890,w.winfo_screenheight()-80)
         w.geometry(f'{ancho}x{alto}');w.minsize(850,670)
-        marco=VentanaCyber(w,'LEAGUE OF LEGENDS',self.cerrar);w.attributes('-topmost',False)
+        marco=VentanaCyber(w,'LEAGUE OF LEGENDS',self.cerrar,minimizar=ocultar)
         w.protocol('WM_DELETE_WINDOW',self.cerrar)
         # Conserva accesibles los controles en portátiles y con escalado de Windows.
         contenedor=tk.Frame(marco.cuerpo,bg=FONDO);contenedor.pack(fill='both',expand=True)
@@ -123,8 +123,6 @@ class PanelLoL:
         pie=tk.Frame(f,bg=FONDO);pie.pack(fill='x',padx=22,pady=(0,5))
         tk.Label(pie,text=ui('Tus cambios se guardan al instante'),bg=FONDO,fg=SUAVE,font=(FAMILIA,9)).pack(side='left')
         tk.Label(pie,text='DATA DRAGON / '+self.catalogo.version,bg=FONDO,fg=SUAVE,font=(FAMILIA,8)).pack(side='right')
-        tk.Label(f,text=ui('Capri no está avalado por Riot Games. League of Legends y Riot Games son marcas de Riot Games, Inc.'),
-                 bg=FONDO,fg=SUAVE,font=(FAMILIA,8),wraplength=900).pack(pady=(0,2))
         self.elegir_rol(self.rol);self.refrescar();w.update_idletasks();ajustar();w.deiconify()
         if consultar:threading.Thread(target=self._consultar,daemon=True).start()
 

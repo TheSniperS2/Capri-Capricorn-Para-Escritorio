@@ -56,6 +56,31 @@ class Seleccion(unittest.TestCase):
         control,c=self.preparar();c.disponibles=[2,3];c.sesion['bans']={'theirTeamBans':[2]}
         control.revisar();self.assertEqual(self.envios(c)[0][2]['championId'],3)
 
+    def test_pick_salta_campeones_ya_elegidos_hasta_agotar_preferencias(self):
+        for ocupados,esperado in (([],1),([1],2),([1,2],3),([1,2,3],None)):
+            with self.subTest(ocupados=ocupados):
+                control,c=self.preparar()
+                c.sesion['theirTeam']=[{'championId':v} for v in ocupados]
+                control.revisar()
+                if esperado is None:self.assertEqual(self.envios(c),[])
+                else:self.assertEqual(self.envios(c)[0][2]['championId'],esperado)
+
+    def test_pick_unica_preferencia_tomada_por_aliado_no_inventa_otro(self):
+        control,c=self.preparar();cfg=normalizar(control.config);cfg['roles']['MIDDLE']['pick']=[1,0,0]
+        control.configurar(cfg,iniciar=False);c.sesion['myTeam'][1]['championId']=1
+        control.revisar();self.assertEqual(self.envios(c),[])
+
+    def test_pick_rechazado_por_carrera_pasa_a_siguiente_si_ya_fue_elegido(self):
+        control,c=self.preparar();c.rechazar=True;control.revisar()
+        self.assertEqual(len(self.envios(c)),1)
+        c.sesion['theirTeam']=[{'championId':1}];c.rechazar=False
+        control.revisar();self.assertEqual([r[2]['championId'] for r in self.envios(c)],[1,2])
+
+    def test_carrera_agota_prioridades_sin_elegir_fuera_de_lista(self):
+        control,c=self.preparar();c.rechazar=True;control.revisar()
+        c.sesion['theirTeam']=[{'championId':v} for v in (1,2,3)];c.rechazar=False
+        control.revisar();self.assertEqual(len(self.envios(c)),1);self.assertEqual(control.estado,SIN_OPCIONES)
+
     def test_ban_respeta_hover_aliado(self):
         control,c=self.preparar('ban');c.sesion['myTeam'][1]['championPickIntent']=1
         control.revisar();self.assertEqual(self.envios(c)[0][2]['championId'],2)

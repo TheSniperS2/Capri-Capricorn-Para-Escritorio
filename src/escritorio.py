@@ -53,6 +53,30 @@ def proteger_foco():
             k.CloseHandle.argtypes=[w.HANDLE];k.CloseHandle(handle)
     except (OSError,AttributeError,ValueError):return True
 
+def valorant_en_primer_plano():
+    """Identifica el ejecutable activo sin activar, mover ni minimizar ventanas."""
+    if os.name!='nt':return False
+    import ctypes
+    from ctypes import wintypes as w
+    try:
+        u=ctypes.windll.user32;k=ctypes.windll.kernel32
+        u.GetForegroundWindow.restype=w.HWND;hwnd=u.GetForegroundWindow()
+        if not hwnd:return False
+        pid=w.DWORD();u.GetWindowThreadProcessId.argtypes=[w.HWND,ctypes.POINTER(w.DWORD)]
+        u.GetWindowThreadProcessId(hwnd,ctypes.byref(pid))
+        k.OpenProcess.argtypes=[w.DWORD,w.BOOL,w.DWORD];k.OpenProcess.restype=w.HANDLE
+        handle=k.OpenProcess(0x1000,False,pid.value)
+        if not handle:return False
+        try:
+            ruta=ctypes.create_unicode_buffer(32768);longitud=w.DWORD(len(ruta))
+            k.QueryFullProcessImageNameW.argtypes=[w.HANDLE,w.DWORD,w.LPWSTR,ctypes.POINTER(w.DWORD)]
+            if not k.QueryFullProcessImageNameW(handle,0,ruta,ctypes.byref(longitud)):return False
+            return Path(ruta.value).name.casefold() in ('valorant.exe','valorant-win64-shipping.exe')
+        finally:
+            k.CloseHandle.argtypes=[w.HANDLE];k.CloseHandle(handle)
+    except (OSError,AttributeError,ValueError):return False
+
+
 def carpeta_usuario(nombre):
     permitidas={'Downloads','Documents','Desktop','Pictures','Music','Videos'}
     if nombre not in permitidas:raise ValueError('Carpeta no reconocida.')

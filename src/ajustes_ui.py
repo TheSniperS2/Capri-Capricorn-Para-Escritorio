@@ -19,9 +19,10 @@ def separar_bordes(ventana,margen=32):
 
 class VentanaCyber:
     """Marco angular, arrastrable y sin la decoración estándar de Windows."""
-    def __init__(self,ventana,titulo,cerrar=None):
+    def __init__(self,ventana,titulo,cerrar=None,minimizar=None):
         import os
         self.ventana=ventana;self.titulo=titulo;self.cerrar=cerrar or ventana.destroy;self.drag=None;self.resize=None
+        self.minimizar=minimizar
         ventana.overrideredirect(True);ventana.configure(bg='#010203');ventana.attributes('-topmost',True)
         if os.name=='nt':ventana.attributes('-transparentcolor','#010203')
         self.canvas=CanvasUI(ventana,bg='#010203',highlightthickness=0);self.canvas.pack(fill='both',expand=True)
@@ -44,6 +45,9 @@ class VentanaCyber:
         c.create_polygon(w-59,8,w-20,8,w-12,16,w-12,32,w-59,32,fill='#5e1a30',outline='',tags='chrome')
         c.create_line(w-39,16,w-31,24,fill=TEXTO,width=2,tags='chrome')
         c.create_line(w-39,24,w-31,16,fill=TEXTO,width=2,tags='chrome')
+        if self.minimizar:
+            c.create_polygon(w-96,8,w-65,8,w-65,32,w-96,32,fill='#35101d',outline='',tags='chrome')
+            c.create_line(w-86,23,w-74,23,fill=TEXTO,width=2,tags='chrome')
         c.create_line(14,40,w-14,40,fill='#5d2134',tags='chrome')
         c.create_line(18,h-8,min(w-30,150),h-8,fill='#f60031',width=3,tags='chrome')
         c.create_line(w-23,h-9,w-10,h-22,fill='#ff829e',width=2,tags='chrome')
@@ -55,6 +59,7 @@ class VentanaCyber:
             self.resize=(e.x_root,e.y_root,self.ventana.winfo_width(),self.ventana.winfo_height());return
         if e.y>37:return
         if e.x>self.canvas.winfo_width()-62:self.cerrar();return
+        if self.minimizar and e.x>self.canvas.winfo_width()-100:self.minimizar();return
         self.drag=(e.x_root,e.y_root,self.ventana.winfo_x(),self.ventana.winfo_y())
 
     def mover(self,e):
@@ -467,6 +472,12 @@ class SelectorCyber(CanvasUI):
         self.create_line(w-36,10,w-36,34,fill='#653041')
         self.create_polygon(w-26,19,w-16,19,w-21,25,fill=ACENTO,outline='')
 
+    def cerrar_popup(self):
+        p=self.popup;self.popup=None
+        if p and p.winfo_exists():
+            if p.grab_current()==p:p.grab_release()
+            p.destroy()
+
     def abrir(self):
         if self.estado=='disabled' or not self.valores:return
         if self.popup and self.popup.winfo_exists():return
@@ -476,6 +487,7 @@ class SelectorCyber(CanvasUI):
         h=filas*alto+16;x=max(l+8,min(r-w-8,self.winfo_rootx()));y=self.winfo_rooty()+46
         if y+h>b-8:y=max(t+8,self.winfo_rooty()-h-2)
         p=self.popup=tk.Toplevel(self);p.overrideredirect(True);p.attributes('-topmost',True);p.configure(bg='#010203')
+        p._capri_cerrar_temporal=self.cerrar_popup
         if os.name=='nt':p.attributes('-transparentcolor','#010203')
         p.geometry(f'{w}x{h}+{x}+{y}')
         borde=CanvasUI(p,width=w,height=h,bg='#010203',highlightthickness=0);borde.pack()
@@ -496,8 +508,7 @@ class SelectorCyber(CanvasUI):
         # Todas las listas cortas empiezan arriba: el elemento seleccionado no oculta los anteriores.
         lista.yview_moveto(0)
         def cerrar():
-            if p.winfo_exists():p.grab_release();p.destroy()
-            self.popup=None
+            self.cerrar_popup()
         def elegir(e=None):
             indice=self.popup_activo if e is None else int(lista.canvasy(e.y)//alto)
             if 0<=indice<len(self.valores):self.current(indice);cerrar();self.event_generate('<<ComboboxSelected>>')

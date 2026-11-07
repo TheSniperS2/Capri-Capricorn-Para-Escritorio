@@ -16,6 +16,8 @@ Si no hay línea asignada, no queda ninguna opción válida o el cliente rechaza
 
 En algunos clientes la lista de campeones baneables devuelve únicamente `-1` (la opción de no banear), incluso durante un turno válido. En ese caso Capri consulta la ficha actual de cada campeón configurado: exige que esté habilitado, sin banear ni seleccionado y respeta las intenciones de tus aliados. Revalida el turno antes de confirmar. Este respaldo solo se aplica al baneo; los picks conservan su lista de disponibilidad habitual.
 
+En picks también se respeta el orden: si alguien elige primero tu campeón, se pasa a la segunda o tercera preferencia. Si se agotan, no se elige un campeón fuera de tu lista. Si LoL rechaza la confirmación porque otro jugador acaba de tomarlo, Capri solo continúa cuando una nueva consulta confirme que ya no está disponible; no repite un rechazo genérico indefinidamente.
+
 Cancelar desde LoL o Capri **no vuelve a iniciar la búsqueda**. El monitor de picks y baneos no toca la cola ni acepta partidas. La aceptación automática se configura por separado.
 
 El catálogo y los retratos oficiales de Data Dragon se incluyen con Capri (versión indicada en el panel). El buscador no necesita Internet. Se actualizan con la aplicación; no son estadísticas del parche ni recomendaciones de composición. La referencia funcional es organizar tu repertorio por línea, inspirada en el [Champion Pool Builder de iTero](https://www.itero.gg/champion-pool-builder); Capri no incorpora su motor de recomendaciones.
@@ -66,7 +68,7 @@ Esta integración no controla al personaje durante la partida. Los picks y baneo
 - `GET /lol-champ-select/v1/grid-champions/{championId}` solo con identificador numérico positivo, para comprobar los baneos configurados cuando la lista anterior no contiene campeones.
 - `PATCH /lol-champ-select/v1/session/actions/{id}` únicamente con un ID numérico, `championId` positivo y `completed: true`.
 
-`src/lol_seleccion.py` separa la vigilancia de selección de la aceptación de partidas. Revalida fase, turno local, rol, selección manual, disponibilidad y preferencias antes de confirmar. Solo realiza un intento por acción para evitar repetir confirmaciones rechazadas o de resultado incierto. `src/lol_ui.py` mantiene las consultas fuera de Tk y usa imágenes locales.
+`src/lol_seleccion.py` separa la vigilancia de selección de la aceptación de partidas. Revalida fase, turno local, rol, selección manual, disponibilidad y preferencias antes de confirmar. No repite rechazos genéricos ni confirmaciones de resultado incierto. En picks puede continuar con otra prioridad si el cliente confirma que la opción rechazada dejó de estar disponible. `src/lol_ui.py` mantiene las consultas fuera de Tk y usa imágenes locales.
 
 La interpretación exige una petición completa. El modelo de conversación no recibe acceso genérico a endpoints. El seguimiento usa un trabajador cancelable, y los avisos vuelven a Tk a través de la cola de eventos.
 

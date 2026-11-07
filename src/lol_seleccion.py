@@ -75,11 +75,12 @@ def candidato(sesion,lista,disponibles,tipo):
 
 
 class ControlSeleccion:
-    """No busca ni acepta partidas. Una petición como máximo por turno local."""
+    """No toca la cola. Confirma el turno local sin repetir rechazos genéricos."""
     def __init__(self,cliente=None):
         self.cliente=cliente or ClienteLCU();self.config=normalizar({});self.estado=APAGADO
         self._lock=threading.RLock();self._stop=threading.Event();self._stop.set()
         self.hilo=None;self._intentos=set()
+        self._rechazos_pick={};self._descartados_pick={}
 
     def configurar(self,config,iniciar=True):
         # Reemplazo atómico de una instantánea; guardar desde Tk nunca espera una petición LCU.
@@ -103,7 +104,7 @@ class ControlSeleccion:
         with self._lock:config=copy.deepcopy(self.config)
         if cancelar.is_set() or not (config['auto_pick'] or config['auto_ban']):return
         if self.cliente.pedir('GET',FASE)!='ChampSelect':
-            self._intentos.clear();self.estado=ESPERANDO;return
+            self._intentos.clear();self._rechazos_pick.clear();self._descartados_pick.clear();self.estado=ESPERANDO;return
         sesion=self.cliente.pedir('GET',SESION);actual=turno(sesion)
         if not actual:self.estado=ESPERANDO;return
         rol,accion,jugador=actual;tipo=accion['type']
@@ -112,30 +113,40 @@ class ControlSeleccion:
         if accion.get('championId',0) or (tipo=='pick' and jugador.get('championPickIntent',0)):
             self.estado=MANUAL;return
         clave=(sesion.get('gameId'),accion['id'],sesion.get('localPlayerCellId'),tipo)
-        if clave in self._intentos:return
+        if clave in self._intentos:
+            rechazado=self._rechazos_pick.get(clave) if tipo=='pick' else None
+            if not rechazado:return
+            actuales=self.cliente.pedir('GET',PICK)
+            if not isinstance(actuales,list):raise ErrorCliente()
+            # No repetir un rechazo genérico. Solo continuar si el cliente
+            # confirma que ese campeón ya no puede elegirse.
+            if candidato(sesion,[rechazado],actuales,'pick') is not None:return
+            self._intentos.discard(clave);self._descartados_pick.setdefault(clave,set()).add(rechazado)
+        prioridades=[v for v in config['roles'][rol][tipo] if v not in self._descartados_pick.get(clave,set())]
         ruta=PICK if tipo=='pick' else BAN
-        disponibles=self._disponibles(ruta,tipo,config['roles'][rol][tipo],cancelar)
-        elegido=candidato(sesion,config['roles'][rol][tipo],disponibles,tipo)
+        disponibles=self._disponibles(ruta,tipo,prioridades,cancelar)
+        elegido=candidato(sesion,prioridades,disponibles,tipo)
         if not elegido:self.estado=SIN_OPCIONES;return
         # Revalidar el turno, los hovers y la disponibilidad después de las lecturas.
         if cancelar.is_set() or self.cliente.pedir('GET',FASE)!='ChampSelect':return
         nueva=self.cliente.pedir('GET',SESION);ahora=turno(nueva)
         if not ahora or ahora!=actual or nueva.get('gameId')!=sesion.get('gameId'):return
-        disponibles=self._disponibles(ruta,tipo,config['roles'][rol][tipo],cancelar)
-        if candidato(nueva,config['roles'][rol][tipo],disponibles,tipo)!=elegido:return
+        disponibles=self._disponibles(ruta,tipo,prioridades,cancelar)
+        if candidato(nueva,prioridades,disponibles,tipo)!=elegido:return
         if tipo=='ban':
             # Las fichas pueden requerir varias lecturas: comprobar otra vez
             # el turno y los hovers después de consultarlas.
             if cancelar.is_set() or self.cliente.pedir('GET',FASE)!='ChampSelect':return
             final=self.cliente.pedir('GET',SESION)
             if turno(final)!=actual or final.get('gameId')!=sesion.get('gameId'):return
-            if candidato(final,config['roles'][rol][tipo],disponibles,tipo)!=elegido:return
+            if candidato(final,prioridades,disponibles,tipo)!=elegido:return
         with self._lock:
             if cancelar.is_set() or config!=self.config:return
             self._intentos.add(clave)
             self.estado=ENVIADO
             try:self.cliente.pedir('PATCH',SESION+'/actions/'+str(accion['id']),{'championId':elegido,'completed':True})
-            except ErrorCliente:
+            except ErrorCliente as e:
+                if tipo=='pick' and e.clave=='rechazo':self._rechazos_pick[clave]=elegido
                 if not cancelar.is_set() and config==self.config:self.estado=ERROR
                 return
         resultado=self.cliente.pedir('GET',SESION)

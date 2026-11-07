@@ -12,6 +12,10 @@ Las referencias visuales usadas por el programa proceden de la [galería de Capr
 
 ## Dependencias y servicios
 
+### Catálogo de Valorant
+
+`assets/valorant/agentes.json` y `assets/valorant/agentes.png` contienen nombres, identificadores y retratos de 30 agentes obtenidos de [Valorant-API](https://valorant-api.com/) el 6 de noviembre de 2026, sin autenticación. Los retratos se redujeron y agruparon en un atlas para usarlos sin descargas durante la ejecución. El arte y las marcas pertenecen a Riot Games y quedan excluidos de la licencia MIT de Capri. El servicio comunitario no recibe tokens ni datos de la cuenta. Los formatos de los servicios del cliente se consultaron en [valorant-api-docs](https://github.com/techchrism/valorant-api-docs); Capri no distribuye su software.
+
 ### Catálogo de League of Legends
 
 `assets/lol/campeones.json` y `assets/lol/champion*.png` contienen nombres, identificadores y retratos oficiales de campeones procedentes de [Data Dragon de Riot Games](https://developer.riotgames.com/docs/lol#data-dragon), versión indicada en el JSON. Estos recursos pertenecen a Riot Games y quedan excluidos de la licencia MIT de Capri. No se incluyen estadísticas de jugadores ni datos privados. iTero se consultó como referencia funcional; no se distribuyen sus diseños, datos ni software.

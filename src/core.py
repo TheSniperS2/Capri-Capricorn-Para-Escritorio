@@ -149,6 +149,9 @@ def interpretar(texto):
     from league import interpretar_lol
     lol=interpretar_lol(texto)
     if lol:return Orden(*lol)
+    from valorant import interpretar_valorant
+    valorant=interpretar_valorant(texto)
+    if valorant:return Orden(*valorant)
     n=nombre_navegador(texto).strip(' .!')
     from volumen_apps import interpretar_volumen
     volumen=interpretar_volumen(texto)

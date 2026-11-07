@@ -186,6 +186,7 @@ Las órdenes dependen de la aplicación y de sus controles disponibles. Capri in
 | **YouTube** | Opera/Opera GX; el puente amplía los controles del reproductor y de resultados. | [Conectar Opera](docs/CONECTAR_OPERA.md) |
 | **Discord** | Cliente de escritorio y sesión iniciada. Sus controles deben ser accesibles; para unirte, deja abierto el servidor. | [Discord](docs/USO.md#discord) |
 | **League of Legends** | Cliente abierto y una sala preparada. Panel de picks y baneos por línea, búsqueda y aceptación automática opcionales. | [Configurar LoL](docs/LEAGUE_OF_LEGENDS.md) |
+| **Valorant** | Juego abierto y sala preparada. Búsqueda, cancelación y tres preferencias de agente; confirmación automática opcional. | [Configurar Valorant](docs/VALORANT.md) |
 
 ## Tus datos y tus permisos
 
@@ -196,6 +197,7 @@ Las órdenes dependen de la aplicación y de sus controles disponibles. Capri in
 | Voz natural | Microsoft recibe el texto que Capri va a leer. Requiere conexión. |
 | Voz de Windows | En tu equipo, si tienes instalada una voz compatible con el idioma/acento. |
 | Búsquedas y reproducción online | En los servicios que abras o controles. |
+| Sala y agentes de Valorant | En tu cliente de Riot y sus servidores. Los tokens temporales solo permanecen en memoria. |
 
 El **control ampliado viene desactivado**. Al habilitarlo, las operaciones sensibles requieren confirmar el objetivo; los borrados compatibles van a la Papelera. El modelo decide entre acciones definidas: sus respuestas no se ejecutan como código de consola. Discord usa la sesión ya abierta y no pide tu contraseña ni un token de cuenta.
 

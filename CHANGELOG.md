@@ -2,6 +2,22 @@
 
 ## En desarrollo
 
+### Valorant
+
+- Protección de la presentación del mapa antes de elegir agente: mapa identificado, selección activa con tiempo restante y jugador incorporado, más seis segundos de seguridad. Revalida antes de seleccionar y confirmar; reinicia la espera al cambiar de mapa o perder la preparación.
+- Conexión corregida cuando Riot informa `Idle` con Valorant ejecutándose: comprobación adicional del proceso del juego y cabecera de identificación propia `CapriDesktop` en las peticiones remotas. Verificada la lectura de una sala real sin iniciar cola ni seleccionar agentes.
+- Reconocimiento de «tira partida», «inicia la búsqueda», «ponme en cola» y otras variantes dirigidas a Valorant, evitando que se envíen al chat, a búsquedas web o a Spotify. Las órdenes reconocidas informan el resultado del controlador sin depender de visión de pantalla.
+- Al mostrar o minimizar Capri se cierran los desplegables temporales para evitar que retengan los clics. Recuperar una ventana visible ya no vuelve a configurar el marco de la ventana principal.
+- Selector de juego en el chat y contexto guardado al abrir los paneles: buscar o cancelar en Valorant sin depender de que el juego tenga el foco, por texto y voz.
+- Ctrl+Alt+C para recuperar solo el avatar, sin abrir ni enfocar el chat. Ocultar Capri conserva los marcos de sus ventanas y deja chat y paneles ocultos hasta que el usuario los abra; mantiene voz y automatizaciones. El panel de LoL conserva su prioridad de ventana para no quedar detrás del chat.
+
+- Buscador con lupa, indicación interior y limpieza integrada; retirados los avisos de marca de los paneles de juego, con los créditos conservados en la documentación.
+- Órdenes de voz genéricas dirigidas a Valorant cuando está en primer plano, conservando los destinos explícitos. La activación por nombre continúa aunque Ajustes esté abierto detrás del juego, sin traer Capri al frente.
+
+- Panel con tres preferencias de agente, retratos incluidos, buscador y guardado automático. Búsqueda y cancelación desde el panel o por órdenes directas, con los ajustes de sala del juego.
+- Selección y confirmación opcionales: respeta elecciones manuales y agentes señalados por aliados, pasa a la siguiente preferencia y no elige fuera de la lista. Cancelar la búsqueda no desactiva las preferencias ni inicia otra cola.
+- LoL continúa con la siguiente prioridad si la primera confirmación fue rechazada y el cliente confirma después que el campeón ya fue elegido. Pruebas de prioridades agotadas en ambos juegos.
+
 ### League of Legends
 
 - Corregida la detección de campeones baneables cuando LoL devuelve solo `[-1]`: consulta de respaldo a sus fichas, sin cambiar los picks ni ignorar campeones deshabilitados, seleccionados, baneados o señalados por aliados.
@@ -82,7 +98,7 @@
 - Nueva forma curiosa de asomo automático en ambos modos, con seguimiento del cursor y parpadeo; conserva la forma y configuración anteriores. Se retira el botón Probar asomo.
 - Tono breve de desconexión al colgar una llamada contestada, respetando volumen y silencio; no altera el estado de narración ni su generación.
 - Voz telefónica durante llamadas, breve sonido de conexión y cuatro saludos localizados. El filtro es temporal y conserva la voz/acento elegidos. Las ondas siguen el audio reproducido, con posición real del reproductor y reposo en los silencios; el aviso espera durante la preparación y reproducción.
-- Llamadas espontáneas con 24 diálogos seleccionados sin repeticiones hasta agotar la lista, respuesta hablada al contestar y simulación desde Más o Ajustes. Intervalo inicial de 15 minutos con variación aleatoria y configurable.
+- Llamadas espontáneas con 24 diálogos seleccionados sin repeticiones hasta agotar la lista, respuesta hablada al contestar y simulación desde Ajustes → Escritorio → Monitor del computador. Intervalo inicial de 15 minutos con variación aleatoria y configurable.
 - Botón Probar asomo desde Escritorio o Juegos; muestra el movimiento sin activar el juego automático.
 - Asomos automáticos y bromas de minimización activables por separado. La ventana se puede restaurar desde la llamada y se recupera al terminar el aviso. Se retiran Atrápame y las aperturas aleatorias de pestañas/Documentos.
 - Apagado confirmado con secuencia roja de interferencia y cierre CRT, cancelación con Esc y vista previa sin apagar.

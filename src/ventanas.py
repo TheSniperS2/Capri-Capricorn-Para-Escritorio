@@ -15,6 +15,29 @@ def registrar_apoyo(ventana):
         if evento.widget==ventana:APOYOS_PROPIOS.discard(hwnd)
     ventana.bind('<Destroy>',retirar,add='+')
 
+def primer_plano_propio():
+    if os.name!='nt':return False
+    u=ctypes.windll.user32;u.GetForegroundWindow.restype=w.HWND
+    hwnd=u.GetForegroundWindow();pid=w.DWORD()
+    if not hwnd:return False
+    u.GetWindowThreadProcessId.argtypes=[w.HWND,ctypes.POINTER(w.DWORD)]
+    u.GetWindowThreadProcessId(hwnd,ctypes.byref(pid))
+    return pid.value==os.getpid()
+
+def traer_al_frente(ventana):
+    """Petición explícita del usuario: solo restaura y activa una ventana propia."""
+    ventana.deiconify();ventana.attributes('-topmost',True);ventana.lift();ventana.update_idletasks()
+    if os.name!='nt':ventana.focus_set();return True
+    u=ctypes.windll.user32
+    u.GetAncestor.argtypes=[w.HWND,w.UINT];u.GetAncestor.restype=w.HWND
+    hwnd=u.GetAncestor(w.HWND(ventana.winfo_id()),2) or ventana.winfo_id()
+    pid=w.DWORD();u.GetWindowThreadProcessId.argtypes=[w.HWND,ctypes.POINTER(w.DWORD)]
+    u.GetWindowThreadProcessId(hwnd,ctypes.byref(pid))
+    if pid.value!=os.getpid():return False
+    u.ShowWindow.argtypes=[w.HWND,ctypes.c_int];u.SetForegroundWindow.argtypes=[w.HWND]
+    u.ShowWindow(hwnd,9)
+    return bool(u.SetForegroundWindow(hwnd))
+
 def preparar_no_activar(ventana):
     """Windows no debe activar este aviso ni añadirlo a Alt+Tab."""
     if os.name!='nt':return None

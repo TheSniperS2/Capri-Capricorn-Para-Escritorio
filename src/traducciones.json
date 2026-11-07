@@ -2553,5 +2553,240 @@
     "LoL did not confirm the action; continue in the client",
     "LoL não confirmou a ação; continue pelo cliente",
     "LoLで確定を確認できませんでした。クライアントで続けてください"
+  ],
+  "Abre Valorant y deja preparada una sala para conectar con Capri.": [
+    "Open Valorant and prepare a lobby to connect Capri.",
+    "Abra o Valorant e prepare uma sala para conectar a Capri.",
+    "Valorantを開き、ロビーを準備してください。"
+  ],
+  "No pude conectar con Valorant. Comprueba el cliente y tu conexión.": [
+    "Could not connect to Valorant. Check the client and your connection.",
+    "Não consegui conectar ao Valorant. Confira o cliente e sua conexão.",
+    "Valorantに接続できません。クライアントと接続を確認してください。"
+  ],
+  "La sesión de Valorant cambió. Vuelve a intentarlo con el juego abierto.": [
+    "The Valorant session changed. Try again with the game open.",
+    "A sessão do Valorant mudou. Tente novamente com o jogo aberto.",
+    "Valorantのセッションが変わりました。ゲームを開いて再試行してください。"
+  ],
+  "No pude identificar la región de Valorant. Abre el juego y vuelve a intentarlo.": [
+    "Could not identify the Valorant region. Open the game and try again.",
+    "Não identifiquei a região do Valorant. Abra o jogo e tente novamente.",
+    "Valorantの地域を特定できません。ゲームを開いて再試行してください。"
+  ],
+  "No pude identificar la versión del cliente de Valorant.": [
+    "Could not identify the Valorant client version.",
+    "Não identifiquei a versão do cliente do Valorant.",
+    "Valorantクライアントのバージョンを特定できません。"
+  ],
+  "Valorant rechazó la acción. Revisa los avisos del juego.": [
+    "Valorant rejected the action. Check the game notices.",
+    "O Valorant recusou a ação. Confira os avisos do jogo.",
+    "Valorantが操作を拒否しました。ゲーム内の通知を確認してください。"
+  ],
+  "Selección automática de agentes desactivada": [
+    "Automatic agent selection disabled",
+    "Seleção automática de agentes desativada",
+    "エージェント自動選択は無効です"
+  ],
+  "Esperando la selección de agentes de Valorant": [
+    "Waiting for Valorant agent select",
+    "Aguardando a seleção de agentes do Valorant",
+    "Valorantのエージェント選択を待機中"
+  ],
+  "Selección de agentes disponible": [
+    "Agent selection available",
+    "Seleção de agentes disponível",
+    "エージェントを選択できます"
+  ],
+  "Tus agentes no están disponibles. Capri no elegirá otro fuera de tus preferencias.": [
+    "Your agents are unavailable. Capri will not choose outside your preferences.",
+    "Seus agentes não estão disponíveis. Capri não escolherá fora das suas preferências.",
+    "候補のエージェントは使えません。設定外のエージェントは選びません。"
+  ],
+  "Selección manual detectada; continúa desde Valorant": [
+    "Manual selection detected; continue in Valorant",
+    "Seleção manual detectada; continue no Valorant",
+    "手動選択を検出しました。Valorantで続けてください"
+  ],
+  "Valorant confirmó tu agente": [
+    "Valorant confirmed your agent",
+    "O Valorant confirmou seu agente",
+    "Valorantでエージェントが確定しました"
+  ],
+  "Selección enviada; comprueba el resultado en Valorant": [
+    "Selection sent; check the result in Valorant",
+    "Seleção enviada; confira o resultado no Valorant",
+    "選択を送信しました。Valorantで結果を確認してください"
+  ],
+  "Comprobando tus preferencias de agente": [
+    "Checking your agent preferences",
+    "Verificando suas preferências de agentes",
+    "エージェントの候補を確認中"
+  ],
+  "Valorant confirmó que la búsqueda está en marcha.": [
+    "Valorant confirmed matchmaking is active.",
+    "O Valorant confirmou que a busca está ativa.",
+    "Valorantでマッチ検索の開始を確認しました。"
+  ],
+  "Envié la búsqueda; Valorant todavía no la confirmó.": [
+    "Search sent; Valorant has not confirmed it yet.",
+    "Enviei a busca; o Valorant ainda não a confirmou.",
+    "検索を送信しました。Valorantでの確認はまだです。"
+  ],
+  "Valorant confirmó la cancelación. No volveré a iniciar la búsqueda.": [
+    "Valorant confirmed cancellation. I will not restart matchmaking.",
+    "O Valorant confirmou o cancelamento. Não reiniciarei a busca.",
+    "Valorantでキャンセルを確認しました。検索は再開しません。"
+  ],
+  "Pedí cancelar la búsqueda; comprueba el resultado en Valorant.": [
+    "Cancellation sent; check the result in Valorant.",
+    "Pedi para cancelar a busca; confira o resultado no Valorant.",
+    "検索キャンセルを送信しました。Valorantで結果を確認してください。"
+  ],
+  "No hay una búsqueda activa en Valorant.": [
+    "There is no active Valorant search.",
+    "Não há uma busca ativa no Valorant.",
+    "Valorantで検索は行われていません。"
+  ],
+  "Prepara una sala y elige el modo desde Valorant.": [
+    "Prepare a lobby and choose the mode in Valorant.",
+    "Prepare uma sala e escolha o modo no Valorant.",
+    "Valorantでロビーとモードを準備してください。"
+  ],
+  "Solo el líder del grupo puede iniciar o cancelar esta búsqueda.": [
+    "Only the party leader can start or cancel this search.",
+    "Só o líder do grupo pode iniciar ou cancelar esta busca.",
+    "グループリーダーのみが検索を開始・キャンセルできます。"
+  ],
+  "Ya estás en selección de agentes o en partida. No cambié la cola.": [
+    "You are in agent select or in game. The queue was not changed.",
+    "Você está na seleção de agentes ou em partida. Não alterei a fila.",
+    "エージェント選択中または試合中です。検索は変更していません。"
+  ],
+  "La búsqueda se detuvo. Esperaré a que vuelvas a iniciarla.": [
+    "Matchmaking stopped. Waiting for you to start it again.",
+    "A busca parou. Vou esperar você iniciá-la novamente.",
+    "検索が停止しました。再度開始するまで待機します。"
+  ],
+  "Valorant indica una restricción para buscar. Revisa el aviso del juego.": [
+    "Valorant reports a matchmaking restriction. Check the game notice.",
+    "O Valorant indica uma restrição de busca. Confira o aviso do jogo.",
+    "Valorantでマッチ検索が制限されています。ゲームの通知を確認してください。"
+  ],
+  "Configurar Valorant": [
+    "Configure Valorant",
+    "Configurar o Valorant",
+    "Valorantの設定"
+  ],
+  "Tus agentes. En tu orden.": [
+    "Your agents. Your order.",
+    "Seus agentes. Sua ordem.",
+    "自分のエージェント。自分の順番。"
+  ],
+  "TRES PREFERENCIAS": [
+    "THREE PREFERENCES",
+    "TRÊS PREFERÊNCIAS",
+    "3つの優先候補"
+  ],
+  "Elegir agente": [
+    "Choose agent",
+    "Escolher agente",
+    "エージェントを選ぶ"
+  ],
+  "Quitar agente": [
+    "Remove agent",
+    "Remover agente",
+    "エージェントを外す"
+  ],
+  "Selecciona una prioridad y pulsa un agente. Si está ocupado, Capri pasa a la siguiente.": [
+    "Select a priority and click an agent. If taken, Capri moves to the next one.",
+    "Selecione uma prioridade e clique em um agente. Se estiver ocupado, Capri passa para a próxima.",
+    "優先順位を選んでエージェントをクリック。他の人が選んだ場合は次の候補へ進みます。"
+  ],
+  "Si se agotan tus preferencias, no se selecciona ningún agente.": [
+    "If all preferences are unavailable, no agent is selected.",
+    "Se todas as preferências estiverem indisponíveis, nenhum agente é selecionado.",
+    "候補がすべて使えなければ、エージェントは選択しません。"
+  ],
+  "Confirmar agente automáticamente": [
+    "Automatically lock in agent",
+    "Confirmar agente automaticamente",
+    "エージェントを自動確定"
+  ],
+  "Confirmar agente en partida": [
+    "Confirm agent in lobby",
+    "Confirmar agente na seleção",
+    "選択画面でエージェントを確定"
+  ],
+  "Buscar agente…": [
+    "Search agents…",
+    "Buscar agente…",
+    "エージェントを検索…"
+  ],
+  "AGENTES": [
+    "AGENTS",
+    "AGENTES",
+    "エージェント"
+  ],
+  "El modo y los servidores se eligen en Valorant. Cancelar no reinicia la búsqueda.": [
+    "Choose the mode and servers in Valorant. Canceling does not restart matchmaking.",
+    "Escolha o modo e os servidores no Valorant. Cancelar não reinicia a busca.",
+    "モードとサーバーはValorantで選択。キャンセル後に検索は再開しません。"
+  ],
+  "La selección automática espera 3 segundos y respeta los agentes señalados por aliados.": [
+    "Automatic selection waits 3 seconds and respects agents hovered by teammates.",
+    "A seleção automática espera 3 segundos e respeita os agentes apontados por aliados.",
+    "自動選択は3秒待ち、味方が選択中のエージェントを避けます。"
+  ],
+  "Si la búsqueda se interrumpe y el motivo no es claro, Capri espera una nueva orden.": [
+    "If matchmaking stops for an unclear reason, Capri waits for a new command.",
+    "Se a busca parar por um motivo incerto, Capri espera uma nova ordem.",
+    "検索停止の理由が不明な場合、新しい指示を待ちます。"
+  ],
+  "Duelista": [
+    "Duelist",
+    "Duelista",
+    "デュエリスト"
+  ],
+  "Centinela": [
+    "Sentinel",
+    "Sentinela",
+    "センチネル"
+  ],
+  "Iniciador": [
+    "Initiator",
+    "Iniciador",
+    "イニシエーター"
+  ],
+  "Controlador": [
+    "Controller",
+    "Controlador",
+    "コントローラー"
+  ],
+  "Sin espera adicional. Se respetan los agentes señalados por aliados.": [
+    "No added delay. Agents hovered by teammates are respected.",
+    "Sem espera extra. Respeita os agentes apontados por aliados.",
+    "追加の待機なし。味方が選択中のエージェントを尊重します。"
+  ],
+  "Valorant": [
+    "Valorant",
+    "Valorant",
+    "VALORANT（ヴァロラント）"
+  ],
+  "Juego para buscar": [
+    "Matchmaking game",
+    "Jogo para buscar",
+    "マッチ検索するゲーム"
+  ],
+  "Minimizar Capri": [
+    "Minimize Capri",
+    "Minimizar a Capri",
+    "Capriを最小化"
+  ],
+  "Ctrl+Alt+C para mostrar u ocultar Capri.": [
+    "Ctrl+Alt+C to show or hide Capri.",
+    "Ctrl+Alt+C para mostrar ou ocultar a Capri.",
+    "Ctrl+Alt+CでCapriを表示・非表示にします。"
   ]
 }
