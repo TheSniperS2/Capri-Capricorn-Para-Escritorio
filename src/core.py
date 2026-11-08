@@ -216,6 +216,9 @@ def url_solicitada(texto):
 
 def interpretar(texto):
     texto = limpiar_peticion(texto)
+    from recordatorios import interpretar as interpretar_recordatorios
+    aviso=interpretar_recordatorios(texto)
+    if aviso:return Orden(*aviso)
     from reacciones_skins import interpretar_skins
     skins=interpretar_skins(texto)
     if skins:return Orden(*skins)

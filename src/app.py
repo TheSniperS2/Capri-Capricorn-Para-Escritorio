@@ -89,6 +89,10 @@ class Capri:
         try:
             self.cfg.update(json.loads((BASE/'ajustes.json').read_text(encoding='utf-8-sig')))
         except (OSError, ValueError): pass
+        from recordatorios import migrar as migrar_recordatorios
+        if migrar_recordatorios(self.cfg):
+            (BASE/'ajustes.json').write_text(json.dumps(self.cfg,ensure_ascii=False,indent=2),encoding='utf8')
+        self.recordatorios_panel=None;self.recordatorios_runtime=hotkeys;self.recordatorios_proximo=0
         from escucha_activa import EscuchaActiva,normalizar as normalizar_escucha
         self.cfg['modo_escucha']=normalizar_escucha(self.cfg.get('modo_escucha'))
         self.escucha_activa=EscuchaActiva(self.cfg['modo_escucha'])
@@ -312,7 +316,7 @@ class Capri:
         juegos=[('Desactivar asomos automáticos' if self.cfg.get('asomos_curiosos') else 'Activar asomos automáticos',lambda:self.guardar('asomos_curiosos',not self.cfg.get('asomos_curiosos'))),
                 ('Desactivar bromas de ventanas' if self.cfg.get('bromas_ventanas') else 'Activar bromas de ventanas',lambda:self.guardar('bromas_ventanas',not self.cfg.get('bromas_ventanas')))]
         voz=[('Hablar',self.hablar),('Activar voz' if not self.cfg.get('voz') else 'Silenciar voz',lambda:self.guardar('voz',not self.cfg.get('voz')))]
-        mas=[('YouTube',self.conectar_opera),('League of Legends',self.abrir_lol),('Valorant',self.abrir_valorant),('Fortnite',self.abrir_fortnite),
+        mas=[('YouTube',self.conectar_opera),('League of Legends',self.abrir_lol),('Valorant',self.abrir_valorant),('Fortnite',self.abrir_fortnite),('Recordatorios',self.abrir_recordatorios),
              ('Minimizar Capri',self.minimizar_capri),('Cerrar Capri',self.cerrar)]
         opciones=[('Ajustes',self.configurar),('Chat',self.abrir_chat),('Juegos' if self.es_personaje() else 'Color',juegos if self.es_personaje() else self.abrir_colores),('Aspecto',self.abrir_aspectos),
                   ('Modo pantalla' if self.es_personaje() else 'Modo personaje',lambda:self.guardar('modo_visual','pantalla' if self.es_personaje() else 'personaje')),('Tamaño',tamanos),('Voz',voz),('Más',mas)]
@@ -474,6 +478,15 @@ class Capri:
     def ejemplo_skin(self,texto):
         if self.ocupada or self.escuchando or self.hablando or self.voz_ticket is not None:return False
         self.avatar.sonreir();self.decir_juego(texto);return True
+
+    def mantener_recordatorios(self):
+        if not self.recordatorios_runtime or time.monotonic()<self.recordatorios_proximo or not self.puede_reaccionar_skins():return
+        self.recordatorios_proximo=time.monotonic()+1
+        vencidos=sorted((r for r in self.cfg.get('recordatorios',[]) if r['vence']<=time.time()),key=lambda r:r['vence'])
+        if vencidos:
+            r=vencidos[0];self.guardar('recordatorios',[x for x in self.cfg['recordatorios'] if x['id']!=r['id']])
+            self.ejemplo_skin(ui('Recordatorio: {0}').format(r['texto']))
+
 
     def descartar_reaccion(self):
         self.reaccion_pendiente=None
@@ -1160,6 +1173,16 @@ class Capri:
         self.dialogo.recibir_usuario(texto)
         self.poner_chat('Tú',texto)
         orden = interpretar(texto)
+        if orden and orden.tipo.startswith('recordatorios_'):
+            if orden.tipo=='recordatorios_panel':self.abrir_recordatorios();return
+            from recordatorios import agregar,ErrorRecordatorio
+            try:
+                if orden.tipo=='recordatorios_cancelar':self.guardar('recordatorios',[]);respuesta=ui('Cancelé tus recordatorios.')
+                else:
+                    datos=json.loads(orden.valor);self.guardar('recordatorios',agregar(self.cfg['recordatorios'],datos['texto'],datos['minutos']))
+                    respuesta=ui('Te lo recordaré en {0} minutos.').format(datos['minutos'])
+            except (ErrorRecordatorio,ValueError,KeyError) as e:respuesta=ui(str(e))
+            self.decir_juego(respuesta);return
         if orden and orden.tipo.startswith('fortnite_') and self.cfg.get('juego_busqueda')!='fortnite':
             self.guardar('juego_busqueda','fortnite')
         elif orden and orden.tipo.startswith('valorant_') and self.cfg.get('juego_busqueda')!='valorant':
@@ -1615,6 +1638,7 @@ class Capri:
                     if actual:self.modelo_combo.set(actual)
                     self.modelo_estado.set(error or 'Elige un modelo instalado. Se usa para conversar y entender peticiones.')
         self.revisar_interacciones()
+        self.mantener_recordatorios()
         self.skins.permitir(self.skins_runtime and self.puede_reaccionar_skins(),codigo_idioma(self.cfg.get('idioma')))
         self.mantener_activacion()
         localizar_widgets(self.root)
@@ -1960,7 +1984,18 @@ class Capri:
         from fortnite_ui import PanelFortnite
         self.fortnite_panel=PanelFortnite(self.root,self.cfg.get('fortnite',{}),self.guardar,self.enviar,self.fortnite,ocultar=self.minimizar_capri)
 
+    def abrir_recordatorios(self):
+        if self.visibilidad.oculta:self.visibilidad.mostrar()
+        if self.recordatorios_panel and not self.recordatorios_panel.cerrado and self.recordatorios_panel.ventana.winfo_exists():
+            self.recordatorios_panel.ventana.deiconify();self.recordatorios_panel.ventana.lift();return
+        from recordatorios_ui import PanelRecordatorios
+        self.recordatorios_panel=PanelRecordatorios(self.root,lambda:self.cfg['recordatorios'],self.guardar,ocultar=self.minimizar_capri)
+
+
     def guardar(self,k,v):
+        if k=='recordatorios':
+            from recordatorios import normalizar
+            v=normalizar(v)
         if k=='modo_escucha':
             from escucha_activa import normalizar
             v=normalizar(v)
@@ -2204,6 +2239,7 @@ class Capri:
         distribuir(SimpleNamespace(width=w-60));ventana.update_idletasks();minimo();ventana.deiconify()
 
     def cerrar(self):
+        if getattr(self,'recordatorios_panel',None) and not self.recordatorios_panel.cerrado:self.recordatorios_panel.cerrar()
         if getattr(self,'skins',None):self.skins.cerrar()
         if getattr(self,'monitor_pc',None):self.monitor_pc.cerrar()
         if getattr(self,'panel_multimedia',None):self.panel_multimedia.cerrar()
@@ -2322,6 +2358,7 @@ class Capri:
         self.root.after(16,self.pintar_despedida)
 
     def cerrar_inmediato(self):
+        if getattr(self,'recordatorios_panel',None) and not self.recordatorios_panel.cerrado:self.recordatorios_panel.cerrar()
         if getattr(self,'skins',None):self.skins.cerrar()
         if getattr(self,'monitor_pc',None):self.monitor_pc.cerrar()
         if getattr(self,'panel_multimedia',None):self.panel_multimedia.cerrar()

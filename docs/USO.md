@@ -1,5 +1,8 @@
 # Capri
 
+Los avisos son generales: **Más → Recordatorios**, o «Capri, recuérdame en 20 minutos
+hacer una pausa». Se conservan al cerrar y se entregan al volver a abrir Capri.
+
 En **Ajustes → Micrófono → Escucha sin decir «Capri»** puedes elegir
 **Después de una pregunta** o **Escucha activa**. La primera opción escucha tu
 respuesta durante 15 segundos después de que Capri termine una pregunta; la

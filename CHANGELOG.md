@@ -2,6 +2,10 @@
 
 ## En desarrollo
 
+### Recordatorios generales
+
+- Avisos en Más → Recordatorios y por voz sin nombrar un juego, con fecha persistente, cancelación individual y entrega una sola vez cuando Capri esté libre. Los avisos antiguos de Roblox conservan su hora y texto al trasladarse a la agenda general.
+
 ### Escucha activa opcional
 
 - La conversación da prioridad a las correcciones y respeta los rechazos sin encadenar preguntas ni proponer otro tema. Comprueba el referente corregido antes de mostrar la respuesta; las salidas incoherentes de esos turnos usan un reconocimiento breve y conservan el historial final.

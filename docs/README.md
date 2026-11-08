@@ -11,6 +11,7 @@
 | [YouTube y Opera](CONECTAR_OPERA.md) | Configurar y comprobar el puente del navegador. |
 | [League of Legends](LEAGUE_OF_LEGENDS.md) | Buscar, cancelar y aceptar partidas desde el cliente local. |
 | [Valorant](VALORANT.md) | Buscar y cancelar partidas, configurar tres agentes por prioridad y activar la selección opcional. |
+| [Recordatorios](USO.md) | Crear avisos generales por voz, conservarlos entre sesiones y cancelarlos individualmente. |
 | [Comparación de modelos](COMPARACION_MODELOS.md) | Comparar reconocimiento y conversación sin perder preferencias. |
 
 ## Desarrollar

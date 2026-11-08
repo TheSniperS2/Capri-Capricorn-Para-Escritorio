@@ -3224,9 +3224,21 @@
     "As frases variam, mas a opinião sobre cada skin continua igual, mesmo após reiniciar.",
     "セリフは変わっても、各スキンへの評価は再起動しても変わらないよ。"
   ],
-  "Le gusta": ["She likes it", "Ela gosta", "お気に入り"],
-  "Opinión neutral": ["Neutral opinion", "Opinião neutra", "中立な評価"],
-  "No es de sus favoritas": ["Not one of her favorites", "Não é das favoritas dela", "あまり好みではない"],
+  "Le gusta": [
+    "She likes it",
+    "Ela gosta",
+    "お気に入り"
+  ],
+  "Opinión neutral": [
+    "Neutral opinion",
+    "Opinião neutra",
+    "中立な評価"
+  ],
+  "No es de sus favoritas": [
+    "Not one of her favorites",
+    "Não é das favoritas dela",
+    "あまり好みではない"
+  ],
   "Estos son ejemplos; Capri reconoce muchas más skins en el juego.": [
     "These are examples; Capri recognizes many more skins in the game.",
     "Estes são exemplos; Capri reconhece muitas outras skins no jogo.",
@@ -3242,16 +3254,36 @@
     "Observa apenas o jogo ativo. As capturas são processadas neste computador e não são salvas.",
     "表示中のゲームだけを確認するよ。画像はこのパソコン内で処理され、保存されないよ。"
   ],
-  "Ficha de Valorant reconocida": ["Valorant skin details recognized", "Detalhes da skin do Valorant reconhecidos", "ヴァロラントのスキン詳細を認識したよ"],
-  "Muestra el nombre completo de la skin de Valorant": ["Show the full Valorant skin name", "Mostre o nome completo da skin do Valorant", "ヴァロラントのスキン名全体を見せてね"],
-  "Abre la ficha de la skin que quieres comentar": ["Open the details of the skin you want to discuss", "Abra os detalhes da skin que quer comentar", "コメントしてほしいスキンの詳細を開いてね"],
+  "Ficha de Valorant reconocida": [
+    "Valorant skin details recognized",
+    "Detalhes da skin do Valorant reconhecidos",
+    "ヴァロラントのスキン詳細を認識したよ"
+  ],
+  "Muestra el nombre completo de la skin de Valorant": [
+    "Show the full Valorant skin name",
+    "Mostre o nome completo da skin do Valorant",
+    "ヴァロラントのスキン名全体を見せてね"
+  ],
+  "Abre la ficha de la skin que quieres comentar": [
+    "Open the details of the skin you want to discuss",
+    "Abra os detalhes da skin que quer comentar",
+    "コメントしてほしいスキンの詳細を開いてね"
+  ],
   "Última reacción: {0}": [
     "Last reaction: {0}",
     "Última reação: {0}",
     "最後のリアクション：{0}"
   ],
-  "RECONOCIENDO": ["RECOGNIZING", "RECONHECENDO", "音声認識中"],
-  "Reconociendo la frase…": ["Recognizing speech…", "Reconhecendo a frase…", "音声を認識中…"],
+  "RECONOCIENDO": [
+    "RECOGNIZING",
+    "RECONHECENDO",
+    "音声認識中"
+  ],
+  "Reconociendo la frase…": [
+    "Recognizing speech…",
+    "Reconhecendo a frase…",
+    "音声を認識中…"
+  ],
   "Escucha sin decir «Capri»": [
     "Listen without saying “Capri”",
     "Escuta sem dizer “Capri”",
@@ -3326,5 +3358,90 @@
     "I could not keep listening. You can use Talk. ",
     "Não consegui manter a escuta ativa. Você pode usar Falar. ",
     "リスニングを続けられなかったよ。「話す」を使ってね。 "
+  ],
+  "Recordatorios": [
+    "Reminders",
+    "Lembretes",
+    "リマインダー"
+  ],
+  "Que Capri te avise.": [
+    "Let Capri remind you.",
+    "Deixe Capri avisar você.",
+    "カプリがお知らせするよ。"
+  ],
+  "Qué quieres recordar": [
+    "What to remind you about",
+    "O que você quer lembrar",
+    "覚えておきたいこと"
+  ],
+  "Dentro de cuántos minutos": [
+    "How many minutes from now",
+    "Daqui a quantos minutos",
+    "何分後に通知するか"
+  ],
+  "Crear recordatorio": [
+    "Create reminder",
+    "Criar lembrete",
+    "リマインダーを作成"
+  ],
+  "Tus próximos avisos": [
+    "Upcoming reminders",
+    "Seus próximos avisos",
+    "これからのリマインダー"
+  ],
+  "No tienes recordatorios pendientes.": [
+    "You have no pending reminders.",
+    "Você não tem lembretes pendentes.",
+    "予定されているリマインダーはないよ。"
+  ],
+  "Cancelar": [
+    "Cancel",
+    "Cancelar",
+    "キャンセル"
+  ],
+  "Recordatorio creado.": [
+    "Reminder created.",
+    "Lembrete criado.",
+    "リマインダーを作成しました。"
+  ],
+  "Elige un plazo entre un segundo y siete días.": [
+    "Choose a delay between one second and seven days.",
+    "Escolha um prazo entre um segundo e sete dias.",
+    "1秒から7日までの時間を選んでね。"
+  ],
+  "Puedes guardar hasta 100 recordatorios.": [
+    "You can save up to 100 reminders.",
+    "Você pode salvar até 100 lembretes.",
+    "リマインダーは100件まで保存できるよ。"
+  ],
+  "Escribe qué quieres recordar.": [
+    "Enter what you want to remember.",
+    "Escreva o que quer lembrar.",
+    "覚えておきたいことを入力してね。"
+  ],
+  "Los avisos esperan si Capri está hablando. Se conservan al cerrar; vuelven a estar disponibles al abrir Capri.": [
+    "Reminders wait while Capri is speaking. They are saved when closed and resume when Capri opens.",
+    "Os avisos esperam enquanto Capri fala. São salvos ao fechar e retomados ao abrir Capri.",
+    "カプリが話している間は通知を待機します。終了しても保存され、次の起動時に再開します。"
+  ],
+  "Puedes decir: «Capri, recuérdame en 20 minutos hacer una pausa».": [
+    "Try saying: “Capri, remind me in 20 minutes to take a break”.",
+    "Você pode dizer: «Capri, lembre-me em 20 minutos de fazer uma pausa».",
+    "「カプリ、20分後に休憩を教えて」と伝えられるよ。"
+  ],
+  "Recordatorio: {0}": [
+    "Reminder: {0}",
+    "Lembrete: {0}",
+    "リマインダー：{0}"
+  ],
+  "Te lo recordaré en {0} minutos.": [
+    "I will remind you in {0} minutes.",
+    "Vou lembrar você em {0} minutos.",
+    "{0}分後にお知らせするね。"
+  ],
+  "Cancelé tus recordatorios.": [
+    "I cancelled your reminders.",
+    "Cancelei seus lembretes.",
+    "リマインダーを取り消したよ。"
   ]
 }
