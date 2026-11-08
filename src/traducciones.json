@@ -2943,5 +2943,125 @@
     "Independent player. Move Capri onto its top edge to let her sit and listen.",
     "Player independente. Mova Capri para a borda superior para ela sentar e ouvir.",
     "独立したプレーヤーです。Capriを上端に動かすと、座って音楽を聴きます。"
+  ],
+  "Fortnite": [
+    "Fortnite",
+    "Fortnite",
+    "フォートナイト"
+  ],
+  "Configurar Fortnite": [
+    "Configure Fortnite",
+    "Configurar Fortnite",
+    "フォートナイトの設定"
+  ],
+  "Tu escuadrón. Tu próxima partida.": [
+    "Your squad. Your next match.",
+    "Seu esquadrão. Sua próxima partida.",
+    "自分のチームで、次のマッチへ。"
+  ],
+  "EXPERIENCIA": [
+    "EXPERIENCE",
+    "EXPERIÊNCIA",
+    "ゲームモード"
+  ],
+  "TAMAÑO DEL EQUIPO": [
+    "TEAM SIZE",
+    "TAMANHO DA EQUIPE",
+    "チーム人数"
+  ],
+  "Modo actual": [
+    "Current mode",
+    "Modo atual",
+    "現在のモード"
+  ],
+  "Equipo actual": [
+    "Current team",
+    "Equipe atual",
+    "現在のチーム"
+  ],
+  "Cero construcción": [
+    "Zero Build",
+    "Construção Zero",
+    "ゼロビルド"
+  ],
+  "Solo": [
+    "Solo",
+    "Solo",
+    "ソロ"
+  ],
+  "Dúo": [
+    "Duo",
+    "Dupla",
+    "デュオ"
+  ],
+  "Trío": [
+    "Trio",
+    "Trio",
+    "トリオ"
+  ],
+  "Squad": [
+    "Squad",
+    "Esquadrão",
+    "スクワッド"
+  ],
+  "Conservar el modo del juego": [
+    "Keep the game mode",
+    "Manter o modo do jogo",
+    "ゲームのモードを維持"
+  ],
+  "Construye y compite": [
+    "Build and compete",
+    "Construa e dispute",
+    "建築して戦う"
+  ],
+  "Combate sin construir": [
+    "Fight without building",
+    "Combata sem construir",
+    "建築なしで戦う"
+  ],
+  "Conservar el equipo del juego": [
+    "Keep the game team size",
+    "Manter a equipe do jogo",
+    "ゲームのチーム人数を維持"
+  ],
+  "Aplicar en Fortnite": [
+    "Apply in Fortnite",
+    "Aplicar no Fortnite",
+    "フォートナイトに適用"
+  ],
+  "Aplicar opciones sin buscar partida": [
+    "Apply options without matchmaking",
+    "Aplicar opções sem buscar partida",
+    "マッチを検索せずに設定を適用"
+  ],
+  "Elige tus opciones. Buscar partida las aplica antes de pulsar Jugar.": [
+    "Choose your options. Find match applies them before pressing Play.",
+    "Escolha suas opções. Buscar partida as aplica antes de clicar em Jogar.",
+    "設定を選んでください。マッチ検索時に適用してからプレイを押します。"
+  ],
+  "Tus cambios se guardan al instante en este equipo.": [
+    "Your changes are saved instantly on this computer.",
+    "Suas alterações são salvas imediatamente neste computador.",
+    "変更はこのパソコンにすぐ保存されます。"
+  ],
+  "Clasificatoria y rellenar equipo se conservan como estén en Fortnite.": [
+    "Ranked and team fill keep their Fortnite settings.",
+    "Ranqueado e preenchimento mantêm as configurações do Fortnite.",
+    "ランクとチーム補充はゲームの設定を維持します。"
+  ],
+  "Cancelar no vuelve a iniciar la búsqueda.": [
+    "Canceling never restarts matchmaking.",
+    "Cancelar não reinicia a busca.",
+    "キャンセル後は検索を再開しません。"
+  ],
+  "Fortnite se comprueba al pulsar una acción.": [
+    "Fortnite is checked when you choose an action.",
+    "Fortnite é verificado ao escolher uma ação.",
+    "操作を選んだときにフォートナイトを確認します。"
+  ],
+  "Battle Royale": [
+    "Battle Royale",
+    "Battle Royale",
+    "バトルロイヤル"
   ]
 }

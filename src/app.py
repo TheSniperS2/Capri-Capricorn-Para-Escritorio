@@ -108,6 +108,9 @@ class Capri:
         from valorant import ControlValorant
         self.valorant=ControlValorant();self.valorant_panel=None
         self.valorant.configurar(self.cfg.get('valorant',{}),iniciar=hotkeys)
+        from fortnite import ControlFortnite
+        self.fortnite=ControlFortnite();self.fortnite_panel=None
+        self.fortnite.configurar(self.cfg.get('fortnite',{}))
         self.entrada_personaje=False;self.ventana_entrada=None;self.entrada_lateral=None;self.transito=None
         self.cfg.setdefault('llamadas_capri',True);self.cfg.setdefault('asomos_automaticos',False);self.cfg.setdefault('bromas_ventanas',False)
         self.cfg.setdefault('intervalo_interacciones',15)
@@ -301,7 +304,7 @@ class Capri:
         juegos=[('Desactivar asomos automáticos' if self.cfg.get('asomos_curiosos') else 'Activar asomos automáticos',lambda:self.guardar('asomos_curiosos',not self.cfg.get('asomos_curiosos'))),
                 ('Desactivar bromas de ventanas' if self.cfg.get('bromas_ventanas') else 'Activar bromas de ventanas',lambda:self.guardar('bromas_ventanas',not self.cfg.get('bromas_ventanas')))]
         voz=[('Hablar',self.hablar),('Activar voz' if not self.cfg.get('voz') else 'Silenciar voz',lambda:self.guardar('voz',not self.cfg.get('voz')))]
-        mas=[('YouTube',self.conectar_opera),('League of Legends',self.abrir_lol),('Valorant',self.abrir_valorant),
+        mas=[('YouTube',self.conectar_opera),('League of Legends',self.abrir_lol),('Valorant',self.abrir_valorant),('Fortnite',self.abrir_fortnite),
              ('Minimizar Capri',self.minimizar_capri),('Cerrar Capri',self.cerrar)]
         opciones=[('Ajustes',self.configurar),('Chat',self.abrir_chat),('Juegos' if self.es_personaje() else 'Color',juegos if self.es_personaje() else self.abrir_colores),('Aspecto',self.abrir_aspectos),
                   ('Modo pantalla' if self.es_personaje() else 'Modo personaje',lambda:self.guardar('modo_visual','pantalla' if self.es_personaje() else 'personaje')),('Tamaño',tamanos),('Voz',voz),('Más',mas)]
@@ -451,6 +454,8 @@ class Capri:
         if invitado and not self.puede_narrar():
             self.dialogo.ocultar();self.llamada_ui.preparar_voz(texto);self.llamada_ui.revelar(texto,len(texto))
         if self.puede_narrar():self.narrar_respuesta(self.peticion,texto,final=True,duracion_final=fin_voz)
+
+
 
     def descartar_reaccion(self):
         self.reaccion_pendiente=None
@@ -1026,10 +1031,10 @@ class Capri:
         from ajustes_ui import SelectorCyber
         fila_juego=tk.Frame(contenido,bg=BG);fila_juego.pack(fill='x',padx=21,pady=(0,8))
         tk.Label(fila_juego,text='Juego para buscar',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(side='left',padx=(0,10))
-        self.juego_combo=SelectorCyber(fila_juego,values=('Automático','League of Legends','Valorant'),width=215)
+        self.juego_combo=SelectorCyber(fila_juego,values=('Automático','League of Legends','Valorant','Fortnite'),width=215)
         self.juego_combo.pack(side='right',fill='x',expand=True)
-        self.juego_combo.current(('auto','lol','valorant').index(self.cfg.get('juego_busqueda','auto') if self.cfg.get('juego_busqueda') in ('auto','lol','valorant') else 'auto'))
-        self.juego_combo.bind('<<ComboboxSelected>>',lambda e:self.guardar('juego_busqueda',('auto','lol','valorant')[self.juego_combo.current()]))
+        self.juego_combo.current(('auto','lol','valorant','fortnite').index(self.cfg.get('juego_busqueda','auto') if self.cfg.get('juego_busqueda') in ('auto','lol','valorant','fortnite') else 'auto'))
+        self.juego_combo.bind('<<ComboboxSelected>>',lambda e:self.guardar('juego_busqueda',('auto','lol','valorant','fortnite')[self.juego_combo.current()]))
         tk.Label(contenido,text='Ctrl+Alt+C para mostrar u ocultar Capri.',bg=BG,fg=MUTED,font=('Chakra Petch',8)).pack(anchor='w',padx=21,pady=(0,7))
         from idiomas import fuente
         self.marco_historial=MarcoTransmision(contenido,'REGISTRO // TRANSMISIONES',height=240)
@@ -1130,14 +1135,25 @@ class Capri:
         self.dialogo.recibir_usuario(texto)
         self.poner_chat('Tú',texto)
         orden = interpretar(texto)
-        if orden and orden.tipo.startswith('valorant_') and self.cfg.get('juego_busqueda')!='valorant':
+        if orden and orden.tipo.startswith('fortnite_') and self.cfg.get('juego_busqueda')!='fortnite':
+            self.guardar('juego_busqueda','fortnite')
+        elif orden and orden.tipo.startswith('valorant_') and self.cfg.get('juego_busqueda')!='valorant':
             self.guardar('juego_busqueda','valorant')
         elif orden and orden.tipo.startswith('lol_') and re.search(r'\b(?:lol|league(?: of legends)?)\b',texto,re.I) and self.cfg.get('juego_busqueda')!='lol':
             self.guardar('juego_busqueda','lol')
         contexto_valorant=self.cfg.get('juego_busqueda')=='valorant'
+        contexto_fortnite=self.cfg.get('juego_busqueda')=='fortnite'
         if origen=='voz' and self.cfg.get('juego_busqueda','auto')=='auto':
-            from escritorio import valorant_en_primer_plano
+            from escritorio import valorant_en_primer_plano,fortnite_en_primer_plano
             contexto_valorant=valorant_en_primer_plano()
+            contexto_fortnite=fortnite_en_primer_plano()
+        if contexto_fortnite:
+            from fortnite import interpretar_fortnite
+            from core import limpiar_peticion,Orden
+            contextual=interpretar_fortnite(limpiar_peticion(texto).strip(' .!?¿¡')+' en fortnite')
+            if contextual:orden=Orden(*contextual)
+            elif orden and orden.tipo in ('lol_buscar','lol_cancelar') and not re.search(r'\b(?:lol|league(?: of legends)?)\b',texto,re.I):
+                orden=Orden('fortnite_'+orden.tipo.removeprefix('lol_'))
         if contexto_valorant:
             from valorant import interpretar_valorant
             from core import limpiar_peticion,Orden
@@ -1215,6 +1231,8 @@ class Capri:
                         respuesta=self.lol.ejecutar(resuelta.tipo,resuelta.valor,automatico=self.cfg.get('lol_aceptar_automatico',False),cancelar=cancelar)
                     elif resuelta.tipo.startswith('valorant_'):
                         respuesta=self.valorant.ejecutar(resuelta.tipo,resuelta.valor,cancelar=cancelar)
+                    elif resuelta.tipo.startswith('fortnite_'):
+                        respuesta=self.fortnite.ejecutar(resuelta.tipo,resuelta.valor,cancelar=cancelar)
                     elif resuelta.tipo in PC:
                         respuesta=self.control_pc.ejecutar(resuelta.tipo,resuelta.valor)
                         if cancelar.is_set():self.control_pc.cancelar();return
@@ -1301,8 +1319,8 @@ class Capri:
         # Evitar que su propia voz active otra conversación. F8 siempre interrumpe.
         if self.escuchando or self.hablando:return
         if self.ajustes and self.ajustes.winfo_exists() and not self.visibilidad.oculta:
-            from escritorio import valorant_en_primer_plano
-            if not valorant_en_primer_plano():return
+            from escritorio import valorant_en_primer_plano,fortnite_en_primer_plano
+            if not (valorant_en_primer_plano() or fortnite_en_primer_plano()):return
         if self.activacion_hilo and self.activacion_hilo.is_alive():return
         if time.monotonic()<self.activacion_reintento:return
         self.activacion_stop=threading.Event()
@@ -1747,6 +1765,8 @@ class Capri:
                  wraplength=460,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w',pady=(7,0))
         tk.Label(f,text='Valorant',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(22,7))
         self.boton(f,'Configurar Valorant',self.abrir_valorant,RED).pack(anchor='w',pady=(0,7))
+        tk.Label(f,text='Fortnite',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(22,7))
+        self.boton(f,'Configurar Fortnite',self.abrir_fortnite,RED).pack(anchor='w',pady=(0,7))
         tk.Label(f,text='No se guarda el audio ni el historial del chat.\nArrastra la imagen para mover a Capri. Clic para chatear.\nTecla configurable en Voz · Esc: detener voz.',wraplength=420,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',10)).pack(anchor='w',pady=20)
         for widget in (self.micro_combo,self.whisper_combo,self.perfil_voz_combo,self.modelo_combo,motor,forma):widget.configure(style='Capri.TCombobox')
         ui.conectar_rueda()
@@ -1832,9 +1852,20 @@ class Capri:
         from valorant_ui import PanelValorant
         self.valorant_panel=PanelValorant(self.root,self.cfg.get('valorant',{}),self.guardar,self.enviar,self.valorant,ocultar=self.minimizar_capri)
 
+    def abrir_fortnite(self):
+        self.guardar('juego_busqueda','fortnite')
+        if self.visibilidad.oculta:self.visibilidad.mostrar()
+        if self.fortnite_panel and not self.fortnite_panel.cerrado and self.fortnite_panel.ventana.winfo_exists():
+            self.fortnite_panel.ventana.deiconify();self.fortnite_panel.ventana.lift();return
+        from fortnite_ui import PanelFortnite
+        self.fortnite_panel=PanelFortnite(self.root,self.cfg.get('fortnite',{}),self.guardar,self.enviar,self.fortnite,ocultar=self.minimizar_capri)
+
     def guardar(self,k,v):
         if k=='multimedia_fuente' and v not in ('auto','spotify','navegador'):return
-        if k=='juego_busqueda' and v not in ('auto','lol','valorant'):return
+        if k=='juego_busqueda' and v not in ('auto','lol','valorant','fortnite'):return
+        if k=='fortnite':
+            from fortnite import normalizar
+            v=normalizar(v);self.fortnite.configurar(v)
         if k=='valorant':
             from valorant import normalizar
             v=normalizar(v);self.valorant.configurar(v)
@@ -1872,7 +1903,7 @@ class Capri:
                 self.aplicar_escala(inicial=False)
         if k=='monitor_pc' and getattr(self,'monitor_pc',None):
             self.root.after_cancel(self.monitor_pc.tarea);self.monitor_pc.actualizar()
-        if k=='juego_busqueda' and getattr(self,'juego_combo',None):self.juego_combo.current(('auto','lol','valorant').index(v))
+        if k=='juego_busqueda' and getattr(self,'juego_combo',None):self.juego_combo.current(('auto','lol','valorant','fortnite').index(v))
         if k=='asomos_curiosos':
             self.proximo_asomo=time.monotonic()+random.uniform(180,360)
             if not v:self.terminar_asomo()
@@ -2072,6 +2103,8 @@ class Capri:
             self.cerrar_inmediato();return
         self.valorant.cerrar()
         if self.valorant_panel and not self.valorant_panel.cerrado:self.valorant_panel.cerrar()
+        self.fortnite.cerrar()
+        if self.fortnite_panel and not self.fortnite_panel.cerrado:self.fortnite_panel.cerrar()
         self.lol_seleccion.cerrar()
         if self.lol_panel and not self.lol_panel.cerrado:self.lol_panel.cerrar()
         if self.asomo and self.asomo.get('curioso'):self.terminar_asomo()
@@ -2198,6 +2231,8 @@ class Capri:
         self.lol.cerrar()
         self.valorant.cerrar()
         if self.valorant_panel and not self.valorant_panel.cerrado:self.valorant_panel.cerrar()
+        self.fortnite.cerrar()
+        if self.fortnite_panel and not self.fortnite_panel.cerrado:self.fortnite_panel.cerrar()
         self.lol_seleccion.cerrar()
         if self.lol_panel and not self.lol_panel.cerrado:self.lol_panel.cerrar()
         if self.activacion_permitida:

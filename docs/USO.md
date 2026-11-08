@@ -4,6 +4,11 @@
 
 En **Más → Valorant** puedes buscar o cancelar partidas y configurar tres preferencias de agente. Si un aliado ocupa la primera, se prueba la segunda y después la tercera; si no queda ninguna válida, no se selecciona otro agente. La selección automática es opcional y viene apagada. Consulta la [guía de Valorant](VALORANT.md).
 
+En **Más → Fortnite** puedes elegir Battle Royale o Cero construcción y Solo, Dúo, Trío o Squad. También puedes conservar las opciones del juego, aplicarlas sin buscar, iniciar la búsqueda y cancelarla. Deja el lobby preparado: Capri usa reconocimiento de texto local de Windows y controles normales del juego, sin programas adicionales. La cancelación nunca inicia otra búsqueda. Consulta la [guía de Fortnite](FORTNITE.md).
+
+Puedes dar las órdenes de Fortnite aunque lo tengas minimizado. Capri lo restaura automáticamente y espera a que el lobby esté listo antes de actuar; el juego aparece en primer plano durante la operación.
+
+
 Para LoL, abre **Más → League of Legends** en el menú radial para entrar directamente al panel, o pulsa el botón de LoL en **Ajustes → IA y servicios**. En un mismo panel puedes buscar, aceptar y cancelar partidas, activar la aceptación automática y guardar tres picks y tres baneos por cada línea. La confirmación automática de campeones se activa por separado y viene apagada. Consulta la [guía de LoL](LEAGUE_OF_LEGENDS.md).
 
 ¿Todavía no tienes el lanzador o falla la preparación? Consulta la [instalación paso a paso](../README.md#empieza-a-usarla) y los [errores frecuentes](INSTALACION.md).

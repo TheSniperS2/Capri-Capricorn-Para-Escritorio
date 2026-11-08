@@ -2,6 +2,13 @@
 
 ## En desarrollo
 
+### Fortnite
+
+- Las órdenes recuperan Fortnite desde minimizado: restauración asíncrona y espera de ventana, foco, imagen y controles del lobby. Las lecturas de transición no ejecutan clics ni reinician la búsqueda. Si se dejó abierto el menú de opciones, vuelve primero al lobby.
+- Panel propio con Battle Royale/Cero construcción y Solo/Dúo/Trío/Squad. Las preferencias son locales; se puede conservar el modo/equipo del juego. Abrir o configurar no inicia ninguna búsqueda.
+- Acciones de aplicar opciones, buscar y cancelar mediante lectura local del lobby con OCR de Windows. Verificación antes de pulsar Jugar; sin reencolado, capturas permanentes ni programas adicionales. No se pulsan clasificatoria/rellenar equipo. Modos y los cuatro tamaños probados en el cliente real sin entrar en cola; confirmación de búsqueda/cancelación comprobada con un cliente simulado.
+- Órdenes por texto/voz, selección de Fortnite como juego y detección en primer plano para órdenes de voz en Automático. Guía `FORTNITE.md` incluida en el paquete.
+
 ### Apertura en modo personaje
 
 - El saludo se retira en su posición y el propio sprite aparece y se traslada a su destino, sin dos Capris superpuestas ni líneas de estela. El trayecto dura 1,5 segundos y usa fotogramas preparados durante el saludo.

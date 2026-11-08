@@ -53,7 +53,7 @@ def proteger_foco():
             k.CloseHandle.argtypes=[w.HANDLE];k.CloseHandle(handle)
     except (OSError,AttributeError,ValueError):return True
 
-def valorant_en_primer_plano():
+def juego_en_primer_plano(nombres):
     """Identifica el ejecutable activo sin activar, mover ni minimizar ventanas."""
     if os.name!='nt':return False
     import ctypes
@@ -71,10 +71,18 @@ def valorant_en_primer_plano():
             ruta=ctypes.create_unicode_buffer(32768);longitud=w.DWORD(len(ruta))
             k.QueryFullProcessImageNameW.argtypes=[w.HANDLE,w.DWORD,w.LPWSTR,ctypes.POINTER(w.DWORD)]
             if not k.QueryFullProcessImageNameW(handle,0,ruta,ctypes.byref(longitud)):return False
-            return Path(ruta.value).name.casefold() in ('valorant.exe','valorant-win64-shipping.exe')
+            return Path(ruta.value).name.casefold() in nombres
         finally:
             k.CloseHandle.argtypes=[w.HANDLE];k.CloseHandle(handle)
     except (OSError,AttributeError,ValueError):return False
+
+
+def valorant_en_primer_plano():
+    return juego_en_primer_plano(('valorant.exe','valorant-win64-shipping.exe'))
+
+
+def fortnite_en_primer_plano():
+    return juego_en_primer_plano(('fortniteclient-win64-shipping.exe',))
 
 
 def carpeta_usuario(nombre):
