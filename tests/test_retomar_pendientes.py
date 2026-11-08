@@ -67,7 +67,7 @@ class IdiomaReal(unittest.TestCase):
             self.assertEqual(ia.conversar('Olá, Capri','local:test',al_texto=parciales.append),portugues)
         self.assertEqual(parciales,[portugues]);self.assertEqual(ia.historia[-1]['content'],portugues)
         solicitud=json.loads(red.call_args_list[0].args[0].data)
-        self.assertIn('português brasileiro',solicitud['messages'][-2]['content'])
+        self.assertIn('português brasileiro',solicitud['messages'][0]['content'])
 
     def test_corrige_tambien_espanol_y_japones(self):
         for idioma,correcta in (('es','Hola, soy Capri. ¿Qué hacemos hoy?'),('ja','こんにちは、カプリだよ。何をしよう？')):

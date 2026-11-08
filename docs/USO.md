@@ -14,6 +14,12 @@ Si empiezas a responder a tiempo, Capri termina de reconocer esa frase aunque
 la ventana de espera se cierre mientras la procesa. «Reconociendo» indica que
 está convirtiendo la voz en texto; no necesitas repetir el nombre en ese paso.
 
+La escucha después de una pregunta no obliga a Capri a seguir preguntando.
+La conversación da prioridad a tus correcciones, conserva el referente que
+aclaraste y respeta respuestas como «preferiría que no» sin ofrecer otro tema.
+Las correcciones y los rechazos se comprueban antes de mostrarlos o narrarlos.
+La calidad de la charla también depende del modelo local elegido.
+
 **Ctrl+Alt+C** recupera solo el avatar de Capri, sin abrir el chat, o la oculta si ya la tienes al frente. También puedes ocultarla con el botón **—** del chat o de los paneles de juego, y recuperarla con ese atajo. La voz y las automatizaciones continúan mientras está oculta. Abre el chat o los paneles desde el menú de Capri cuando los necesites. En el chat, elige **Valorant** en **Juego para buscar** para escribir «busca partida» aunque el juego esté en segundo plano; abrir su panel también guarda ese destino.
 
 En **Más → Valorant** puedes buscar o cancelar partidas y configurar tres preferencias de agente. Si un aliado ocupa la primera, se prueba la segunda y después la tercera; si no queda ninguna válida, no se selecciona otro agente. La selección automática es opcional y viene apagada. Consulta la [guía de Valorant](VALORANT.md).

@@ -5,7 +5,7 @@ import json
 import re
 import time
 import urllib.request
-from core import Orden,APPS,normalizar,url_solicitada,limpiar_peticion,ABRIR
+from core import Orden,APPS,normalizar,url_solicitada,limpiar_peticion,ABRIR,CONTEXTO_IA
 
 ACCIONES=('spotify','spotify_pausa','spotify_siguiente','spotify_anterior',
           'spotify_estado','spotify_playlist','spotify_playlist_cancion','spotify_buscar','spotify_volumen','abrir','buscar','pestana','carpeta',
@@ -233,6 +233,8 @@ class Interprete:
     def resolver(self,texto,modelo,cancelar=None,control_ampliado=False):
         if cancelar and cancelar.is_set():raise InterruptedError('Interpretación cancelada.')
         if protegida(texto):return Decision()
+        from core import pide_una_pregunta
+        if pide_una_pregunta(texto):return Decision()
         contexto=self.contexto()
         if not modelo:return Decision(pregunta='Necesito la IA local activada para entender esa petición con contexto.')
         sistema=SISTEMA;esquema=ESQUEMA
@@ -251,7 +253,7 @@ class Interprete:
         mensajes.append({'role':'user','content':texto})
         cuerpo={'model':modelo,'stream':False,'format':esquema,'keep_alive':'15m',
                 'messages':mensajes,
-                'options':{'temperature':0,'num_ctx':2048,'num_predict':100}}
+                'options':{'temperature':0,'num_ctx':CONTEXTO_IA,'num_predict':100}}
         if modelo.lower().startswith('qwen3'):cuerpo['think']=False
         req=urllib.request.Request('http://127.0.0.1:11434/api/chat',
                 data=json.dumps(cuerpo).encode('utf-8'),headers={'Content-Type':'application/json'})

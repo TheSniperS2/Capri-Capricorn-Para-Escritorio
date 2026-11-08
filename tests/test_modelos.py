@@ -25,7 +25,9 @@ class SeleccionModelos(unittest.TestCase):
             self.assertEqual(Interprete().resolver('detén la música',modelo).orden,core.Orden('spotify_pausa'))
         self.assertEqual(red.call_count,3)
         for llamada in red.call_args_list:
-            self.assertIs(json.loads(llamada.args[0].data)['think'],False)
+            cuerpo=json.loads(llamada.args[0].data)
+            self.assertIs(cuerpo['think'],False)
+            self.assertEqual(cuerpo['options']['num_ctx'],core.CONTEXTO_IA)
 
     def test_seleccion_base_small_y_respaldo_si_falta_el_preferido(self):
         with tempfile.TemporaryDirectory() as d:

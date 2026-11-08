@@ -4,7 +4,10 @@
 
 ### Escucha activa opcional
 
+- La conversación da prioridad a las correcciones y respeta los rechazos sin encadenar preguntas ni proponer otro tema. Comprueba el referente corregido antes de mostrar la respuesta; las salidas incoherentes de esos turnos usan un reconocimiento breve y conservan el historial final.
+- Unificado el contexto en un sistema inicial y ampliado el margen para el historial. La charla anterior ya no se duplica como si fuera un resultado real del ejecutor. Preguntas opcionales según el tema, sin forzarlas después de cada respuesta.
 - Corregido el descarte de respuestas al pasar de captura a Whisper: el turno sigue activo hasta terminar el reconocimiento, aunque la espera de la pregunta ya se haya consumido. La interfaz indica «Reconociendo» durante ese proceso; Esc y los cambios de configuración siguen cancelándolo.
+- Las peticiones de que Capri haga una pregunta se tratan como conversación. Instrucciones para mantener el hilo de las respuestas breves y corregir una salida que no formule ninguna pregunta antes de mostrarla o guardarla.
 - Corregida la escucha después de preguntas seguidas de otra frase, como «¿Quieres una historia? ¡Espero tu interés!». Detecta la pregunta dentro del mensaje y espera a que termine toda la voz para escuchar la respuesta, sin confundir preguntas citadas, código o enlaces.
 - Ajustes → Micrófono incorpora tres modos: desactivada, responder después de una pregunta y escucha activa sin decir «Capri». El modo habitual por nombre se conserva por defecto.
 - Las preguntas abren una ventana de respuesta de 15 segundos al terminar realmente la voz, también con voz desactivada. La escucha continua espera habla en el micrófono, conserva el comienzo de la frase y usa Whisper o Vosk ya instalados.
