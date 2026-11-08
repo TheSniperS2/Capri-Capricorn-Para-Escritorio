@@ -2,6 +2,11 @@
 
 ## En desarrollo
 
+### Apertura en modo personaje
+
+- El saludo se retira en su posición y el propio sprite aparece y se traslada a su destino, sin dos Capris superpuestas ni líneas de estela. El trayecto dura 1,5 segundos y usa fotogramas preparados durante el saludo.
+- La llegada conserva pose, tamaño, dirección y posición del personaje activo. No se reinicia su colocación ni se dispara un glitch al finalizar la intro.
+
 ### Panel multimedia
 
 - Cabeceo y movimiento independiente de hombros y cabello en el visor, con cámara fija. Bucle de 72 fotogramas a 30 fps preparado fuera del hilo de la interfaz, cachés acotadas y pausa al desactivar la opción. El rojo del cabello se aproxima al arte habitual sin alterar ojos, piel verde o ropa; estática y barrido se aplican después del movimiento para conservar su definición.

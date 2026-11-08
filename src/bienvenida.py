@@ -60,12 +60,10 @@ class Bienvenida:
         self.centro=(ancho/2,alto/2);self.salida_desde=None;self.retenida=False
         self.f=max(.55,alto/1080)
         self.pantalla=pantalla;self.destino_tamano=destino.size;self.recorte=None
+        self.duracion=DURACION if pantalla else SALIDA+1.5
         self.lienzo=None
         self.llegada=[]
-        for i in range(1 if pantalla else 21):
-            zoom=1 if pantalla else 1+.28*(1-i/20)
-            im=destino.resize((max(1,round(destino.width*zoom)),max(1,round(destino.height*zoom))),Image.Resampling.LANCZOS)
-            self.llegada.append(ImageTk.PhotoImage(im))
+        self.llegada.append(ImageTk.PhotoImage(destino))
         self.marcos={};self.destino=destino.copy();self.apertura_salida=0;self.progreso_salida=0
         self.aparicion_t=None;self.numero_forma=0
         self.espera_preparacion=None;self.pausa_preparacion=0.
@@ -126,7 +124,7 @@ class Bienvenida:
             self.cartel(c,t)
             if isinstance(c,LienzoAnimado):c.terminar()
             return
-        u=limitar((t-SALIDA)/(DURACION-SALIDA));self.progreso_salida=u
+        u=limitar((t-SALIDA)/(self.duracion-SALIDA));self.progreso_salida=u
         q=suave(max(0,(u-.08)/.92))
         if self.pantalla:
             self.apertura_salida=suave(u/.22)
@@ -136,16 +134,7 @@ class Bienvenida:
             self.recorte=None
             if isinstance(c,LienzoAnimado):c.terminar()
             return
-        if u<.20:
-            salida=suave(u/.20)
-            self.retrato(c,SALIDA,1.25,self.w*.12*salida,self.h*salida)
-        i=min(len(self.llegada)-1,round(q*(len(self.llegada)-1)))
-        cx,cy=self.centro;x=cx+(self.fin[0]-cx)*q;y=cy+(self.fin[1]-cy)*q-40*math.sin(math.pi*q)
-        c.create_image(x,y,image=self.llegada[i],tags='intro_llegada')
-        if q<.85:
-            for k in (1,2,3):
-                p=max(0,q-k*.025);tx=cx+(self.fin[0]-cx)*p;ty=cy+(self.fin[1]-cy)*p-40*math.sin(math.pi*p)
-                c.create_line(tx-10,ty,tx+10,ty,fill=color('#8e304a'),width=2,tags='intro_estela')
+        self.retrato(c,SALIDA,self.encuadre(SALIDA))
         if isinstance(c,LienzoAnimado):c.terminar()
 
     @staticmethod

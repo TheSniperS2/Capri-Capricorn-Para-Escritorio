@@ -16,6 +16,18 @@ def geometria():
 
 
 class Visor(unittest.TestCase):
+    def test_traslado_personaje_termina_exactamente_en_el_sprite_sin_retrato_ni_marco(self):
+        from retrato_intro import plan_personaje
+        b=geometria();b.destino_tamano=(210,240)
+        retrato=Image.new('RGBA',(1238,941),'#ff0030')
+        cuerpo=Image.new('RGBA',(210,240),'#00ef24')
+        for u in (.28,.55,.8,1):
+            im,pos=renderizar_transicion(retrato,cuerpo,plan_personaje(b,u),'#ff4267')
+            self.assertEqual(im.getchannel('R').getextrema(),(0,0))
+        self.assertEqual(im.size,cuerpo.size)
+        self.assertEqual(im.tobytes(),cuerpo.tobytes())
+        self.assertEqual(pos,(round(b.fin[0]-105),round(b.fin[1]-120)))
+
     def test_color_key_equivale_a_componer_sobre_el_fondo_real_sin_perder_detalle(self):
         from retrato_intro import imagen_opaca,FONDO
         im=Image.new('RGBA',(3,1))
@@ -75,6 +87,42 @@ class Visor(unittest.TestCase):
 
 class Preparacion(PruebasTk):
     capri=fixtures.ModoPersonaje.capri
+
+    def test_intro_personaje_conserva_orientacion_posicion_y_pose_al_llegar(self):
+        from PIL import ImageTk,ImageOps
+        from companera import con_sombra
+        with self.capri(ajustes={'modo_visual':'personaje','voz':False}) as (c,_):
+            c.root.deiconify()
+            for direccion in (-1,1):
+                c.companera.direccion=direccion;c.iniciar_intro()
+                b=c.bienvenida;p=c.companera;pos=(p.x,p.y)
+                sprite=ImageOps.mirror(p.lienzos[0]) if direccion<0 else p.lienzos[0]
+                esperado=con_sombra(sprite,c.cfg.get('halo_personaje','violeta'))
+                self.assertEqual(b.destino.tobytes(),esperado.tobytes())
+                with patch.object(p,'iniciar',side_effect=AssertionError('No reiniciar al llegar')):
+                    c.finalizar_intro()
+                c.root.update_idletasks()
+                self.assertEqual((p.x,p.y,p.direccion),(*pos,direccion))
+                self.assertEqual(ImageTk.getimage(p.imagen).tobytes(),sprite.tobytes())
+                self.assertFalse(p.glitch_activo)
+                self.assertGreater(p.proxima_accion,p.ultimo)
+                self.assertEqual((c.root.winfo_width(),c.root.winfo_height()),sprite.size)
+
+    def test_traslado_personaje_muestra_un_solo_compuesto_sin_estelas_ajenas(self):
+        from PIL import ImageTk
+        from bienvenida import DURACION
+        with self.capri(ajustes={'modo_visual':'personaje','voz':False}) as (c,_):
+            c.iniciar_intro();b=c.bienvenida;r=b.retrato_aprobado
+            r.detener();r.preparado=True
+            foto=ImageTk.PhotoImage(b.destino)
+            r.fotos={i:(foto,(100,100)) for i in range(r.pasos+1)}
+            with patch('retrato_intro.ImageTk.PhotoImage',side_effect=AssertionError('Sin remuestreo en reproducción')):
+                for u in (.1,.4,.8,.99):
+                    b.dibujar(c.canvas,SALIDA+u*(b.duracion-SALIDA))
+                    self.assertEqual(len(c.canvas.find_withtag('intro_retrato')),1)
+                    self.assertFalse(c.canvas.find_withtag('intro_estela'))
+                    visibles=[i for i in c.canvas.find_all() if c.canvas.itemcget(i,'state')!='hidden']
+                    self.assertEqual(len(visibles),1)
 
     def test_no_prepara_transicion_durante_la_aparicion(self):
         with self.capri() as (c,_):

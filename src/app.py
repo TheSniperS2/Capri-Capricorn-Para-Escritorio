@@ -755,9 +755,12 @@ class Capri:
         sw=self.root.winfo_screenwidth();sh=self.root.winfo_screenheight()
         self.frase_intro=ui(SALUDO);self.intro_audio=None;self.intro_generacion=None
         self.intro_hablando=False;self.intro_boca=False;self.intro_esperando_fin=False
+        self.intro_personaje=None
         if self.es_personaje():
             self.companera.redimensionar(s);self.companera.iniciar()
-            destino=self.companera.lienzos[0]
+            p=self.companera
+            self.intro_personaje=(p.x,p.y,p.direccion)
+            destino=ImageOps.mirror(p.lienzos[0]) if p.direccion<0 else p.lienzos[0]
             from companera import con_sombra
             destino=con_sombra(destino,self.cfg.get('halo_personaje','violeta'))
             fin=(self.companera.x+self.companera.ancho/2,self.companera.y+self.companera.alto/2)
@@ -801,7 +804,7 @@ class Capri:
             self.root.after(30,self.animar);return
         t=ahora-self.inicio_intro
         visual=self.bienvenida.tiempo(t)
-        if visual>=DURACION:
+        if visual>=self.bienvenida.duracion:
             self.finalizar_intro();self.root.after(1,self.animar);return
         self.intro_en_viaje=visual>SALIDA+.12
         self.bienvenida.dibujar(self.canvas,visual,self.intro_hablando,self.intro_boca,self.voz.bandas_salida)
@@ -846,10 +849,16 @@ class Capri:
         if self.bienvenida is not None:self.bienvenida.detener()
         self.bienvenida=None;self.intro_activa=False
         self.intro_hablando=False;self.intro_boca=False
+        personaje=getattr(self,'intro_personaje',None);self.intro_personaje=None
+        if self.es_personaje() and personaje:
+            p=self.companera;p.x,p.y,p.direccion=personaje
+            ahora=time.monotonic();p.ultimo=ahora;p.proxima_accion=ahora+5
+            p.estado='quieta';p.glitch_hasta=0.;p.proximo_glitch=ahora+random.uniform(2.8,6)
+            p.entrada_hasta=ahora+.35
         self.pasar_clics_intro(False)
         self.entrada_compacta.pack(fill='x')
         if getattr(self,'monitor_pc',None):self.monitor_pc.sincronizar()
-        self.aplicar_escala(inicial=True);self.fragmentos_intro=None
+        self.aplicar_escala(inicial=not self.es_personaje());self.fragmentos_intro=None
         if getattr(self,'panel_multimedia',None):self.panel_multimedia.sincronizar()
         # Recuperar la prioridad sólo después de reducir la ventana al panel.
         self.restaurar_capa_intro()

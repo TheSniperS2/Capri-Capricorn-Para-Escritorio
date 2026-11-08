@@ -283,10 +283,11 @@ class Companera:
         c.delete('all')
         if not self.fotos:return
         ahora=time.monotonic()
+        asentando=ahora<getattr(self,'entrada_hasta',0.)
         if glitch and ahora>=self.proximo_glitch:
             self.glitch_hasta=ahora+random.uniform(.24,.42)
             self.proximo_glitch=ahora+random.uniform(1.8,3.6) if hablando else ahora+random.uniform(2.8,6)
-        self.glitch_activo=glitch and ahora<self.glitch_hasta
+        self.glitch_activo=glitch and ahora<self.glitch_hasta and not asentando
         if self.ancla:
             ax=self.ancla['x']-self.x;ay=self.ancla['y']-self.y
             edad=max(0,ahora-self.ancla['inicio']);lado=-1 if self.direccion<0 else 1;s=self.escala
@@ -311,7 +312,7 @@ class Companera:
         indice=(6 if hablando and boca else 3) if self.estado=='sentada' else 0
         if indice==0:
             if hablando and boca:indice=4
-            elif ahora%5.3<.13:indice=5
+            elif not asentando and ahora%5.3<.13:indice=5
         fotos=self.espejos if self.direccion<0 else self.fotos
         giro=round(-2+2*math.sin((ahora-self.ancla['inicio'])*3))*(1 if self.direccion>=0 else -1) if self.ancla else 0
         if self.ancla:

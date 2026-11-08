@@ -61,8 +61,36 @@ def plan_transicion(b,u,fuente=(1238,941)):
             'marco_centro':((caja[0]+caja[2])/2,(caja[1]+caja[3])/2+(b.destino_tamano[1]/2-160*b.destino_tamano[0]/360)*factor)}
 
 
+def plan_personaje(b,u,fuente=(1238,941)):
+    """Retirar el saludo en su sitio; materializar y trasladar el sprite definitivo."""
+    w,h=fuente;dw,dh=b.destino_tamano
+    if u<.12:
+        escala=b.w*ZOOM/w;centro=(b.w*.5,b.h*.42);opacidad=1-suave(u/.12);retrato=True
+    else:
+        viajar=suave((u-.24)/.76);inicio=(b.w*.5,b.h*.54)
+        centro=tuple(a+(z-a)*viajar for a,z in zip(inicio,b.fin))
+        escala=1+.08*(1-viajar);opacidad=suave((u-.12)/.12);retrato=False
+    return {'personaje':True,'u':u,'pantalla':(b.w,b.h),'centro':centro,
+            'escala':escala,'opacidad':opacidad,'retrato':retrato}
+
+
+def renderizar_personaje(im,destino,p):
+    """Un único fotograma compuesto; sin retrato que cae ni estelas añadidas."""
+    sw,sh=p['pantalla'];cx,cy=p['centro'];s=p['escala'];peso=p['opacidad']
+    fuente=im if p['retrato'] else destino
+    x=cx-fuente.width*s/2;y=cy-fuente.height*s/2
+    l,a,r,b=max(0,round(x)),max(0,round(y)),min(sw,round(x+fuente.width*s)),min(sh,round(y+fuente.height*s))
+    if r<=l or b<=a or peso<=0:return Image.new('RGBA',(1,1)),(0,0)
+    box=(max(0,(l-x)/s),max(0,(a-y)/s),min(fuente.width,(r-x)/s),min(fuente.height,(b-y)/s))
+    base=fuente if fuente.mode=='RGBa' else fuente.convert('RGBa')
+    salida=base.resize((r-l,b-a),Image.Resampling.LANCZOS,box=box).convert('RGBA')
+    if peso<1:salida.putalpha(salida.getchannel('A').point(lambda n:round(n*peso)))
+    return salida,(l,a)
+
+
 def renderizar_transicion(im,destino,p,tinta):
     """Solo Pillow. Remuestrea el area visible, nunca un retrato enorme entero."""
+    if p.get('personaje'):return renderizar_personaje(im,destino,p)
     u=p['u'];sw,sh=p['pantalla'];s=p['escala'];ix,iy=p['posicion']
     l,a,r,b=p['apertura']
     foto=(max(0,math.ceil(l),math.ceil(ix)),max(0,math.ceil(a),math.ceil(iy)),
@@ -150,13 +178,15 @@ class RetratoIntro:
         for fila,col in ((0,0),(0,4),(1,2),(2,1),(2,5)):
             caja=(col*cuerpo.width//6,fila*cuerpo.height//3,(col+1)*cuerpo.width//6,(fila+1)*cuerpo.height//3)
             self.fragmentos.append((ImageTk.PhotoImage(imagen_opaca(cuerpo.crop(caja))),caja[:2]))
-        self.personaje=ImageTk.PhotoImage(self.vistas[3].resize(self.base,Image.Resampling.LANCZOS)) if not b.pantalla else None
-        self.planes=[plan_transicion(b,i/PASOS,(self.w,self.h)) for i in range(PASOS+1)]
+        self.pasos=PASOS if b.pantalla else 45
+        plan=plan_transicion if b.pantalla else plan_personaje
+        self.pantalla=b.pantalla
+        self.planes=[plan(b,i/self.pasos,(self.w,self.h)) for i in range(self.pasos+1)]
         self.destino=b.destino.copy()
         from tema_ui import actual
         self.tinta=actual();self.pool=ThreadPoolExecutor(max_workers=3,thread_name_prefix='CapriRetrato')
         self.futuros={};self.fotos={};self.ultimo=None
-        self.siguiente=0;self.preparado=not b.pantalla
+        self.siguiente=0;self.preparado=False
 
     def preparar(self):
         """Una transferencia nativa por tick del saludo, nunca durante el viaje."""
@@ -168,16 +198,16 @@ class RetratoIntro:
         self.fotos[self.siguiente]=(PhotoImage(data=datos,format='PPM'),pos)
         del self.futuros[self.siguiente]
         self.siguiente+=1
-        self.preparado=self.siguiente>PASOS
+        self.preparado=self.siguiente>self.pasos
         if not self.preparado:self.pedir(self.siguiente)
 
     def pedir(self,indice):
-        necesarios=range(indice,min(PASOS+1,indice+PREPARADOS))
+        necesarios=range(indice,min(self.pasos+1,indice+PREPARADOS))
         for viejo in list(self.futuros):
             if viejo not in necesarios:self.futuros.pop(viejo).cancel()
         for i in necesarios:
             if i not in self.futuros:
-                original=self.fuentes_premultiplicadas[3 if i/PASOS<.08 else 2]
+                original=self.fuentes_premultiplicadas[3 if not self.pantalla or i/self.pasos<.08 else 2]
                 self.futuros[i]=self.pool.submit(preparar_imagen,original,self.destino,self.planes[i],self.tinta)
 
     @staticmethod
@@ -192,13 +222,11 @@ class RetratoIntro:
 
     def dibujar(self,c,b,t):
         from bienvenida import SALIDA
-        if not b.pantalla and t>=SALIDA:
-            c.create_image(b.rig[5],b.rig[6],image=self.personaje,tags='intro_retrato');return
-        if b.pantalla and t>=SALIDA:
+        if t>=SALIDA:
             u=b.progreso_salida
             if u>=1:
                 c.create_image(*b.fin,image=b.llegada[-1],tags=('intro_retrato','intro_llegada'));return
-            indice=round(u*PASOS)
+            indice=round(u*self.pasos)
             if indice in self.fotos:
                 self.ultimo=indice
                 # Devuelve memoria conforme avanza; no hay trabajo Pillow ni Tk PhotoImage aqui.

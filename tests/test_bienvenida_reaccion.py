@@ -92,7 +92,9 @@ class BienvenidaYReaccion(PruebasTk):
             c.cfg['modo_visual']='personaje';c.iniciar_intro()
             ultima=c.bienvenida.llegada[-1]
             self.assertEqual((ultima.width(),ultima.height()),(c.companera.ancho,c.companera.alto))
-            c.inicio_intro=time.monotonic()-DURACION-.1;c.animar()
+            # Este caso comprueba la entrega final; la preparación asíncrona se valida aparte.
+            c.bienvenida.retrato_aprobado.preparado=True
+            c.inicio_intro=time.monotonic()-c.bienvenida.duracion-.1;c.animar()
             self.assertFalse(c.intro_activa);self.assertFalse(c.entrada_compacta.winfo_manager())
             self.assertEqual(int(c.canvas.cget('height')),c.companera.alto)
 
