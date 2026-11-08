@@ -8,6 +8,7 @@ En **Más → Fortnite** puedes elegir Battle Royale o Cero construcción y Solo
 
 Puedes dar las órdenes de Fortnite aunque lo tengas minimizado. Capri lo restaura automáticamente y espera a que el lobby esté listo antes de actuar; el juego aparece en primer plano durante la operación.
 
+En **Ajustes → Reacciones**, activa **Reaccionar a las skins** y el juego que quieras. Elige una skin y deja su ficha con el nombre visible: Capri puede comentarla automáticamente. También detecta cambios de equipamiento propio en Valorant fuera de partida. Incluye Goku Black y miles de skins; las que no tienen diálogo propio reciben una opinión genérica positiva, neutral o negativa que se mantiene incluso al reiniciar. Acepta **«mira mi skin en Fortnite/Valorant»** y **«¿qué te parece esta skin?»**. Las reacciones esperan mientras conversas con Capri y no cambian el foco del juego. Esta función sigue en desarrollo: puede tardar y fallar al identificar algunos nombres; detectar una nueva selección real sigue pendiente. Consulta la [guía de reacciones](REACCIONES_SKINS.md).
 
 Para LoL, abre **Más → League of Legends** en el menú radial para entrar directamente al panel, o pulsa el botón de LoL en **Ajustes → IA y servicios**. En un mismo panel puedes buscar, aceptar y cancelar partidas, activar la aceptación automática y guardar tres picks y tres baneos por cada línea. La confirmación automática de campeones se activa por separado y viene apagada. Consulta la [guía de LoL](LEAGUE_OF_LEGENDS.md).
 

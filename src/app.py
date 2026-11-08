@@ -111,6 +111,9 @@ class Capri:
         from fortnite import ControlFortnite
         self.fortnite=ControlFortnite();self.fortnite_panel=None
         self.fortnite.configurar(self.cfg.get('fortnite',{}))
+        from reacciones_skins import MonitorSkins
+        self.skins_runtime=hotkeys;self.skins=MonitorSkins(self.eventos.put)
+        self.skins.configurar(self.cfg.get('reacciones_skins',{}),iniciar=hotkeys)
         self.entrada_personaje=False;self.ventana_entrada=None;self.entrada_lateral=None;self.transito=None
         self.cfg.setdefault('llamadas_capri',True);self.cfg.setdefault('asomos_automaticos',False);self.cfg.setdefault('bromas_ventanas',False)
         self.cfg.setdefault('intervalo_interacciones',15)
@@ -455,7 +458,17 @@ class Capri:
             self.dialogo.ocultar();self.llamada_ui.preparar_voz(texto);self.llamada_ui.revelar(texto,len(texto))
         if self.puede_narrar():self.narrar_respuesta(self.peticion,texto,final=True,duracion_final=fin_voz)
 
+    def puede_reaccionar_skins(self):
+        return not bool(self.cerrado or self.saliendo or self.intro_activa or self.transito or self.ocupada
+                        or self.escuchando or self.hablando or self.voz_ticket is not None or self.drag
+                        or self.escribiendo() or self.control_pc.pendiente or getattr(self,'radial',None)
+                        or (self.ajustes and self.ajustes.winfo_exists())
+                        or (self.llamada_ui and not self.llamada_ui.cerrada)
+                        or (self.apagado_ui and not self.apagado_ui.cerrada))
 
+    def ejemplo_skin(self,texto):
+        if self.ocupada or self.escuchando or self.hablando or self.voz_ticket is not None:return False
+        self.avatar.sonreir();self.decir_juego(texto);return True
 
     def descartar_reaccion(self):
         self.reaccion_pendiente=None
@@ -1195,6 +1208,10 @@ class Capri:
             self.poner_chat('Capri',respuesta,mostrar=not self.puede_narrar())
             if self.puede_narrar():self.narrar_respuesta(self.peticion,respuesta,final=True)
             return
+        if orden and orden.tipo=='skins_opinar':
+            # Una petición manual puede recuperar el juego. Cerrar Ajustes evita
+            # que su ventana siempre visible tape el nombre que se va a leer.
+            if self.ajustes and self.ajustes.winfo_exists():self.ajustes.destroy();self.ajustes=None
         self.ocupada=True; self.estado='Pensando…'
         self.peticion += 1
         ticket = self.peticion
@@ -1233,6 +1250,9 @@ class Capri:
                         respuesta=self.valorant.ejecutar(resuelta.tipo,resuelta.valor,cancelar=cancelar)
                     elif resuelta.tipo.startswith('fortnite_'):
                         respuesta=self.fortnite.ejecutar(resuelta.tipo,resuelta.valor,cancelar=cancelar)
+                    elif resuelta.tipo=='skins_opinar':
+                        preferido=self.cfg.get('juego_busqueda','')
+                        respuesta=self.skins.opinar(resuelta.valor or '',idioma=idioma,cancelar=cancelar,preferido=preferido)
                     elif resuelta.tipo in PC:
                         respuesta=self.control_pc.ejecutar(resuelta.tipo,resuelta.valor)
                         if cancelar.is_set():self.control_pc.cancelar();return
@@ -1251,7 +1271,8 @@ class Capri:
                     except Exception as e:
                         self.eventos.put(('error',(ticket,texto_idioma('ia_error',idioma)+' '+str(e)[:180])));return
                 self.eventos.put(('contexto',(ticket,texto,resuelta,respuesta,bool(pregunta))))
-                if resuelta or pregunta:respuesta=self.localizar_respuesta(respuesta,idioma,cancelar)
+                if (resuelta or pregunta) and not (resuelta and resuelta.tipo=='skins_opinar'):
+                    respuesta=self.localizar_respuesta(respuesta,idioma,cancelar)
                 if cancelar.is_set():return
                 self.eventos.put(('respuesta',(ticket,respuesta)))
             except InterruptedError:return
@@ -1443,6 +1464,10 @@ class Capri:
                                 mostrar=not (self.ocupada or self.escuchando or self.hablando or self.voz_ticket is not None))
             elif tipo=='travesura_resultado':
                 if not self.ocupada and not self.escuchando and not self.hablando:self.decir_juego(valor)
+            elif tipo=='skin_reaccion':
+                version,plan=valor
+                if self.puede_reaccionar_skins() and self.skins.aceptar(version,plan):
+                    self.avatar.sonreir();self.decir_juego(plan.texto)
             elif tipo=='voz':
                 if isinstance(valor,tuple):
                     generacion,valor=valor
@@ -1523,6 +1548,7 @@ class Capri:
                     if actual:self.modelo_combo.set(actual)
                     self.modelo_estado.set(error or 'Elige un modelo instalado. Se usa para conversar y entender peticiones.')
         self.revisar_interacciones()
+        self.skins.permitir(self.skins_runtime and self.puede_reaccionar_skins(),codigo_idioma(self.cfg.get('idioma')))
         self.mantener_activacion()
         localizar_widgets(self.root)
         self.root.after(60,self.poll)
@@ -1580,10 +1606,13 @@ class Capri:
         self.panel_ajustes=ui=PanelAjustes(self.marco_ajustes.cuerpo)
         escritorio=ui.seccion('Escritorio','Forma, tamaño, movimiento y efectos de Capri.')
         multimedia=ui.seccion('Multimedia','Música y vídeos junto a Capri.')
+        reacciones=ui.seccion('Reacciones','Gustos y comentarios de Capri sobre las skins.')
         micro=ui.seccion('Micrófono','Elige tu entrada y ajusta la sensibilidad y el reconocimiento local.')
         voz=ui.seccion('Voz','Elige el idioma, el perfil y la velocidad de la voz de Capri.')
         ia=ui.seccion('IA y servicios','Modelo local, navegador y música.')
         permisos=ui.seccion('Permisos','Decide qué puede hacer Capri en tu computador.')
+        from skins_ui import AjustesSkins
+        self.ajustes_skins=AjustesSkins(reacciones,self.cfg.get('reacciones_skins',{}),self.guardar,self.enviar,self.ejemplo_skin,self.skins)
         tk.Label(multimedia,text='Panel multimedia',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w')
         mostrar_media=tk.BooleanVar(value=bool(self.cfg.get('panel_multimedia',False)))
         InterruptorCyber(multimedia,text='Mostrar panel multimedia',variable=mostrar_media,
@@ -1861,6 +1890,9 @@ class Capri:
         self.fortnite_panel=PanelFortnite(self.root,self.cfg.get('fortnite',{}),self.guardar,self.enviar,self.fortnite,ocultar=self.minimizar_capri)
 
     def guardar(self,k,v):
+        if k=='reacciones_skins':
+            from reacciones_skins import normalizar
+            v=normalizar(v);self.skins.configurar(v,iniciar=self.skins_runtime)
         if k=='multimedia_fuente' and v not in ('auto','spotify','navegador'):return
         if k=='juego_busqueda' and v not in ('auto','lol','valorant','fortnite'):return
         if k=='fortnite':
@@ -2097,6 +2129,7 @@ class Capri:
         distribuir(SimpleNamespace(width=w-60));ventana.update_idletasks();minimo();ventana.deiconify()
 
     def cerrar(self):
+        if getattr(self,'skins',None):self.skins.cerrar()
         if getattr(self,'monitor_pc',None):self.monitor_pc.cerrar()
         if getattr(self,'panel_multimedia',None):self.panel_multimedia.cerrar()
         if self.visibilidad.oculta:
@@ -2214,6 +2247,7 @@ class Capri:
         self.root.after(16,self.pintar_despedida)
 
     def cerrar_inmediato(self):
+        if getattr(self,'skins',None):self.skins.cerrar()
         if getattr(self,'monitor_pc',None):self.monitor_pc.cerrar()
         if getattr(self,'panel_multimedia',None):self.panel_multimedia.cerrar()
         if self.cerrado:return

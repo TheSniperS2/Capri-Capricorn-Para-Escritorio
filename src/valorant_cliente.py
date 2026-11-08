@@ -108,7 +108,7 @@ def descubrir():
 def permitida(metodo,ruta,jugador):
     if metodo=='GET':
         if ruta in (f'/parties/v1/players/{jugador}',f'/pregame/v1/players/{jugador}',f'/core-game/v1/players/{jugador}',
-                    f'/store/v1/entitlements/{jugador}/{AGENTES}'):return True
+                    f'/store/v1/entitlements/{jugador}/{AGENTES}',f'/personalization/v2/players/{jugador}/playerloadout'):return True
         return re.fullmatch(rf'/(?:parties/v1/parties|pregame/v1/matches)/{UUID}',ruta) is not None
     return metodo=='POST' and (re.fullmatch(rf'/parties/v1/parties/{UUID}/matchmaking/(?:join|leave)',ruta) is not None
         or re.fullmatch(rf'/pregame/v1/matches/{UUID}/(?:select|lock)/{UUID}',ruta) is not None)
@@ -129,7 +129,7 @@ class ClienteValorant:
             s=self.conectar(forzar=metodo=='POST')
             if metodo=='POST' and anterior is not None and anterior.jugador!=s.jugador:raise ErrorValorant('sesion')
             if not permitida(metodo,ruta,s.jugador):raise ValueError('Acción de Valorant no permitida.')
-            host=f'pd.{s.shard}.a.pvp.net' if ruta.startswith('/store/') else f'glz-{s.region}-1.{s.shard}.a.pvp.net'
+            host=f'pd.{s.shard}.a.pvp.net' if ruta.startswith(('/store/','/personalization/')) else f'glz-{s.region}-1.{s.shard}.a.pvp.net'
             req=urllib.request.Request('https://'+host+ruta,method=metodo,data=b'' if metodo=='POST' else None,
                 headers={'Authorization':'Bearer '+s.acceso,'X-Riot-Entitlements-JWT':s.derecho,
                          'X-Riot-ClientVersion':s.version,'X-Riot-ClientPlatform':PLATAFORMA,

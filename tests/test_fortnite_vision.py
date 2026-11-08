@@ -112,6 +112,26 @@ class Vision(unittest.TestCase):
         with patch('fortnite_vision.subprocess.run',side_effect=subprocess.TimeoutExpired('ocr',9)):
             with self.assertRaises(ErrorFortnite):leer_imagen('foto.png')
 
+    def test_ficha_de_skin_lee_region_ampliada_de_izquierda_y_derecha_sin_entradas(self):
+        from pathlib import Path
+        from skins_fuentes import FuentesSkins
+        v=self.vista();v._validar=Mock();rutas=[];tamanos=[]
+        p=Pantalla(123,(0,0,1920,1080),(Texto('ATUENDO',(1060,135,100,17)),
+            Texto('ATUENDO - ESTILO FO',(87,734,306,17)),Texto('PHILIP Z',(80,767,236,32))),time.monotonic())
+        regiones=v.regiones_ficha(p);self.assertEqual(len(regiones),1)
+        l,a,r,b=regiones[0];self.assertLessEqual(l,80);self.assertGreaterEqual(r,447);self.assertGreaterEqual(b,800)
+        def ocr(ruta):
+            rutas.append(Path(ruta))
+            with Image.open(ruta) as im:tamanos.append(im.size)
+            return (Texto('ATUENDO - ESTILO FO',(66,57,918,49)),Texto('PHILIP J. FR',(45,156,974,95)))
+        with patch('PIL.ImageGrab.grab',return_value=Image.new('RGB',(1920,1080),'#1255aa')),patch('fortnite_vision.leer_imagen',side_effect=ocr):
+            detalle=v.leer_ficha(p)
+        self.assertEqual(FuentesSkins().fortnite_visible(detalle).skins[0]['perfil'],'fry')
+        self.assertEqual(len(tamanos),2);self.assertGreater(tamanos[0][0],tamanos[1][0]);self.assertLessEqual(max(tamanos[0]),3600)
+        self.assertTrue(all(not ruta.exists() for ruta in rutas))
+        v.a.mouse_event.assert_not_called();v.a.keybd_event.assert_not_called()
+        derecha=Pantalla(123,(0,0,1920,1080),(Texto('OUTFIT - FORTNITE STYLE',(1200,830,350,20)),),time.monotonic())
+        l,a,r,b=v.regiones_ficha(derecha)[0];self.assertGreater(l,1000);self.assertLessEqual(r,1920);self.assertLessEqual(b,1080)
 
 
 if __name__=='__main__':unittest.main()

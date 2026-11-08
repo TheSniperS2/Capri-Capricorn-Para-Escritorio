@@ -3063,5 +3063,191 @@
     "Battle Royale",
     "Battle Royale",
     "バトルロイヤル"
+  ],
+  "Reacciones": [
+    "Reactions",
+    "Reações",
+    "リアクション"
+  ],
+  "Gustos y comentarios de Capri sobre las skins.": [
+    "Capri’s tastes and comments about skins.",
+    "Gostos e comentários da Capri sobre skins.",
+    "スキンについてのCapriの好みとコメント。"
+  ],
+  "Capri también tiene estilo.": [
+    "Capri has style, too.",
+    "Capri também tem estilo.",
+    "Capriにもこだわりがある。"
+  ],
+  "Reaccionar a las skins": [
+    "React to skins",
+    "Reagir às skins",
+    "スキンに反応する"
+  ],
+  "Equipamiento fuera de partida": [
+    "Loadout outside matches",
+    "Equipamento fora das partidas",
+    "マッチ外の装備"
+  ],
+  "Fichas del casillero y la tienda": [
+    "Locker and shop item details",
+    "Detalhes de itens do vestiário e da loja",
+    "ロッカーとショップの商品詳細"
+  ],
+  "Frecuencia de los comentarios": [
+    "Comment frequency",
+    "Frequência dos comentários",
+    "コメントの頻度"
+  ],
+  "Discreta": [
+    "Quiet",
+    "Discreta",
+    "控えめ"
+  ],
+  "Equilibrada": [
+    "Balanced",
+    "Equilibrada",
+    "バランス"
+  ],
+  "Entusiasta": [
+    "Enthusiastic",
+    "Entusiasmada",
+    "にぎやか"
+  ],
+  "Los comentarios esperan su momento. Capri no repite la misma skin constantemente.": [
+    "Comments wait for the right moment. Capri will not constantly repeat the same skin.",
+    "Os comentários esperam o momento certo. Capri não repete a mesma skin constantemente.",
+    "タイミングを見てコメントします。同じスキンに何度も反応しません。"
+  ],
+  "Observa solo el juego activo. Las capturas de Fortnite se procesan en este equipo y no se guardan.": [
+    "Only observes the active game. Fortnite screenshots are processed on this computer and are not saved.",
+    "Observa apenas o jogo ativo. As capturas do Fortnite são processadas neste computador e não são salvas.",
+    "操作中のゲームだけを見ます。フォートナイトの画像はこのパソコンで処理し、保存しません。"
+  ],
+  "PRUEBA DE PERSONALIDAD": [
+    "PERSONALITY PREVIEW",
+    "PRÉVIA DE PERSONALIDADE",
+    "個性のプレビュー"
+  ],
+  "Skin de ejemplo": [
+    "Example skin",
+    "Skin de exemplo",
+    "サンプルスキン"
+  ],
+  "Favorita de Capri": [
+    "Capri’s favorite",
+    "Favorita da Capri",
+    "Capriのお気に入り"
+  ],
+  "Escuchar ejemplo": [
+    "Hear an example",
+    "Ouvir exemplo",
+    "サンプルを聴く"
+  ],
+  "Mirar mi skin ahora": [
+    "Look at my skin now",
+    "Olhar minha skin agora",
+    "今のスキンを見て"
+  ],
+  "Este ejemplo no analiza el juego ni cambia tu equipamiento.": [
+    "This example does not inspect the game or change your loadout.",
+    "Este exemplo não analisa o jogo nem altera seu equipamento.",
+    "このサンプルではゲームを確認せず、装備も変更しません。"
+  ],
+  "No reconoce atuendos solo por su silueta: en Fortnite necesita el nombre visible en una ficha.": [
+    "Outfits are not recognized by silhouette alone: Fortnite needs the visible name in item details.",
+    "Não reconhece trajes apenas pela silhueta: no Fortnite, precisa do nome visível nos detalhes do item.",
+    "シルエットだけでは判別しません。フォートナイトでは詳細画面に名前を表示してください。"
+  ],
+  "Reacciones a skins desactivadas": [
+    "Skin reactions off",
+    "Reações às skins desativadas",
+    "スキンへの反応はオフ"
+  ],
+  "Esperando una skin reconocible fuera de partida": [
+    "Waiting for a recognizable skin outside matches",
+    "Aguardando uma skin reconhecível fora das partidas",
+    "マッチ外で認識できるスキンを待っています"
+  ],
+  "En partida o selección: Capri reserva sus comentarios": [
+    "In a match or agent select: Capri keeps her comments for later",
+    "Em partida ou seleção: Capri guarda os comentários",
+    "マッチ中やエージェント選択中はコメントを控えます"
+  ],
+  "Equipamiento de Valorant comprobado": [
+    "Valorant loadout checked",
+    "Equipamento do Valorant verificado",
+    "ヴァロラントの装備を確認しました"
+  ],
+  "No hay una skin del catálogo equipada": [
+    "No catalog skin is equipped",
+    "Nenhuma skin do catálogo está equipada",
+    "カタログにあるスキンが装備されていません"
+  ],
+  "Skin visible de Fortnite reconocida": [
+    "Visible Fortnite skin recognized",
+    "Skin visível do Fortnite reconhecida",
+    "表示中のフォートナイトのスキンを認識しました"
+  ],
+  "Muestra la ficha de un atuendo en el casillero o la tienda": [
+    "Show outfit details in the locker or shop",
+    "Mostre os detalhes de um traje no vestiário ou na loja",
+    "ロッカーかショップでコスチュームの詳細を表示してください"
+  ],
+  "No pude confirmar una skin; esperaré otra ocasión": [
+    "Could not confirm a skin; waiting for another moment",
+    "Não consegui confirmar uma skin; vou esperar outra ocasião",
+    "スキンを確認できませんでした。別の機会を待ちます"
+  ],
+  "Dime si quieres que mire tu skin en Valorant o Fortnite.": [
+    "Tell me whether to look at your skin in Valorant or Fortnite.",
+    "Diga se quer que eu olhe sua skin no Valorant ou no Fortnite.",
+    "ヴァロラントとフォートナイト、どちらのスキンを見るか教えてね。"
+  ],
+  "Abre tu colección de Valorant fuera de partida para que pueda comprobar tus skins equipadas.": [
+    "Open your Valorant collection outside a match so I can check your equipped skins.",
+    "Abra sua coleção do Valorant fora da partida para eu verificar suas skins equipadas.",
+    "マッチ外でヴァロラントのコレクションを開いてね。装備中のスキンを確認するよ。"
+  ],
+  "Muéstrame el nombre de la skin en el casillero o en su ficha de la tienda de Fortnite. No pude identificarla todavía.": [
+    "Show me the skin name in the locker or its Fortnite shop details. I could not identify it yet.",
+    "Mostre o nome da skin no vestiário ou nos detalhes da loja do Fortnite. Ainda não consegui identificá-la.",
+    "フォートナイトのロッカーやショップの詳細でスキン名を見せてね。まだ判別できなかったよ。"
+  ],
+  "Elige una skin y deja su ficha visible unos segundos: Capri comenta automáticamente.": [
+    "Select a skin and leave its details visible for a few seconds: Capri comments automatically.",
+    "Escolha uma skin e deixe os detalhes visíveis por alguns segundos: Capri comenta automaticamente.",
+    "スキンを選んで詳細を数秒表示しておくと、カプリが自動でコメントするよ。"
+  ],
+  "Las frases varían, pero su opinión sobre cada skin se mantiene incluso al reiniciar.": [
+    "The wording varies, but her opinion of each skin stays the same, even after restarting.",
+    "As frases variam, mas a opinião sobre cada skin continua igual, mesmo após reiniciar.",
+    "セリフは変わっても、各スキンへの評価は再起動しても変わらないよ。"
+  ],
+  "Le gusta": ["She likes it", "Ela gosta", "お気に入り"],
+  "Opinión neutral": ["Neutral opinion", "Opinião neutra", "中立な評価"],
+  "No es de sus favoritas": ["Not one of her favorites", "Não é das favoritas dela", "あまり好みではない"],
+  "Estos son ejemplos; Capri reconoce muchas más skins en el juego.": [
+    "These are examples; Capri recognizes many more skins in the game.",
+    "Estes são exemplos; Capri reconhece muitas outras skins no jogo.",
+    "これは例だよ。ゲーム内ではもっと多くのスキンを認識できるよ。"
+  ],
+  "Abre la ficha de la skin en la colección o tienda de Valorant, con su nombre visible y fuera de partida.": [
+    "Open the skin details in the Valorant collection or store, with its name visible and outside a match.",
+    "Abra os detalhes da skin na coleção ou loja do Valorant, com o nome visível e fora da partida.",
+    "マッチ外でヴァロラントのコレクションかストアのスキン詳細を開いて、名前を見せてね。"
+  ],
+  "Observa solo el juego activo. Las capturas se procesan en este equipo y no se guardan.": [
+    "Only observes the active game. Screenshots are processed on this computer and are not saved.",
+    "Observa apenas o jogo ativo. As capturas são processadas neste computador e não são salvas.",
+    "表示中のゲームだけを確認するよ。画像はこのパソコン内で処理され、保存されないよ。"
+  ],
+  "Ficha de Valorant reconocida": ["Valorant skin details recognized", "Detalhes da skin do Valorant reconhecidos", "ヴァロラントのスキン詳細を認識したよ"],
+  "Muestra el nombre completo de la skin de Valorant": ["Show the full Valorant skin name", "Mostre o nome completo da skin do Valorant", "ヴァロラントのスキン名全体を見せてね"],
+  "Abre la ficha de la skin que quieres comentar": ["Open the details of the skin you want to discuss", "Abra os detalhes da skin que quer comentar", "コメントしてほしいスキンの詳細を開いてね"],
+  "Última reacción: {0}": [
+    "Last reaction: {0}",
+    "Última reação: {0}",
+    "最後のリアクション：{0}"
   ]
 }

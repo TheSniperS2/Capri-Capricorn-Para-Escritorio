@@ -76,7 +76,7 @@ class Autonomia(PruebasTk):
             antes=c.cfg['voz_perfil']
             c.configurar();c.ajustes.withdraw()
             ui=c.panel_ajustes
-            self.assertEqual(set(ui.secciones),{'Escritorio','Multimedia','Micrófono','Voz','IA y servicios','Permisos'})
+            self.assertEqual(set(ui.secciones),{'Escritorio','Multimedia','Reacciones','Micrófono','Voz','IA y servicios','Permisos'})
             ui.mostrar('Micrófono');self.assertEqual(ui.actual,'Micrófono')
             self.assertIs(c.micro_combo.master.master,ui.secciones['Micrófono'])
             c.abrir_aspectos();g=c.galeria_aspectos;g.ventana.withdraw()

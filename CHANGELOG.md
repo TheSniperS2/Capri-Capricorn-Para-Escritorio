@@ -2,6 +2,19 @@
 
 ## En desarrollo
 
+### Reacciones a skins
+
+- Función en desarrollo: quedan pendientes reducir la demora, corregir fallos intermitentes de identificación y activar el comentario a partir de una nueva selección real del usuario. La lectura de fichas de Valorant aún requiere validación con el cliente real.
+- Ampliado el catálogo a 4292 skins (2880 atuendos de Fortnite y 1412 skins de Valorant), incluido Goku Black. Opiniones genéricas positivas, neutrales o negativas para las que no tienen diálogo propio, fijas por identidad incluso entre idiomas/reinicios; los reencuentros conservan el mismo gusto.
+- Corregida también la detección de la ficha cuando Windows separa «A TUENDO»: la lectura ampliada elige el nombre junto a Estilo en lugar de la pestaña de atuendos. Comprobado con Fry en el juego abierto.
+- Reconoce «¿qué te parece esta skin?» y prioriza el juego activo. La reacción observa una ficha estable, con intervalos menores y sin repetir continuamente la misma. El probador incluye ejemplos de los tres gustos.
+- En Valorant la ficha visible de colección/tienda tiene prioridad sobre otras armas equipadas. La pregunta manual pide aclarar una ficha ambigua y no elige otra arma al azar. OCR local sin controles de juego; lectura de equipamiento como alternativa fuera de partida.
+- Corregido «Mirar mi skin ahora» en la selección de atuendos de Fortnite: si el OCR general corta el nombre, vuelve a leer su zona ampliada en color y con contraste, junto al rótulo de atuendo. Compatible con fichas a izquierda/derecha, sin aceptar fragmentos insuficientes. Los errores de foco se muestran con su causa real.
+- Capri comenta skins con gustos propios, afinidad por neón/Night City y frases especiales para 18 colecciones de Valorant y 23 personajes de Fortnite. Variantes reconocidas por identificador y diálogos originales en español, con alternativas en inglés, portugués y japonés.
+- Ajustes → Reacciones incorpora activación opcional por juego, tres frecuencias y un probador de personalidad. La petición «mira mi skin» comprueba la fuente real; el ejemplo de Ajustes no consulta el juego.
+- En Valorant se lee únicamente el equipamiento propio fuera de partida/selección. Fortnite reconoce nombres en fichas de atuendos, con anclas de contexto y tolerancia acotada a errores del OCR. Dos observaciones deben coincidir; comentarios caducables, sin repetir la misma skin continuamente ni interrumpir conversaciones. Observar no restaura ventanas ni cambia equipamiento, compras o colas.
+- Catálogo público incluido en el paquete, sin descargas nuevas ni envío de capturas. Preferencias locales y memoria de reencuentros solo durante la sesión. Fortnite comprobado con Fry en el cliente real, incluida la generación automática del evento; Valorant y casos de rechazo comprobados con cliente simulado.
+
 ### Fortnite
 
 - Las órdenes recuperan Fortnite desde minimizado: restauración asíncrona y espera de ventana, foco, imagen y controles del lobby. Las lecturas de transición no ejecutan clics ni reinician la búsqueda. Si se dejó abierto el menú de opciones, vuelve primero al lobby.

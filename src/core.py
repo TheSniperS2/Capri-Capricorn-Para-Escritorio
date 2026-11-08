@@ -141,6 +141,9 @@ def url_solicitada(texto):
 
 def interpretar(texto):
     texto = limpiar_peticion(texto)
+    from reacciones_skins import interpretar_skins
+    skins=interpretar_skins(texto)
+    if skins:return Orden(*skins)
     if re.fullmatch(r'(?:apaga|apagar)\s+(?:el\s+|mi\s+)?(?:computador|computadora|ordenador|pc|equipo)[.!?]*',normalizar(texto)):
         return Orden('equipo_apagar')
     from discord_control import interpretar_discord

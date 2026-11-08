@@ -80,6 +80,9 @@ assets/lol/*
 assets/valorant/*
 !assets/valorant/agentes.json
 !assets/valorant/agentes.png
+!assets/skins/
+assets/skins/*
+!assets/skins/catalogo.json
 build/
 dist/
 *.part

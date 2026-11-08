@@ -7,7 +7,9 @@ import base64
 import ctypes
 from ctypes import wintypes as w
 import json
+import math
 import os
+import re
 from pathlib import Path
 import subprocess
 import tempfile
@@ -61,6 +63,9 @@ def leer_imagen(ruta):
         raise ErrorFortnite('No pude leer los controles de Fortnite con el reconocimiento de Windows.') from e
 
 
+def es_rotulo_atuendo(texto):
+    # El OCR separa a veces la A inicial en la tipografía inclinada del juego.
+    return bool(re.search(r'\b(?:a\s*tuendo|outfit|traje)\b',texto,re.I))
 
 
 def botones_equipo(imagen,textos):
@@ -189,7 +194,47 @@ class VistaFortnite:
         self._validar(h,rect)
         return Pantalla(h,rect,textos,inicio,botones_equipo(imagen,textos))
 
+    @staticmethod
+    def regiones_ficha(p):
+        """Rótulo y nombre contiguo, tanto a la izquierda como a la derecha."""
+        ancho=p.rect[2]-p.rect[0];alto=p.rect[3]-p.rect[1]
+        anclas=[t for t in p.textos if es_rotulo_atuendo(t.texto)
+                and alto*.12<t.rect[1]<alto*.94]
+        detalladas=[t for t in anclas if re.search(r'estilo|style',t.texto,re.I)]
+        if detalladas:anclas=detalladas
+        anclas.sort(key=lambda t:(not bool(re.search(r'estilo|style',t.texto,re.I)),-t.rect[1]))
+        regiones=[]
+        for t in anclas[:2]:
+            x,y,w,h=t.rect;margen=max(8,math.ceil(h*1.3))
+            l=max(0,int(x)-margen);a=max(0,int(y)-max(8,math.ceil(h*1.1)))
+            r=min(ancho,l+math.ceil(max(ancho*.45,w*1.9)/10)*10)
+            b=min(alto,int(y+max(alto*.08,h*5)))
+            regiones.append((l,a,r,b))
+        return tuple(regiones)
 
+    def leer_ficha(self,p):
+        """Segunda lectura óptica del nombre; nunca usa coincidencias parciales."""
+        regiones=self.regiones_ficha(p)
+        if not regiones:return None
+        self._validar(p.ventana,p.rect)
+        from PIL import Image,ImageGrab,ImageOps,ImageChops
+        inicio=time.monotonic();imagen=ImageGrab.grab(bbox=p.rect,all_screens=True).convert('RGB')
+        self._validar(p.ventana,p.rect);textos=[]
+        with tempfile.TemporaryDirectory(prefix='capri-skin-detalle-') as temporal:
+            for i,(l,a,r,b) in enumerate(regiones):
+                original=imagen.crop((l,a,r,b));rojo,verde,azul=original.split()
+                minimo=ImageChops.darker(ImageChops.darker(rojo,verde),azul)
+                contraste=ImageOps.invert(minimo.point(lambda v:255 if v>=145 else 0))
+                for modo,recorte in enumerate((original,contraste)):
+                    escala=min(3 if modo==0 else 2.5,3600/max(original.size))
+                    tamano=(round(original.width*escala),round(original.height*escala))
+                    ruta=Path(temporal)/f'nombre-{i}-{modo}.png'
+                    recorte.resize(tamano,Image.Resampling.LANCZOS).save(ruta)
+                    for t in leer_imagen(ruta):
+                        x,y,w,h=t.rect
+                        textos.append(Texto(t.texto,(l+x/escala,a+y/escala,w/escala,h/escala)))
+                self._validar(p.ventana,p.rect)
+        return Pantalla(p.ventana,p.rect,tuple(textos),inicio)
 
     def pulsar(self,p,t):
         self._validar(p.ventana,p.rect)
