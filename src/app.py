@@ -52,7 +52,7 @@ class Capri:
         self.root.geometry(f'360x338+{max(0,self.root.winfo_screenwidth()-384)}+{max(0,self.root.winfo_screenheight()-408)}')
         self.eventos = queue.Queue()
         self.cerrado = False
-        self.saliendo=False;self.animacion_cierre=bool(hotkeys)
+        self.saliendo=False;self.animacion_cierre=bool(hotkeys);self.instancia=None
         self.estado = 'Lista para ti'
         self.nivel = 0
         self.hablando = False
@@ -1525,6 +1525,9 @@ class Capri:
 
     def poll(self):
         if self.cerrado:return
+        instancia=getattr(self,'instancia',None)
+        if instancia and instancia.recibir() and not self.saliendo:
+            self.finalizar_intro();self.visibilidad.mostrar()
         if getattr(self,'lol_estado',None):
             estado_lol=ui(self.lol.estado)
             if self.lol_estado.get()!=estado_lol:self.lol_estado.set(estado_lol)
@@ -2484,21 +2487,14 @@ class Capri:
         self.root.destroy()
 
 def main():
-    mutex=None
+    from instancia import InstanciaCapri
     if os.name=='nt':
         import ctypes
         try:ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('Capri.Desktop')
         except OSError:pass
-        k=ctypes.WinDLL('kernel32',use_last_error=True)
-        k.CreateMutexW.argtypes=[ctypes.c_void_p,ctypes.c_bool,ctypes.c_wchar_p]
-        k.CreateMutexW.restype=ctypes.c_void_p
-        mutex=k.CreateMutexW(None,False,'Local\\CapriDesktopCompanion1')
-        if mutex and ctypes.get_last_error()==183:
-            root=tk.Tk();root.withdraw();messagebox.showinfo('Capri','Capri ya está abierta. Busca su imagen flotante.');root.destroy();return
-    try:
-        app=Capri();app.root.mainloop()
-    finally:
-        if mutex:
-            k.CloseHandle.argtypes=[ctypes.c_void_p];k.CloseHandle(mutex)
+    with InstanciaCapri() as instancia:
+        if not instancia.primera:
+            instancia.solicitar_mostrar();return
+        app=Capri();app.instancia=instancia;app.root.mainloop()
 
 if __name__=='__main__':main()

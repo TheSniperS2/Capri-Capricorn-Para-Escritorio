@@ -118,6 +118,19 @@ class Visibilidad(PruebasTk):
             self.assertEqual(ejecutar.call_args.args[0],'valorant_buscar')
             self.assertTrue(c.visibilidad.oculta);self.assertEqual(c.root.state(),'withdrawn')
 
+    def test_abrir_de_nuevo_recupera_avatar_sin_abrir_chat_ni_ocultarlo_en_otra_apertura(self):
+        import os,uuid
+        from instancia import InstanciaCapri
+        if os.name!='nt':self.skipTest('Eventos locales de Windows')
+        nombre='Local\\CapriVisibilidadPrueba-'+uuid.uuid4().hex
+        with self.capri() as (c,_),InstanciaCapri(nombre) as receptor,InstanciaCapri(nombre) as emisor:
+            c.instancia=receptor;c.minimizar_capri();c.root.update();antes=dict(c.cfg)
+            self.assertTrue(c.visibilidad.oculta)
+            for _ in range(2):
+                emisor.solicitar_mostrar();c.poll();c.root.update()
+                self.assertFalse(c.visibilidad.oculta);self.assertEqual(c.root.state(),'normal');self.assertIsNone(c.panel)
+                self.assertEqual(c.cfg,antes)
+
     def test_orden_de_valorant_informa_error_del_controlador_sin_pedir_vision_a_la_ia(self):
         from valorant import MENSAJES
         with self.capri() as (c,_),patch.object(c.valorant,'ejecutar',return_value=MENSAJES['cliente']) as ejecutar,patch.object(c.ia,'conversar') as conversar,patch.object(c.interprete,'resolver') as resolver:

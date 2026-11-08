@@ -1,5 +1,8 @@
 # Capri
 
+Si Capri ya está funcionando, vuelve a abrir su acceso directo para mostrarla.
+También la recupera si está minimizada, sin iniciar otra copia de la aplicación.
+
 En **Más → Roblox** puedes guardar experiencias favoritas y abrir sus enlaces por voz.
 Capri consulta su descripción/categoría para adaptar el perfil automáticamente. Avatar
 comenta prendas y accesorios concretos; Acompañamiento intenta reconocer resultados y

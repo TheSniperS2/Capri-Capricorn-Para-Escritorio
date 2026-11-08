@@ -15,6 +15,7 @@ Capri separa la interfaz Tk, el trabajo de audio y las integraciones. El código
 | Multimedia | `multimedia.py`, `playlists.py`, `volumen_apps.py` | Spotify, biblioteca, sesiones y volumen interno. |
 | League of Legends | `league.py` | Conexión local limitada a sala, búsqueda y ready-check; aceptación opcional cancelable. |
 | Roblox | `roblox.py`, `roblox_cache.py`, `roblox_ui.py`, `roblox_info.py`, `roblox_dialogos.py`, `roblox_vision.py` | Favoritos, caché pública local de datos/iconos, perfiles inferidos, avatar por piezas y acompañamiento opcional con preguntas ante finales ambiguos. |
+| Instancia y visibilidad | `instancia.py`, `visibilidad.py` | Mutex y evento local de Windows para mostrar la Capri existente al abrir otra vez el acceso, sin otra interfaz ni invertir su visibilidad. |
 | Recordatorios | `recordatorios.py`, `recordatorios_ui.py` | Avisos generales persistentes, migración desde Roblox y cancelación individual; `desplazamiento_ui.py` aporta la rueda local y barras discretas a las listas. |
 | Apagado | `apagado.py`, `control_pc.py` | Escena CRT nativa en Canvas sin retrato ni escalado de bitmaps por fotograma, con frecuencia limitada; solicitud de apagado tras confirmación y efecto, cancelación previa y vista de prueba. |
 | Discord | `discord_control.py` | Controles propios y canales de voz mediante accesibilidad del cliente de escritorio, sin credenciales. |

@@ -16,6 +16,10 @@
 - Acompañamiento opcional con avisos habituales de resultado ya incorporados; eliminados botones de resultados y campos de palabras exactas. Dos observaciones, pausa entre eventos y pregunta ante un final ambiguo, compatible con escucha tras preguntas. Identificación de experiencia por ID del registro reciente del cliente. Solo recorta Roblox activo y elimina capturas temporales. No reconoce todos los juegos ni se ha validado en partidas reales; sin entradas del juego ni reclamación de recompensas.
 - Traducciones de interfaz y diálogos en cuatro idiomas. Guardas personales vacías por defecto; las órdenes ambiguas de buscar con Roblox seleccionado no inician colas de LoL. API pública y flujos simulados comprobados; faltan pruebas de eventos visuales con las experiencias reales del usuario.
 
+### Apertura y recuperación de Capri
+
+- Abrir de nuevo el acceso directo solicita mostrar la instancia existente, también minimizada, en lugar del mensaje «Capri ya está abierta». Señal local de Windows procesada por el hilo de la interfaz; sin abrir otra copia ni desplegar el chat.
+
 ### Escucha activa opcional
 
 - La conversación da prioridad a las correcciones y respeta los rechazos sin encadenar preguntas ni proponer otro tema. Comprueba el referente corregido antes de mostrar la respuesta; las salidas incoherentes de esos turnos usan un reconocimiento breve y conservan el historial final.
