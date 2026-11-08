@@ -74,6 +74,8 @@ class Capri:
         self.activacion_hilo=None
         self.activacion_reintento=0
         self.activacion_lista=False;self.precalentamiento_lanzado=False
+        self.activacion_tipo='nombre'
+        self.activacion_en_curso=False
         self.activacion_permitida=hotkeys
         self.micro = Microfono(BASE/'modelos')
         self.ia = IA()
@@ -87,6 +89,9 @@ class Capri:
         try:
             self.cfg.update(json.loads((BASE/'ajustes.json').read_text(encoding='utf-8-sig')))
         except (OSError, ValueError): pass
+        from escucha_activa import EscuchaActiva,normalizar as normalizar_escucha
+        self.cfg['modo_escucha']=normalizar_escucha(self.cfg.get('modo_escucha'))
+        self.escucha_activa=EscuchaActiva(self.cfg['modo_escucha'])
         from tema_ui import activar as activar_color
         activar_color(self.cfg.get('color_interfaz','#ff4267'))
         self.cfg.setdefault('modo_visual','pantalla');self.cfg.setdefault('pasear_personaje',True);self.cfg.setdefault('control_ampliado',False)
@@ -968,6 +973,8 @@ class Capri:
             self.root.after(33,self.animar);return
         if self.intro_activa:self.animar_intro();return
         self.entrada_compacta.activacion=bool(self.cfg.get('activacion_voz'))
+        self.entrada_compacta.sin_nombre=self.activacion_lista and self.activacion_tipo!='nombre'
+        self.entrada_compacta.reconociendo=self.activacion_en_curso and not self.escuchando
         inicio_frame=time.perf_counter();self.actualizar_indicador_voz()
         if self.transito and self.dibujar_transito():
             self.root.after(max(1,round(16.667-(time.perf_counter()-inicio_frame)*1000)),self.animar);return
@@ -986,6 +993,10 @@ class Capri:
         color=GREEN if self.escuchando else ('#ffc2b5' if self.hablando or self.ocupada or self.voz_ticket is not None or (self.activacion_permitida and self.cfg.get('activacion_voz') and not self.activacion_lista) else '#ed6684')
         from avatar import dibujar_marco
         fase='ESCUCHA' if self.escuchando else ('VOZ' if self.hablando else ('SINTONIZANDO' if self.voz_ticket is not None else ('RECIBIENDO' if self.ocupada else ('CONECTANDO' if self.activacion_permitida and self.cfg.get('activacion_voz') and not self.activacion_lista else ('DI CAPRI' if self.cfg.get('activacion_voz') else self.cfg.get('tecla_hablar','F8'))))))
+        if not (self.escuchando or self.hablando or self.ocupada or self.voz_ticket is not None):
+            if self.activacion_en_curso:fase='RECONOCIENDO'
+            elif self.activacion_lista and self.activacion_tipo!='nombre':fase='ESCUCHA ACTIVA'
+            elif self.escucha_activa.pausada and self.cfg.get('modo_escucha')!='nombre':fase='EN PAUSA'
         dibujar_marco(c,self.fase if animaciones else 0,color,fase,self.nivel,self.avatar.glitch_activo if animaciones else False,self.escala_avatar,aspecto=self.avatar.aspecto,unido=self.chasis_unido())
         if self.avatar.fotos:
             self.imagen_ref=self.avatar.imagen(self.hablando and self.boca_activa,glitch=self.cfg.get('efecto_glitch',True)) if animaciones else self.avatar.fotos[0]
@@ -1144,6 +1155,7 @@ class Capri:
         if self.es_personaje():
             self.ocultar_entrada_personaje();self.entrada_compacta.pack_forget()
         self.detener_activacion()
+        self.escucha_activa.reanudar()
         self.narracion_activa=False;self.voz.parar();self.voz_ticket=None;self.voz_cursor=0
         self.dialogo.recibir_usuario(texto)
         self.poner_chat('Tú',texto)
@@ -1308,6 +1320,7 @@ class Capri:
         self.detener_activacion()
         # El micrófono tiene prioridad, incluso mientras se genera una respuesta.
         self.parar()
+        self.escucha_activa.reanudar()
         self.descartar_micro=False
         self.escuchando=True; self.micro_stop=threading.Event()
         self.estado='Te escucho…'
@@ -1328,6 +1341,7 @@ class Capri:
 
     def detener_activacion(self):
         self.activacion_stop.set()
+        self.activacion_en_curso=False
         self.activacion_lista=False
         self.activacion_ticket+=1
         if self.capturando_activacion:
@@ -1336,32 +1350,67 @@ class Capri:
     def mantener_activacion(self):
         if self.saliendo:return
         if self.apagado_ui and not self.apagado_ui.cerrada:return
-        if not self.activacion_permitida or not self.cfg.get('activacion_voz') or self.cerrado:return
+        if not self.activacion_permitida or self.cerrado:return
+        # Una vez iniciada la respuesta, terminar captura Y reconocimiento aunque
+        # su ventana de espera ya se haya consumido o hayan pasado los 15 s.
+        if self.activacion_en_curso and self.activacion_hilo and self.activacion_hilo.is_alive():
+            if self.activacion_tipo!='nombre' and self.bloqueada_escucha_activa():self.detener_activacion()
+            return
+        modo=self.escucha_activa.tipo()
+        sin_nombre=modo in ('preguntas','continua')
+        if modo is None:return
+        if modo=='nombre' and not self.cfg.get('activacion_voz'):return
+        if sin_nombre:
+            if self.bloqueada_escucha_activa():
+                if self.activacion_tipo!='nombre' and self.activacion_hilo and self.activacion_hilo.is_alive() and not self.activacion_stop.is_set():self.detener_activacion()
+                return
         # Evitar que su propia voz active otra conversación. F8 siempre interrumpe.
         if self.escuchando or self.hablando:return
         if self.ajustes and self.ajustes.winfo_exists() and not self.visibilidad.oculta:
             from escritorio import valorant_en_primer_plano,fortnite_en_primer_plano
             if not (valorant_en_primer_plano() or fortnite_en_primer_plano()):return
-        if self.activacion_hilo and self.activacion_hilo.is_alive():return
+        if self.activacion_hilo and self.activacion_hilo.is_alive():
+            if self.activacion_tipo!=modo and not self.activacion_stop.is_set():self.detener_activacion()
+            return
         if time.monotonic()<self.activacion_reintento:return
         self.activacion_stop=threading.Event()
         self.activacion_fin=threading.Event()
         detener=self.activacion_stop
         terminar=self.activacion_fin
         self.activacion_ticket+=1;ticket=self.activacion_ticket
+        self.activacion_tipo=modo
+        dispositivo=self.cfg.get('microfono');motor=self.cfg.get('reconocimiento','mixto')
+        tiempo_espera=self.escucha_activa.espera()
         def esperar():
             try:
-                texto=self.micro.esperar_activacion(detener,lambda:self.eventos.put(('nombre_detectado',ticket)),
-                         dispositivo=self.cfg.get('microfono'),motor=self.cfg.get('reconocimiento','mixto'),terminar=terminar,
+                escuchar=self.micro.escuchar_activamente if sin_nombre else self.micro.esperar_activacion
+                opciones={'espera':tiempo_espera} if sin_nombre else {}
+                texto=escuchar(detener,lambda:self.eventos.put(('nombre_detectado',ticket)),
+                         dispositivo=dispositivo,motor=motor,terminar=terminar,
                          nivel=lambda n:self.eventos.put(('activacion_nivel',(ticket,n))),
                          estado=lambda s:self.eventos.put(('activacion_estado',(ticket,s))),
-                         lista=lambda:self.eventos.put(('activacion_lista',ticket)))
+                         lista=lambda:self.eventos.put(('activacion_lista',ticket)),**opciones)
                 self.eventos.put(('activacion_resultado',(ticket,texto,None)))
             except Exception as e:self.eventos.put(('activacion_resultado',(ticket,None,str(e))))
         self.activacion_hilo=threading.Thread(target=esperar,name='CapriActivacion',daemon=True)
         self.activacion_hilo.start()
 
+    def bloqueada_escucha_activa(self):
+        foco=self.root.focus_get()
+        escribiendo=self.escribiendo()
+        if foco is not None and foco.winfo_class() in ('Entry','Text','TEntry'):
+            try:
+                texto=foco.get('1.0','end') if foco.winfo_class()=='Text' else foco.get()
+                placeholder=foco is self.entrada_compacta.entrada and self.entrada_compacta.placeholder
+                escribiendo=bool(texto.strip()) and not placeholder and str(foco.cget('state'))!='disabled'
+            except tk.TclError:pass
+        return bool(self.ocupada or self.voz_ticket is not None or self.hablando or self.intro_activa
+                    or self.transito or escribiendo or self.drag or getattr(self,'radial',None)
+                    or (self.llamada_ui and not self.llamada_ui.cerrada)
+                    or (self.ajustes and self.ajustes.winfo_exists()))
+
     def parar(self,preservar_activacion=False):
+        if not preservar_activacion:self.escucha_activa.pausar()
         self.descartar_reaccion()
         if self.asomo and self.asomo.get('curioso'):self.terminar_asomo()
         llamada=getattr(self,'llamada_ui',None)
@@ -1416,25 +1465,38 @@ class Capri:
             if tipo=='activacion_lista':
                 if valor!=self.activacion_ticket:continue
                 self.activacion_lista=True
-                if not self.ocupada and not self.hablando and self.voz_ticket is None:self.estado='Di «Capri» o pulsa '+self.cfg.get('tecla_hablar','F8')
+                if not self.ocupada and not self.hablando and self.voz_ticket is None:
+                    self.estado=('Habla sin decir «Capri»' if self.activacion_tipo=='continua' else 'Responde sin decir «Capri»') if self.activacion_tipo!='nombre' else 'Di «Capri» o pulsa '+self.cfg.get('tecla_hablar','F8')
+                    if self.activacion_tipo!='nombre':self.subtitulo.set(self.estado)
                 self.precalentar_ia()
             elif tipo=='nombre_detectado':
                 if valor!=self.activacion_ticket:continue
+                if self.activacion_tipo!='nombre' and self.bloqueada_escucha_activa():
+                    self.detener_activacion();continue
                 self.parar(preservar_activacion=True)
+                self.escucha_activa.cancelar()
+                self.activacion_en_curso=True
                 self.escuchando=True;self.capturando_activacion=True;self.descartar_micro=False
                 self.estado='Te escucho…'
                 if self.panel and self.panel.winfo_exists():self.subtitulo.set('Te escucho…')
             elif tipo=='activacion_resultado':
                 ticket,texto,error=valor
                 if ticket!=self.activacion_ticket:continue
+                if self.activacion_tipo!='nombre' and self.bloqueada_escucha_activa():
+                    self.detener_activacion();continue
                 self.escuchando=False;self.capturando_activacion=False;self.nivel=0
+                self.activacion_en_curso=False
                 self.activacion_lista=False
+                sin_nombre=self.activacion_tipo!='nombre'
+                if sin_nombre:self.escucha_activa.cancelar()
                 if error:
                     self.activacion_reintento=time.monotonic()+30
                     self.estado='Activación por voz no disponible'
-                    self.poner_chat('Capri','No pude mantener la escucha de «Capri». Puedes usar Hablar. '+error[:150])
+                    self.poner_chat('Capri',('No pude mantener la escucha activa. Puedes usar Hablar. ' if sin_nombre else 'No pude mantener la escucha de «Capri». Puedes usar Hablar. ')+error[:150])
                 elif texto:
                     self.recibir_dictado(texto)
+                elif sin_nombre:
+                    self.estado='Lista para ti'
                 elif texto is not None:
                     self.estado='No escuché una orden. Di «Capri» otra vez.'
                 else:
@@ -1484,6 +1546,8 @@ class Capri:
                         self.pintar_historial()
                     continue
                 if isinstance(valor,bool):
+                    ticket_terminado=self.voz_ticket
+                    fin_turno=not valor and self.narracion_activa and self.voz_ticket==self.peticion
                     anterior=self.hablando;self.hablando=valor;self.boca_activa=valor
                     if self.llamada_ui and not self.llamada_ui.cerrada and getattr(self.llamada_ui,'invitado',None):self.boca_activa=False
                     self.estado='Hablando…' if valor else ('Respondiendo…' if self.ocupada else 'Lista para ti')
@@ -1495,7 +1559,9 @@ class Capri:
                         self.pintar_historial()
                         if fin_llamada:llamada.terminar_voz(completa=True)
                     if anterior and not valor:self.avatar.sonreir()
+                    if fin_turno:self.escucha_activa.fin_voz(ticket_terminado)
                 else:
+                    self.escucha_activa.cancelar();self.escucha_activa.fin_voz(None)
                     self.voz_ticket=None;self.estado=valor[:37];self.poner_chat('Capri',valor)
                     if self.llamada_ui and self.llamada_ui.conectada:self.llamada_ui.terminar_voz()
                 if self.hablando:self.detener_activacion()
@@ -1531,6 +1597,7 @@ class Capri:
                     self.stream_ticket=None;self.respuesta_borrador=''
                 apagando=bool(self.apagado_ui and not self.apagado_ui.cerrada)
                 con_voz=tipo=='respuesta' and self.puede_narrar() and not apagando
+                self.escucha_activa.preparar(ticket,valor if tipo=='respuesta' else '',con_voz)
                 self.poner_chat('Capri',valor,mostrar=not con_voz and not apagando)
                 self.subtitulo.set(self.cfg.get('tecla_hablar','F8')+' para hablar · Esc para detener')
                 if con_voz:
@@ -1560,6 +1627,7 @@ class Capri:
         if not texto.strip():
             self.estado='Di qué quieres hacer';return
         if self.micro.confianza_baja:
+            self.escucha_activa.pausar()
             self.dialogo.revisar(texto)
             self.estado='Revisa lo que entendí'
             self.subtitulo.set('No estoy segura de la frase. Revísala y pulsa Enviar.')
@@ -1596,6 +1664,7 @@ class Capri:
         if self.asomo and self.asomo.get('curioso'):self.terminar_asomo()
         self.finalizar_intro()
         self.detener_activacion()
+        self.escucha_activa.cancelar()
         if self.ajustes and self.ajustes.winfo_exists():self.ajustes.lift();return
         p=self.ajustes=tk.Toplevel(self.root);p.title('Capri · Ajustes');p.configure(bg=BG)
         p.bind('<Escape>',lambda e:self.interrumpir())
@@ -1726,6 +1795,8 @@ class Capri:
             var=tk.BooleanVar(value=bool(self.cfg.get(key)))
             destino=micro if key=='activacion_voz' else (voz if key in ('voz','voz_natural') else escritorio)
             InterruptorCyber(destino,text=texto,variable=var,command=lambda k=key,v=var:self.guardar(k,v.get()),bg=BG,fg=FG,selectcolor=CARD,activebackground=BG,activeforeground=FG,font=('Chakra Petch',11)).pack(anchor='w',pady=5)
+        from escucha_activa import crear_opciones
+        self.escucha_combo=crear_opciones(micro,self.cfg,self.guardar)
         f=voz
         volumen=normalizar_volumen(self.cfg.get('volumen_voz',100))
         texto_volumen=tk.StringVar(value=f'Volumen de Capri: {volumen}%')
@@ -1890,6 +1961,9 @@ class Capri:
         self.fortnite_panel=PanelFortnite(self.root,self.cfg.get('fortnite',{}),self.guardar,self.enviar,self.fortnite,ocultar=self.minimizar_capri)
 
     def guardar(self,k,v):
+        if k=='modo_escucha':
+            from escucha_activa import normalizar
+            v=normalizar(v)
         if k=='reacciones_skins':
             from reacciones_skins import normalizar
             v=normalizar(v);self.skins.configurar(v,iniciar=self.skins_runtime)
@@ -1985,8 +2059,9 @@ class Capri:
         if k=='escala_avatar':
             if self.transito:self.finalizar_transito()
             self.finalizar_intro();self.aplicar_escala()
-        if k in ('activacion_voz','microfono','reconocimiento','modelo_whisper'):
+        if k in ('activacion_voz','microfono','reconocimiento','modelo_whisper','modo_escucha'):
             self.detener_activacion();self.activacion_reintento=0
+            self.escucha_activa.configurar(self.cfg.get('modo_escucha'))
 
     def suspender_atajo(self):
         self.atajo_visibilidad_suspendido=bool(self.atajo_visibilidad)

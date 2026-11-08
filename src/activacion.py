@@ -4,6 +4,7 @@ from collections import deque
 import json
 import queue
 import re
+import time
 import unicodedata
 from reconocimiento import amplificar_bajo,DetectorVoz
 
@@ -19,7 +20,7 @@ def quitar_nombre(texto,*,candidato=False):
         encontrado=True;resto=resto[coincidencia.end():].strip()
     return resto if encontrado else None
 
-def esperar(micro,detener,detectada,dispositivo=None,motor='mixto',terminar=None,nivel=None,estado=None,lista=None):
+def esperar(micro,detener,detectada,dispositivo=None,motor='mixto',terminar=None,nivel=None,estado=None,lista=None,*,sin_nombre=False,espera=None):
     micro.confianza_baja=False
     import sounddevice as sd
     from vosk import Model,KaldiRecognizer,SetLogLevel
@@ -28,7 +29,7 @@ def esperar(micro,detener,detectada,dispositivo=None,motor='mixto',terminar=None
     from prueba_microfono import filtrar
     verificar_whisper=motor in ('mixto','preciso') and disponible(micro.carpeta,getattr(micro,'modelo_whisper','base'))
     SetLogLevel(-1)
-    if estado:estado('Preparando activación…')
+    if estado:estado('Preparando escucha…' if sin_nombre else 'Preparando activación…')
     indice=resolver_microfono(dispositivo)
     datos=sd.query_devices(indice,kind='input') if indice is not None else sd.query_devices(kind='input')
     bloques=queue.Queue(maxsize=512)
@@ -47,7 +48,9 @@ def esperar(micro,detener,detectada,dispositivo=None,motor='mixto',terminar=None
         actividad=DetectorVoz();actividad.analizar(bytes(6400),16000)
         if detener.is_set():return None
         if lista:lista()
+        inicio_espera=time.monotonic();voz_inicio=0
         while not detener.is_set():
+            if sin_nombre and not activada and espera is not None and time.monotonic()-inicio_espera>=espera:break
             if activada and terminar and terminar.is_set():
                 parcial=json.loads(reconocedor.FinalResult()).get('text','')
                 texto_final=' '.join(segmentos+[parcial]).strip()
@@ -85,7 +88,9 @@ def esperar(micro,detener,detectada,dispositivo=None,motor='mixto',terminar=None
             # sin esperar la pausa de fin de frase. Esto solo abre la captura:
             # Whisper verifica el nombre real antes de enviar la orden. Sin
             # Whisper solo se admite el nombre exacto confirmado por Vosk final.
-            nombre_detectado=resto is not None
+            if sin_nombre and not activada:
+                voz_inicio=voz_inicio+len(bloque)/(tasa*2) if habla else 0
+            nombre_detectado=(voz_inicio>=.12 if sin_nombre else resto is not None)
             if final and quitar_nombre(texto) is not None:nombre_confirmado=True
             if nombre_detectado and not activada:
                 activada=True;inicio_orden=reloj_audio;detectada()
@@ -120,7 +125,9 @@ def esperar(micro,detener,detectada,dispositivo=None,motor='mixto',terminar=None
         # El ASR de dictado verifica el nombre en el audio original. Un final
         # incorrecto de Vosk no veta una confirmación independiente de Whisper.
         # Si Whisper no oye Capri al principio, no se envía ninguna frase.
-        return quitar_nombre(texto)
+        return (quitar_nombre(texto) if quitar_nombre(texto) is not None else texto.strip()) if sin_nombre else quitar_nombre(texto)
+    if sin_nombre:
+        return quitar_nombre(texto_final) if quitar_nombre(texto_final) is not None else texto_final.strip()
     if not nombre_confirmado:return None
     resto_vosk=quitar_nombre(texto_final)
     if resto_vosk is None:return None

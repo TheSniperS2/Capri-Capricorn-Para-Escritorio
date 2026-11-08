@@ -3249,5 +3249,82 @@
     "Last reaction: {0}",
     "Última reação: {0}",
     "最後のリアクション：{0}"
+  ],
+  "RECONOCIENDO": ["RECOGNIZING", "RECONHECENDO", "音声認識中"],
+  "Reconociendo la frase…": ["Recognizing speech…", "Reconhecendo a frase…", "音声を認識中…"],
+  "Escucha sin decir «Capri»": [
+    "Listen without saying “Capri”",
+    "Escuta sem dizer “Capri”",
+    "「カプリ」と呼ばずに話す"
+  ],
+  "Desactivada": [
+    "Disabled",
+    "Desativada",
+    "無効"
+  ],
+  "Después de una pregunta": [
+    "After a question",
+    "Depois de uma pergunta",
+    "質問のあと"
+  ],
+  "Escucha activa": [
+    "Active listening",
+    "Escuta ativa",
+    "常時リスニング"
+  ],
+  "Después de una pregunta: espera tu respuesta durante 15 segundos.": [
+    "After a question: waits up to 15 seconds for your answer.",
+    "Depois de uma pergunta: espera sua resposta por 15 segundos.",
+    "質問のあと、返事を15秒間待ちます。"
+  ],
+  "Escucha activa: puedes hablar sin decir su nombre. Se pausa mientras Capri responde o escribes.": [
+    "Active listening: speak without saying her name. Pauses while Capri replies or you type.",
+    "Escuta ativa: fale sem dizer o nome dela. Pausa enquanto Capri responde ou você digita.",
+    "名前を呼ばずに話せます。カプリの返答中や入力中は一時停止します。"
+  ],
+  "Esc pausa la escucha activa. Di «Capri» o pulsa tu tecla para hablar para retomarla.": [
+    "Esc pauses active listening. Say “Capri” or press your talk key to resume.",
+    "Esc pausa a escuta ativa. Diga “Capri” ou pressione a tecla de falar para retomar.",
+    "Escで一時停止。「カプリ」と呼ぶか、話すキーを押すと再開します。"
+  ],
+  "El reconocimiento se procesa en este equipo. No se guardan grabaciones.": [
+    "Speech is recognized on this computer. Recordings are not saved.",
+    "O reconhecimento é processado neste computador. As gravações não são salvas.",
+    "音声認識はこのパソコン内で処理し、録音は保存しません。"
+  ],
+  "Preparando escucha…": [
+    "Preparing to listen…",
+    "Preparando a escuta…",
+    "リスニングを準備中…"
+  ],
+  "Habla sin decir «Capri»": [
+    "Speak without saying “Capri”",
+    "Fale sem dizer “Capri”",
+    "名前を呼ばずに話してね"
+  ],
+  "Responde sin decir «Capri»": [
+    "Reply without saying “Capri”",
+    "Responda sem dizer “Capri”",
+    "名前を呼ばずに返事してね"
+  ],
+  "Habla o escribe…": [
+    "Speak or type…",
+    "Fale ou escreva…",
+    "話すか入力してね…"
+  ],
+  "ESCUCHA ACTIVA": [
+    "LISTENING",
+    "ESCUTA ATIVA",
+    "リスニング中"
+  ],
+  "Escucha activa pausada": [
+    "Active listening paused",
+    "Escuta ativa pausada",
+    "リスニングを一時停止中"
+  ],
+  "No pude mantener la escucha activa. Puedes usar Hablar. ": [
+    "I could not keep listening. You can use Talk. ",
+    "Não consegui manter a escuta ativa. Você pode usar Falar. ",
+    "リスニングを続けられなかったよ。「話す」を使ってね。 "
   ]
 }

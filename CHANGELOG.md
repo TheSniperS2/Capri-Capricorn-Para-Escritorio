@@ -2,6 +2,14 @@
 
 ## En desarrollo
 
+### Escucha activa opcional
+
+- Corregido el descarte de respuestas al pasar de captura a Whisper: el turno sigue activo hasta terminar el reconocimiento, aunque la espera de la pregunta ya se haya consumido. La interfaz indica «Reconociendo» durante ese proceso; Esc y los cambios de configuración siguen cancelándolo.
+- Corregida la escucha después de preguntas seguidas de otra frase, como «¿Quieres una historia? ¡Espero tu interés!». Detecta la pregunta dentro del mensaje y espera a que termine toda la voz para escuchar la respuesta, sin confundir preguntas citadas, código o enlaces.
+- Ajustes → Micrófono incorpora tres modos: desactivada, responder después de una pregunta y escucha activa sin decir «Capri». El modo habitual por nombre se conserva por defecto.
+- Las preguntas abren una ventana de respuesta de 15 segundos al terminar realmente la voz, también con voz desactivada. La escucha continua espera habla en el micrófono, conserva el comienzo de la frase y usa Whisper o Vosk ya instalados.
+- Pausa durante voz, generación, escritura, ajustes y llamadas; Esc pausa y la activación habitual o tecla para hablar reanuda. Resultados versionados, una sola entrada de audio y revisión de transcripciones dudosas. Indicador y texto de entrada reflejan la escucha activa, sin abrir el chat.
+
 ### Reacciones a skins
 
 - Función en desarrollo: quedan pendientes reducir la demora, corregir fallos intermitentes de identificación y activar el comentario a partir de una nueva selección real del usuario. La lectura de fichas de Valorant aún requiere validación con el cliente real.

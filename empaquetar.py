@@ -57,6 +57,7 @@ ARCHIVOS.extend(['assets/capri-despedida-camara-v3.png','PROMPT_DESPEDIDA_V3.md'
 ARCHIVOS.extend(['assets/capri-asomo-fiel-v3.png','assets/capri-despedida-expresiones-v4.png','PROMPTS_GESTOS_V4.md'])
 ARCHIVOS.append('traducciones.json')
 ARCHIVOS.append('REFERENCIAS_VOZ.md')
+ARCHIVOS.append('escucha_activa.py')
 ARCHIVOS.extend(['despedida.py','assets/capri-base-hd-v1.png','PROMPT_HD.md'])
 
 def origen(nombre):

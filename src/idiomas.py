@@ -43,6 +43,7 @@ def _traducir_ui(original,idioma):
     for prefijo in ('Oyendo: ','Guardado: ','No disponible: ','Seleccionado: ','Di «Capri» o pulsa ',
                     'No te escuché. Pulsa ','No entendí la frase. Acércate al micrófono y pulsa ',
                     'No pude mantener la escucha de «Capri». Puedes usar Hablar. ',
+                    'No pude mantener la escucha activa. Puedes usar Hablar. ',
                     'No pude completar la prueba: ','No pude usar el micrófono. ',
                     'No se pudo inicializar el audio de Windows: ','Vinculada. Puedes decir «Capri, pon mi playlist '):
         if original.startswith(prefijo) and len(original)>len(prefijo):
