@@ -1,5 +1,11 @@
 # Capri
 
+En **Más → Roblox** puedes guardar experiencias favoritas y abrir sus enlaces por voz.
+Capri consulta su descripción/categoría para adaptar el perfil automáticamente. Avatar
+comenta prendas y accesorios concretos; Acompañamiento intenta reconocer resultados y
+pregunta si son ambiguos, sin campos de palabras clave. Sigue siendo experimental y no
+reconoce todos los juegos. Consulta la [guía de Roblox](ROBLOX.md).
+
 Los avisos son generales: **Más → Recordatorios**, o «Capri, recuérdame en 20 minutos
 hacer una pausa». Se conservan al cerrar y se entregan al volver a abrir Capri.
 

@@ -28,6 +28,7 @@ respaldo-*/
 .publicacion/
 
 # Recursos descargados y archivos generados
+cache/roblox/
 modelos/
 models/
 src/assets/

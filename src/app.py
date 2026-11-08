@@ -120,6 +120,10 @@ class Capri:
         from fortnite import ControlFortnite
         self.fortnite=ControlFortnite();self.fortnite_panel=None
         self.fortnite.configurar(self.cfg.get('fortnite',{}))
+        from roblox import ControlRoblox,normalizar as normalizar_roblox
+        self.cfg['roblox']=normalizar_roblox(self.cfg.get('roblox'))
+        self.roblox=ControlRoblox(self.eventos.put,iniciar=hotkeys,cache=BASE/'cache/roblox');self.roblox_panel=None;self.roblox_runtime=hotkeys
+        self.roblox.configurar(self.cfg['roblox']);self.roblox_proximo_aviso=0;self.roblox_aviso_pendiente=None;self.roblox_duda_hasta=0
         from reacciones_skins import MonitorSkins
         self.skins_runtime=hotkeys;self.skins=MonitorSkins(self.eventos.put)
         self.skins.configurar(self.cfg.get('reacciones_skins',{}),iniciar=hotkeys)
@@ -316,7 +320,7 @@ class Capri:
         juegos=[('Desactivar asomos automáticos' if self.cfg.get('asomos_curiosos') else 'Activar asomos automáticos',lambda:self.guardar('asomos_curiosos',not self.cfg.get('asomos_curiosos'))),
                 ('Desactivar bromas de ventanas' if self.cfg.get('bromas_ventanas') else 'Activar bromas de ventanas',lambda:self.guardar('bromas_ventanas',not self.cfg.get('bromas_ventanas')))]
         voz=[('Hablar',self.hablar),('Activar voz' if not self.cfg.get('voz') else 'Silenciar voz',lambda:self.guardar('voz',not self.cfg.get('voz')))]
-        mas=[('YouTube',self.conectar_opera),('League of Legends',self.abrir_lol),('Valorant',self.abrir_valorant),('Fortnite',self.abrir_fortnite),('Recordatorios',self.abrir_recordatorios),
+        mas=[('YouTube',self.conectar_opera),('League of Legends',self.abrir_lol),('Valorant',self.abrir_valorant),('Fortnite',self.abrir_fortnite),('Roblox',self.abrir_roblox),('Recordatorios',self.abrir_recordatorios),
              ('Minimizar Capri',self.minimizar_capri),('Cerrar Capri',self.cerrar)]
         opciones=[('Ajustes',self.configurar),('Chat',self.abrir_chat),('Juegos' if self.es_personaje() else 'Color',juegos if self.es_personaje() else self.abrir_colores),('Aspecto',self.abrir_aspectos),
                   ('Modo pantalla' if self.es_personaje() else 'Modo personaje',lambda:self.guardar('modo_visual','pantalla' if self.es_personaje() else 'personaje')),('Tamaño',tamanos),('Voz',voz),('Más',mas)]
@@ -479,6 +483,26 @@ class Capri:
         if self.ocupada or self.escuchando or self.hablando or self.voz_ticket is not None:return False
         self.avatar.sonreir();self.decir_juego(texto);return True
 
+    def mantener_roblox(self):
+        disponible=self.roblox_runtime and self.puede_reaccionar_skins()
+        self.roblox.permitido=disponible
+        if not disponible:return
+        d=self.roblox.copia();ahora=time.monotonic()
+        p=self.roblox_aviso_pendiente
+        if p:
+            self.roblox_aviso_pendiente=None
+            from roblox_vision import en_primer_plano
+            if p.get('generacion')!=self.roblox.generacion or not en_primer_plano() or ahora-p.get('fecha',ahora)>(120 if p.get('tipo')=='avatar' else 12):return
+            from roblox_dialogos import opinion,reaccion
+            if p['tipo']=='avatar' and d['avatar_auto'] and p['avatar']['usuario']==d['usuario']:
+                self.roblox.baseline=p['avatar']['huella'];self.roblox.avisado=p['avatar']['huella'];self.ejemplo_skin(opinion(p['avatar']))
+            elif p['tipo']=='evento' and (d['acompanar'] or any(f['eventos']['activo'] for f in d['favoritos'])):
+                frase=reaccion(p['evento'],p.get('perfil',self.roblox.perfil()))
+                if self.ejemplo_skin(frase) and p['evento']=='duda':
+                    self.roblox_duda_hasta=ahora+45
+                    self.escucha_activa.preparar(self.peticion,frase,self.puede_narrar())
+                    self.ia.historia.append({'role':'assistant','content':frase})
+
     def mantener_recordatorios(self):
         if not self.recordatorios_runtime or time.monotonic()<self.recordatorios_proximo or not self.puede_reaccionar_skins():return
         self.recordatorios_proximo=time.monotonic()+1
@@ -486,7 +510,6 @@ class Capri:
         if vencidos:
             r=vencidos[0];self.guardar('recordatorios',[x for x in self.cfg['recordatorios'] if x['id']!=r['id']])
             self.ejemplo_skin(ui('Recordatorio: {0}').format(r['texto']))
-
 
     def descartar_reaccion(self):
         self.reaccion_pendiente=None
@@ -1068,10 +1091,10 @@ class Capri:
         from ajustes_ui import SelectorCyber
         fila_juego=tk.Frame(contenido,bg=BG);fila_juego.pack(fill='x',padx=21,pady=(0,8))
         tk.Label(fila_juego,text='Juego para buscar',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(side='left',padx=(0,10))
-        self.juego_combo=SelectorCyber(fila_juego,values=('Automático','League of Legends','Valorant','Fortnite'),width=215)
+        self.juego_combo=SelectorCyber(fila_juego,values=('Automático','League of Legends','Valorant','Fortnite','Roblox'),width=215)
         self.juego_combo.pack(side='right',fill='x',expand=True)
-        self.juego_combo.current(('auto','lol','valorant','fortnite').index(self.cfg.get('juego_busqueda','auto') if self.cfg.get('juego_busqueda') in ('auto','lol','valorant','fortnite') else 'auto'))
-        self.juego_combo.bind('<<ComboboxSelected>>',lambda e:self.guardar('juego_busqueda',('auto','lol','valorant','fortnite')[self.juego_combo.current()]))
+        self.juego_combo.current(('auto','lol','valorant','fortnite','roblox').index(self.cfg.get('juego_busqueda','auto') if self.cfg.get('juego_busqueda') in ('auto','lol','valorant','fortnite','roblox') else 'auto'))
+        self.juego_combo.bind('<<ComboboxSelected>>',lambda e:self.guardar('juego_busqueda',('auto','lol','valorant','fortnite','roblox')[self.juego_combo.current()]))
         tk.Label(contenido,text='Ctrl+Alt+C para mostrar u ocultar Capri.',bg=BG,fg=MUTED,font=('Chakra Petch',8)).pack(anchor='w',padx=21,pady=(0,7))
         from idiomas import fuente
         self.marco_historial=MarcoTransmision(contenido,'REGISTRO // TRANSMISIONES',height=240)
@@ -1173,6 +1196,16 @@ class Capri:
         self.dialogo.recibir_usuario(texto)
         self.poner_chat('Tú',texto)
         orden = interpretar(texto)
+        if self.roblox_duda_hasta>time.monotonic() and not orden:
+            from roblox_info import resolver_resultado
+            resultado=resolver_resultado(texto)
+            if resultado:
+                from core import Orden
+                orden=Orden('roblox_evento',resultado)
+        self.roblox_duda_hasta=0
+        if orden and orden.tipo=='roblox_recordar':
+            from core import Orden
+            orden=Orden('recordatorios_crear',orden.valor)
         if orden and orden.tipo.startswith('recordatorios_'):
             if orden.tipo=='recordatorios_panel':self.abrir_recordatorios();return
             from recordatorios import agregar,ErrorRecordatorio
@@ -1191,10 +1224,16 @@ class Capri:
             self.guardar('juego_busqueda','lol')
         contexto_valorant=self.cfg.get('juego_busqueda')=='valorant'
         contexto_fortnite=self.cfg.get('juego_busqueda')=='fortnite'
+        contexto_roblox=self.cfg.get('juego_busqueda')=='roblox'
         if origen=='voz' and self.cfg.get('juego_busqueda','auto')=='auto':
             from escritorio import valorant_en_primer_plano,fortnite_en_primer_plano
             contexto_valorant=valorant_en_primer_plano()
             contexto_fortnite=fortnite_en_primer_plano()
+            from roblox_vision import en_primer_plano as roblox_al_frente
+            contexto_roblox=roblox_al_frente()
+        if contexto_roblox and orden and orden.tipo in ('lol_buscar','lol_cancelar','lol_aceptar') and not re.search(r'\b(?:lol|league|valorant|fortnite)\b',texto,re.I):
+            from core import Orden
+            orden=Orden('roblox_panel')
         if contexto_fortnite:
             from fortnite import interpretar_fortnite
             from core import limpiar_peticion,Orden
@@ -1247,6 +1286,18 @@ class Capri:
             # Una petición manual puede recuperar el juego. Cerrar Ajustes evita
             # que su ventana siempre visible tape el nombre que se va a leer.
             if self.ajustes and self.ajustes.winfo_exists():self.ajustes.destroy();self.ajustes=None
+        respuesta_roblox=None
+        if orden and orden.tipo=='roblox_panel':
+            self.abrir_roblox();return
+        if orden and orden.tipo.startswith('roblox_'):
+            from roblox import preparar_local,ErrorRoblox
+            try:
+                cambios,respuesta_roblox=preparar_local(self.cfg['roblox'],orden.tipo,orden.valor,codigo_idioma(self.cfg.get('idioma')))
+                if orden.tipo=='roblox_evento':
+                    from roblox_dialogos import reaccion
+                    respuesta_roblox=reaccion(orden.valor,self.roblox.perfil(),codigo_idioma(self.cfg.get('idioma')))
+                if cambios!=self.cfg['roblox']:self.guardar('roblox',cambios)
+            except (ErrorRoblox,ValueError,KeyError) as e:respuesta_roblox=ui(str(e))
         self.ocupada=True; self.estado='Pensando…'
         self.peticion += 1
         ticket = self.peticion
@@ -1285,6 +1336,20 @@ class Capri:
                         respuesta=self.valorant.ejecutar(resuelta.tipo,resuelta.valor,cancelar=cancelar)
                     elif resuelta.tipo.startswith('fortnite_'):
                         respuesta=self.fortnite.ejecutar(resuelta.tipo,resuelta.valor,cancelar=cancelar)
+                    elif resuelta.tipo.startswith('roblox_'):
+                        if respuesta_roblox is not None:respuesta=respuesta_roblox
+                        elif resuelta.tipo=='roblox_abrir':
+                            favorito=self.roblox.abrir(resuelta.valor,cancelar)
+                            respuesta=ui('Abrí el enlace de {0}.',idioma).format(favorito['nombre'])
+                        elif resuelta.tipo=='roblox_avatar':
+                            from roblox_dialogos import opinion
+                            a=self.roblox.avatar(cancelar);self.roblox.baseline=a['huella'];self.roblox.avisado=a['huella']
+                            respuesta=opinion(a,idioma)
+                        elif resuelta.tipo=='roblox_tiempo':
+                            inicio=self.roblox.inicio
+                            favorito=next((f for f in self.roblox.copia()['favoritos'] if inicio and f['id']==inicio[0]),None)
+                            respuesta=ui('Han pasado {0} minutos desde que abriste {1} con Capri.',idioma).format(int((time.monotonic()-inicio[1])/60),favorito['nombre']) if favorito else ui('No hay una partida abierta por Capri en esta sesión.',idioma)
+                        else:respuesta=ui('Selecciona un favorito.',idioma)
                     elif resuelta.tipo=='skins_opinar':
                         preferido=self.cfg.get('juego_busqueda','')
                         respuesta=self.skins.opinar(resuelta.valor or '',idioma=idioma,cancelar=cancelar,preferido=preferido)
@@ -1297,6 +1362,8 @@ class Capri:
                         self.ia.contexto_acciones=self.interprete.contexto()['turnos']
                         self.ia.control_ampliado=bool(self.cfg.get('control_ampliado'))
                         self.ia.idioma=idioma
+                        from roblox_vision import en_primer_plano as roblox_al_frente
+                        self.ia.contexto_roblox=self.roblox.contexto() if re.search(r'\broblox\b',texto,re.I) or roblox_al_frente() else None
                         respuesta = self.ia.conversar(texto,self.cfg.get('modelo') or None,
                                     al_texto=lambda t:self.eventos.put(('respuesta_parcial',(ticket,t))),cancelar=cancelar,
                                     origen=origen)
@@ -1306,7 +1373,7 @@ class Capri:
                     except Exception as e:
                         self.eventos.put(('error',(ticket,texto_idioma('ia_error',idioma)+' '+str(e)[:180])));return
                 self.eventos.put(('contexto',(ticket,texto,resuelta,respuesta,bool(pregunta))))
-                if (resuelta or pregunta) and not (resuelta and resuelta.tipo=='skins_opinar'):
+                if (resuelta or pregunta) and not (resuelta and (resuelta.tipo=='skins_opinar' or resuelta.tipo.startswith('roblox_'))):
                     respuesta=self.localizar_respuesta(respuesta,idioma,cancelar)
                 if cancelar.is_set():return
                 self.eventos.put(('respuesta',(ticket,respuesta)))
@@ -1553,6 +1620,7 @@ class Capri:
                 version,plan=valor
                 if self.puede_reaccionar_skins() and self.skins.aceptar(version,plan):
                     self.avatar.sonreir();self.decir_juego(plan.texto)
+            elif tipo=='roblox_aviso':self.roblox_aviso_pendiente=valor
             elif tipo=='voz':
                 if isinstance(valor,tuple):
                     generacion,valor=valor
@@ -1638,6 +1706,7 @@ class Capri:
                     if actual:self.modelo_combo.set(actual)
                     self.modelo_estado.set(error or 'Elige un modelo instalado. Se usa para conversar y entender peticiones.')
         self.revisar_interacciones()
+        self.mantener_roblox()
         self.mantener_recordatorios()
         self.skins.permitir(self.skins_runtime and self.puede_reaccionar_skins(),codigo_idioma(self.cfg.get('idioma')))
         self.mantener_activacion()
@@ -1677,7 +1746,12 @@ class Capri:
             llamada.audio_iniciado=True;llamada.ticket_voz=ticket
         elif self.audio_reaccion:
             canal['preparado']=self.audio_reaccion;self.audio_reaccion=None
-        self.voz.hablar(texto,self.cfg.get('voz_natural',True),perfil=self.cfg.get('voz_perfil','capri'),velocidad=self.cfg.get('velocidad_voz',1.0),volumen=self.cfg.get('volumen_voz',100),**canal)
+        volumen=self.cfg.get('volumen_voz',100)
+        from roblox_vision import en_primer_plano as roblox_al_frente
+        contexto=self.roblox.contexto() if getattr(self,'roblox',None) else None
+        if contexto and contexto['perfil'] in ('terror','discreta') and roblox_al_frente():
+            volumen=round(normalizar_volumen(volumen)*(.75 if contexto['perfil']=='terror' else .6))
+        self.voz.hablar(texto,self.cfg.get('voz_natural',True),perfil=self.cfg.get('voz_perfil','capri'),velocidad=self.cfg.get('velocidad_voz',1.0),volumen=volumen,**canal)
         self.pintar_historial()
 
     def puede_narrar(self):return bool(self.cfg.get('voz')) and normalizar_volumen(self.cfg.get('volumen_voz',100))>0
@@ -1891,6 +1965,8 @@ class Capri:
         self.boton(f,'Configurar Valorant',self.abrir_valorant,RED).pack(anchor='w',pady=(0,7))
         tk.Label(f,text='Fortnite',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(22,7))
         self.boton(f,'Configurar Fortnite',self.abrir_fortnite,RED).pack(anchor='w',pady=(0,7))
+        tk.Label(f,text='Roblox',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(22,7))
+        self.boton(f,'Configurar Roblox',self.abrir_roblox,RED).pack(anchor='w',pady=(0,7))
         tk.Label(f,text='No se guarda el audio ni el historial del chat.\nArrastra la imagen para mover a Capri. Clic para chatear.\nTecla configurable en Voz · Esc: detener voz.',wraplength=420,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',10)).pack(anchor='w',pady=20)
         for widget in (self.micro_combo,self.whisper_combo,self.perfil_voz_combo,self.modelo_combo,motor,forma):widget.configure(style='Capri.TCombobox')
         ui.conectar_rueda()
@@ -1991,11 +2067,21 @@ class Capri:
         from recordatorios_ui import PanelRecordatorios
         self.recordatorios_panel=PanelRecordatorios(self.root,lambda:self.cfg['recordatorios'],self.guardar,ocultar=self.minimizar_capri)
 
+    def abrir_roblox(self):
+        self.guardar('juego_busqueda','roblox')
+        if self.visibilidad.oculta:self.visibilidad.mostrar()
+        if self.roblox_panel and not self.roblox_panel.cerrado and self.roblox_panel.ventana.winfo_exists():
+            self.roblox_panel.ventana.deiconify();self.roblox_panel.ventana.lift();return
+        from roblox_ui import PanelRoblox
+        self.roblox_panel=PanelRoblox(self.root,self.cfg['roblox'],self.guardar,self.enviar,self.roblox,ocultar=self.minimizar_capri)
 
     def guardar(self,k,v):
         if k=='recordatorios':
             from recordatorios import normalizar
             v=normalizar(v)
+        if k=='roblox':
+            from roblox import normalizar
+            v=normalizar(v);self.roblox.configurar(v)
         if k=='modo_escucha':
             from escucha_activa import normalizar
             v=normalizar(v)
@@ -2003,7 +2089,7 @@ class Capri:
             from reacciones_skins import normalizar
             v=normalizar(v);self.skins.configurar(v,iniciar=self.skins_runtime)
         if k=='multimedia_fuente' and v not in ('auto','spotify','navegador'):return
-        if k=='juego_busqueda' and v not in ('auto','lol','valorant','fortnite'):return
+        if k=='juego_busqueda' and v not in ('auto','lol','valorant','fortnite','roblox'):return
         if k=='fortnite':
             from fortnite import normalizar
             v=normalizar(v);self.fortnite.configurar(v)
@@ -2044,7 +2130,7 @@ class Capri:
                 self.aplicar_escala(inicial=False)
         if k=='monitor_pc' and getattr(self,'monitor_pc',None):
             self.root.after_cancel(self.monitor_pc.tarea);self.monitor_pc.actualizar()
-        if k=='juego_busqueda' and getattr(self,'juego_combo',None):self.juego_combo.current(('auto','lol','valorant','fortnite').index(v))
+        if k=='juego_busqueda' and getattr(self,'juego_combo',None):self.juego_combo.current(('auto','lol','valorant','fortnite','roblox').index(v))
         if k=='asomos_curiosos':
             self.proximo_asomo=time.monotonic()+random.uniform(180,360)
             if not v:self.terminar_asomo()
@@ -2240,6 +2326,8 @@ class Capri:
 
     def cerrar(self):
         if getattr(self,'recordatorios_panel',None) and not self.recordatorios_panel.cerrado:self.recordatorios_panel.cerrar()
+        if getattr(self,'roblox_panel',None) and not self.roblox_panel.cerrado:self.roblox_panel.cerrar()
+        if getattr(self,'roblox',None):self.roblox.cerrar()
         if getattr(self,'skins',None):self.skins.cerrar()
         if getattr(self,'monitor_pc',None):self.monitor_pc.cerrar()
         if getattr(self,'panel_multimedia',None):self.panel_multimedia.cerrar()
@@ -2359,6 +2447,8 @@ class Capri:
 
     def cerrar_inmediato(self):
         if getattr(self,'recordatorios_panel',None) and not self.recordatorios_panel.cerrado:self.recordatorios_panel.cerrar()
+        if getattr(self,'roblox_panel',None) and not self.roblox_panel.cerrado:self.roblox_panel.cerrar()
+        if getattr(self,'roblox',None):self.roblox.cerrar()
         if getattr(self,'skins',None):self.skins.cerrar()
         if getattr(self,'monitor_pc',None):self.monitor_pc.cerrar()
         if getattr(self,'panel_multimedia',None):self.panel_multimedia.cerrar()

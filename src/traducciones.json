@@ -3359,20 +3359,145 @@
     "Não consegui manter a escuta ativa. Você pode usar Falar. ",
     "リスニングを続けられなかったよ。「話す」を使ってね。 "
   ],
+  "Configurar Roblox": [
+    "Configure Roblox",
+    "Configurar Roblox",
+    "Robloxを設定"
+  ],
+  "Tu siguiente aventura empieza aquí.": [
+    "Your next adventure starts here.",
+    "Sua próxima aventura começa aqui.",
+    "次の冒険はここから。"
+  ],
+  "FAVORITOS DE ROBLOX": [
+    "ROBLOX FAVORITES",
+    "FAVORITOS DO ROBLOX",
+    "ROBLOXのお気に入り"
+  ],
+  "Nombre del favorito": [
+    "Favorite name",
+    "Nome do favorito",
+    "お気に入りの名前"
+  ],
+  "Enlace oficial o ID": [
+    "Official link or ID",
+    "Link oficial ou ID",
+    "公式リンクまたはID"
+  ],
+  "Guardar favorito": [
+    "Save favorite",
+    "Salvar favorito",
+    "お気に入りを保存"
+  ],
+  "Quitar favorito": [
+    "Remove favorite",
+    "Remover favorito",
+    "お気に入りを外す"
+  ],
+  "Abrir experiencia": [
+    "Open experience",
+    "Abrir experiência",
+    "体験を開く"
+  ],
+  "Experiencia": [
+    "Experience",
+    "Experiência",
+    "体験"
+  ],
+  "Avatar": [
+    "Avatar",
+    "Avatar",
+    "アバター"
+  ],
   "Recordatorios": [
     "Reminders",
     "Lembretes",
     "リマインダー"
   ],
-  "Que Capri te avise.": [
-    "Let Capri remind you.",
-    "Deixe Capri avisar você.",
-    "カプリがお知らせするよ。"
+  "Perfil de Capri": [
+    "Capri profile",
+    "Perfil da Capri",
+    "カプリのプロフィール"
   ],
-  "Qué quieres recordar": [
-    "What to remind you about",
-    "O que você quer lembrar",
-    "覚えておきたいこと"
+  "Tu nota para esta experiencia": [
+    "Your note for this experience",
+    "Sua nota para esta experiência",
+    "この体験のメモ"
+  ],
+  "Las notas se guardan en este equipo.": [
+    "Notes are saved on this computer.",
+    "As notas são salvas neste computador.",
+    "メモはこのパソコンに保存されます。"
+  ],
+  "Agrega tu primer favorito para guardar notas y elegir un perfil.": [
+    "Add your first favorite to save notes and choose a profile.",
+    "Adicione seu primeiro favorito para salvar notas e escolher um perfil.",
+    "最初のお気に入りを追加して、メモとプロフィールを設定しましょう。"
+  ],
+  "Selecciona un favorito.": [
+    "Select a favorite.",
+    "Selecione um favorito.",
+    "お気に入りを選んでください。"
+  ],
+  "Nombre de usuario o ID": [
+    "Username or ID",
+    "Nome de usuário ou ID",
+    "ユーザー名またはID"
+  ],
+  "Guardar usuario": [
+    "Save username",
+    "Salvar usuário",
+    "ユーザーを保存"
+  ],
+  "Mirar mi avatar": [
+    "Look at my avatar",
+    "Olhar meu avatar",
+    "アバターを見てもらう"
+  ],
+  "Avatar de tu cuenta": [
+    "Your account avatar",
+    "Avatar da sua conta",
+    "アカウントのアバター"
+  ],
+  "Usa el nombre de usuario, no el nombre visible. No necesitas contraseñas ni cookies.": [
+    "Use the username, not the display name. No passwords or cookies are needed.",
+    "Use o nome de usuário, não o nome de exibição. Não precisa de senhas nem cookies.",
+    "表示名ではなくユーザー名を入力してください。パスワードやCookieは不要です。"
+  ],
+  "El avatar público puede ser diferente del personaje dentro de una experiencia.": [
+    "The public avatar may differ from the character inside an experience.",
+    "O avatar público pode ser diferente do personagem dentro de uma experiência.",
+    "公開アバターは体験内のキャラクターと異なる場合があります。"
+  ],
+  "Comentar cambios de mi avatar": [
+    "Comment on avatar changes",
+    "Comentar mudanças do meu avatar",
+    "アバターの変更にコメントする"
+  ],
+  "Solo mientras Roblox esté al frente. Se comprueba aproximadamente cada minuto.": [
+    "Only while Roblox is in the foreground. Checked about once a minute.",
+    "Somente com Roblox em primeiro plano. Verificação aproximadamente a cada minuto.",
+    "Robloxが最前面のときだけ、約1分ごとに確認します。"
+  ],
+  "Todavía no has consultado un avatar.": [
+    "You have not checked an avatar yet.",
+    "Você ainda não consultou um avatar.",
+    "まだアバターを確認していません。"
+  ],
+  "Cargando miniatura…": [
+    "Loading thumbnail…",
+    "Carregando miniatura…",
+    "サムネイルを読み込み中…"
+  ],
+  "Miniatura no disponible": [
+    "Thumbnail unavailable",
+    "Miniatura indisponível",
+    "サムネイルを取得できません"
+  ],
+  "Recordatorio": [
+    "Reminder",
+    "Lembrete",
+    "リマインダー"
   ],
   "Dentro de cuántos minutos": [
     "How many minutes from now",
@@ -3384,6 +3509,511 @@
     "Criar lembrete",
     "リマインダーを作成"
   ],
+  "Cancelar seleccionado": [
+    "Cancel selected",
+    "Cancelar selecionado",
+    "選択した通知を取り消す"
+  ],
+  "Los avisos esperan si Capri está hablando. Se conservan al cerrar; vuelven a estar disponibles al abrir Capri.": [
+    "Reminders wait while Capri is speaking. They are saved when closed and resume when Capri opens.",
+    "Os avisos esperam enquanto Capri fala. São salvos ao fechar e retomados ao abrir Capri.",
+    "カプリが話している間は通知を待機します。終了しても保存され、次の起動時に再開します。"
+  ],
+  "No hay recordatorios pendientes.": [
+    "No pending reminders.",
+    "Não há lembretes pendentes.",
+    "保留中のリマインダーはありません。"
+  ],
+  "REACCIONES A TU PARTIDA": [
+    "GAME REACTIONS",
+    "REAÇÕES À PARTIDA",
+    "プレイへのリアクション"
+  ],
+  "Contárselo a Capri": [
+    "Tell Capri",
+    "Contar para Capri",
+    "カプリに伝える"
+  ],
+  "Gané": [
+    "I won",
+    "Ganhei",
+    "勝った"
+  ],
+  "Perdí": [
+    "I lost",
+    "Perdi",
+    "負けた"
+  ],
+  "Me morí": [
+    "I died",
+    "Morri",
+    "やられた"
+  ],
+  "Lectura visual experimental": [
+    "Experimental visual reading",
+    "Leitura visual experimental",
+    "実験的な画面認識"
+  ],
+  "Leer eventos en el centro de Roblox": [
+    "Read events in the center of Roblox",
+    "Ler eventos no centro do Roblox",
+    "Roblox画面中央のイベントを読み取る"
+  ],
+  "Activación opcional por favorito. No mueve el personaje ni pulsa botones del juego.": [
+    "Optional per favorite. It does not move your character or press game buttons.",
+    "Ativação opcional por favorito. Não move o personagem nem aperta botões do jogo.",
+    "お気に入りごとに有効化できます。キャラクターの移動やゲームボタンの操作は行いません。"
+  ],
+  "Palabras exactas de victoria": [
+    "Exact victory words",
+    "Palavras exatas de vitória",
+    "勝利を表す正確な文言"
+  ],
+  "Palabras exactas de derrota": [
+    "Exact defeat words",
+    "Palavras exatas de derrota",
+    "敗北を表す正確な文言"
+  ],
+  "Palabras exactas de muerte": [
+    "Exact death words",
+    "Palavras exatas de morte",
+    "死亡を表す正確な文言"
+  ],
+  "Separa alternativas con |. Deben coincidir con una línea completa visible en el centro del juego.": [
+    "Separate alternatives with |. They must match a whole line in the center of the game.",
+    "Separe alternativas com |. Devem corresponder a uma linha inteira no centro do jogo.",
+    "候補は | で区切ります。ゲーム画面中央の1行全体と一致する必要があります。"
+  ],
+  "Guardar palabras": [
+    "Save words",
+    "Salvar palavras",
+    "文言を保存"
+  ],
+  "Requiere dos lecturas coincidentes. Puede fallar según el diseño o idioma de la experiencia.": [
+    "Requires two matching readings. Detection may fail depending on the experience layout or language.",
+    "Exige duas leituras iguais. Pode falhar conforme o layout ou idioma da experiência.",
+    "2回の一致で判定します。体験の画面構成や言語によって認識できない場合があります。"
+  ],
+  "El reconocimiento visual usa capturas locales temporales solo de Roblox en primer plano.": [
+    "Visual recognition uses temporary local captures of Roblox in the foreground only.",
+    "O reconhecimento visual usa capturas locais temporárias apenas do Roblox em primeiro plano.",
+    "画面認識には、最前面のRobloxだけを一時的にローカル撮影します。"
+  ],
+  "Guardado en este equipo.": [
+    "Saved on this computer.",
+    "Salvo neste computador.",
+    "このパソコンに保存しました。"
+  ],
+  "No pude guardar ese cambio.": [
+    "I could not save that change.",
+    "Não consegui salvar essa alteração.",
+    "変更を保存できませんでした。"
+  ],
+  "Escribe un usuario o ID válido de Roblox.": [
+    "Enter a valid Roblox username or ID.",
+    "Digite um usuário ou ID válido do Roblox.",
+    "有効なRobloxユーザー名またはIDを入力してください。"
+  ],
+  "Favorito guardado.": [
+    "Favorite saved.",
+    "Favorito salvo.",
+    "お気に入りを保存しました。"
+  ],
+  "Selecciona un recordatorio.": [
+    "Select a reminder.",
+    "Selecione um lembrete.",
+    "リマインダーを選んでください。"
+  ],
+  "Recordatorio creado.": [
+    "Reminder created.",
+    "Lembrete criado.",
+    "リマインダーを作成しました。"
+  ],
+  "Sin experiencia seleccionada": [
+    "No experience selected",
+    "Nenhuma experiência selecionada",
+    "体験が選ばれていません"
+  ],
+  "No hay una partida abierta por Capri en esta sesión.": [
+    "Capri has not opened an experience in this session.",
+    "Capri não abriu uma experiência nesta sessão.",
+    "この起動中にカプリが開いた体験はありません。"
+  ],
+  "Roblox listo": [
+    "Roblox ready",
+    "Roblox pronto",
+    "Robloxの準備完了"
+  ],
+  "Avatar de Roblox actualizado": [
+    "Roblox avatar updated",
+    "Avatar do Roblox atualizado",
+    "Robloxのアバターを更新しました"
+  ],
+  "No pude actualizar el avatar de Roblox": [
+    "Could not update the Roblox avatar",
+    "Não consegui atualizar o avatar do Roblox",
+    "Robloxのアバターを更新できませんでした"
+  ],
+  "Observando el centro de la ventana de Roblox": [
+    "Watching the center of the Roblox window",
+    "Observando o centro da janela do Roblox",
+    "Roblox画面中央を確認中"
+  ],
+  "No pude leer la ventana de Roblox": [
+    "Could not read the Roblox window",
+    "Não consegui ler a janela do Roblox",
+    "Roblox画面を読み取れませんでした"
+  ],
+  "Nota guardada para {0}.": [
+    "Note saved for {0}.",
+    "Nota salva para {0}.",
+    "{0}のメモを保存しました。"
+  ],
+  "Tu nota para {0}: {1}": [
+    "Your note for {0}: {1}",
+    "Sua nota para {0}: {1}",
+    "{0}のメモ：{1}"
+  ],
+  "Todavía no tienes una nota para {0}.": [
+    "You do not have a note for {0} yet.",
+    "Você ainda não tem uma nota para {0}.",
+    "{0}のメモはまだありません。"
+  ],
+  "Abrí el enlace de {0}.": [
+    "I opened the link for {0}.",
+    "Abri o link de {0}.",
+    "{0}のリンクを開いたよ。"
+  ],
+  "Perfil de Capri: {0}.": [
+    "Capri profile: {0}.",
+    "Perfil da Capri: {0}.",
+    "カプリのプロフィール：{0}。"
+  ],
+  "Recordatorio para {0} en {1} minutos.": [
+    "Reminder for {0} in {1} minutes.",
+    "Lembrete para {0} em {1} minutos.",
+    "{0}のリマインダーを{1}分後に設定しました。"
+  ],
+  "Cancelé tus recordatorios de Roblox.": [
+    "I canceled your Roblox reminders.",
+    "Cancelei seus lembretes do Roblox.",
+    "Robloxのリマインダーを取り消しました。"
+  ],
+  "Aviso de Roblox · {0}: {1}": [
+    "Roblox reminder · {0}: {1}",
+    "Aviso do Roblox · {0}: {1}",
+    "Robloxの通知 · {0}：{1}"
+  ],
+  "Han pasado {0} minutos desde que abriste {1} con Capri.": [
+    "It has been {0} minutes since you opened {1} with Capri.",
+    "Passaram {0} minutos desde que você abriu {1} com Capri.",
+    "カプリで{1}を開いてから{0}分が経ちました。"
+  ],
+  "Nombre de Roblox guardado.": [
+    "Roblox username saved.",
+    "Nome do Roblox salvo.",
+    "Robloxのユーザー名を保存しました。"
+  ],
+  "Configura tu usuario de Roblox en el panel.": [
+    "Set your Roblox username in the panel.",
+    "Configure seu usuário do Roblox no painel.",
+    "パネルでRobloxのユーザー名を設定してください。"
+  ],
+  "Usa un enlace oficial de Roblox o un ID de experiencia.": [
+    "Use an official Roblox link or experience ID.",
+    "Use um link oficial do Roblox ou um ID de experiência.",
+    "公式Robloxリンクまたは体験IDを入力してください。"
+  ],
+  "Escribe un nombre para el favorito.": [
+    "Enter a name for the favorite.",
+    "Digite um nome para o favorito.",
+    "お気に入りの名前を入力してください。"
+  ],
+  "Ya hay un favorito con ese nombre.": [
+    "A favorite already has that name.",
+    "Já existe um favorito com esse nome.",
+    "その名前のお気に入りはすでにあります。"
+  ],
+  "Puedes guardar hasta 40 favoritos de Roblox.": [
+    "You can save up to 40 Roblox favorites.",
+    "Você pode salvar até 40 favoritos do Roblox.",
+    "Robloxのお気に入りは40件まで保存できます。"
+  ],
+  "Puedes guardar hasta 30 recordatorios de Roblox.": [
+    "You can save up to 30 Roblox reminders.",
+    "Você pode salvar até 30 lembretes do Roblox.",
+    "Robloxのリマインダーは30件まで保存できます。"
+  ],
+  "Elige entre 1 y 10080 minutos.": [
+    "Choose between 1 and 10080 minutes.",
+    "Escolha entre 1 e 10080 minutos.",
+    "1〜10080分で指定してください。"
+  ],
+  "Escribe el texto del recordatorio.": [
+    "Enter the reminder text.",
+    "Digite o texto do lembrete.",
+    "通知する内容を入力してください。"
+  ],
+  "No encontré ese favorito en el panel de Roblox.": [
+    "I could not find that favorite in the Roblox panel.",
+    "Não encontrei esse favorito no painel do Roblox.",
+    "Robloxパネルにそのお気に入りが見つかりません。"
+  ],
+  "No pude consultar Roblox. Inténtalo de nuevo en un momento.": [
+    "I could not reach Roblox. Try again in a moment.",
+    "Não consegui consultar o Roblox. Tente novamente em um momento.",
+    "Robloxに接続できませんでした。少し待ってからもう一度試してください。"
+  ],
+  "No encontré ese usuario. Usa su nombre de usuario, no el nombre visible.": [
+    "I could not find that user. Use the username, not the display name.",
+    "Não encontrei esse usuário. Use o nome de usuário, não o nome de exibição.",
+    "ユーザーが見つかりません。表示名ではなくユーザー名を入力してください。"
+  ],
+  "No pude leer el avatar público de esa cuenta.": [
+    "I could not read that account public avatar.",
+    "Não consegui ler o avatar público dessa conta.",
+    "そのアカウントの公開アバターを取得できませんでした。"
+  ],
+  "Terror y Discreta reducen el volumen de Capri mientras Roblox está al frente.": [
+    "Horror and Quiet reduce Capri volume while Roblox is in the foreground.",
+    "Terror e Discreta reduzem o volume da Capri com Roblox em primeiro plano.",
+    "ホラーと控えめでは、Robloxが最前面の間カプリの音量が下がります。"
+  ],
+  "Roblox devolvió una redirección inesperada.": [
+    "Roblox returned an unexpected redirect.",
+    "Roblox retornou um redirecionamento inesperado.",
+    "Robloxから想定外のリダイレクトが返されました。"
+  ],
+  "Dirección de Roblox no admitida.": [
+    "Unsupported Roblox address.",
+    "Endereço do Roblox não permitido.",
+    "未対応のRobloxアドレスです。"
+  ],
+  "La respuesta de Roblox es demasiado grande.": [
+    "The Roblox response is too large.",
+    "A resposta do Roblox é grande demais.",
+    "Robloxの応答が大きすぎます。"
+  ],
+  "Nuevo favorito": [
+    "New favorite",
+    "Novo favorito",
+    "新しいお気に入り"
+  ],
+  "Tu próxima partida, con Capri.": [
+    "Your next game, with Capri.",
+    "Sua próxima partida, com Capri.",
+    "次のゲームもカプリと一緒。"
+  ],
+  "Experiencias": [
+    "Experiences",
+    "Experiências",
+    "エクスペリエンス"
+  ],
+  "Acompañamiento": [
+    "Companion",
+    "Companhia",
+    "付き添い"
+  ],
+  "Filtrar favoritos": [
+    "Filter favorites",
+    "Filtrar favoritos",
+    "お気に入りを絞り込む"
+  ],
+  "Agregar experiencia": [
+    "Add experience",
+    "Adicionar experiência",
+    "エクスペリエンスを追加"
+  ],
+  "Elige una experiencia": [
+    "Choose an experience",
+    "Escolha uma experiência",
+    "エクスペリエンスを選んでね"
+  ],
+  "Todavía no tienes favoritos.": [
+    "You have no favorites yet.",
+    "Você ainda não tem favoritos.",
+    "お気に入りはまだないよ。"
+  ],
+  "Tus favoritos son accesos rápidos para abrir los juegos que más usas.": [
+    "Favorites are shortcuts to open your most played games.",
+    "Os favoritos são atalhos para abrir seus jogos mais usados.",
+    "お気に入りから、よく遊ぶゲームをすぐ開けるよ。"
+  ],
+  "Pega el enlace de un juego para empezar.": [
+    "Paste a game link to get started.",
+    "Cole o link de um jogo para começar.",
+    "ゲームのリンクを貼って始めよう。"
+  ],
+  "Descripción de la experiencia": [
+    "Experience description",
+    "Descrição da experiência",
+    "エクスペリエンスの説明"
+  ],
+  "Capri se adapta a este juego": [
+    "Capri adapts to this game",
+    "Capri se adapta a este jogo",
+    "カプリがこのゲームに合わせるよ"
+  ],
+  "Perfil automático · {0}": [
+    "Automatic profile · {0}",
+    "Perfil automático · {0}",
+    "自動プロフィール · {0}"
+  ],
+  "Según la descripción y las categorías publicadas por su creador.": [
+    "Based on the creator's published description and categories.",
+    "Com base na descrição e nas categorias publicadas pelo criador.",
+    "制作者が公開した説明とカテゴリーに基づいているよ。"
+  ],
+  "Consultando la experiencia…": [
+    "Loading experience details…",
+    "Consultando a experiência…",
+    "エクスペリエンスを確認中…"
+  ],
+  "Aún no hay información pública disponible para este enlace.": [
+    "Public information is not available for this link yet.",
+    "Ainda não há informações públicas para este link.",
+    "このリンクの公開情報はまだ取得できていないよ。"
+  ],
+  "Por {0}": [
+    "By {0}",
+    "Por {0}",
+    "制作：{0}"
+  ],
+  "Nombre personalizado (opcional)": [
+    "Custom name (optional)",
+    "Nome personalizado (opcional)",
+    "カスタム名（任意）"
+  ],
+  "Cancelar": [
+    "Cancel",
+    "Cancelar",
+    "キャンセル"
+  ],
+  "Si lo dejas vacío, Capri usa el nombre de la experiencia.": [
+    "Leave it empty to use the experience's name.",
+    "Deixe vazio para usar o nome da experiência.",
+    "空欄ならエクスペリエンスの名前を使うよ。"
+  ],
+  "No pude leer la información de esta experiencia.": [
+    "I could not read this experience's information.",
+    "Não consegui ler as informações desta experiência.",
+    "このエクスペリエンスの情報を取得できなかったよ。"
+  ],
+  "Tu avatar, pieza por pieza": [
+    "Your avatar, piece by piece",
+    "Seu avatar, peça por peça",
+    "アバターのアイテムを一つずつ"
+  ],
+  "Lo que llevas": [
+    "What you are wearing",
+    "O que você está usando",
+    "身に付けているもの"
+  ],
+  "Guarda tu usuario y Capri consultará el avatar público de esa cuenta.": [
+    "Save your username so Capri can read that account's public avatar.",
+    "Salve seu usuário para Capri consultar o avatar público dessa conta.",
+    "ユーザー名を保存すると、そのアカウントの公開アバターを確認するよ。"
+  ],
+  "Usa el nombre de usuario, no el nombre visible.": [
+    "Use your username, not your display name.",
+    "Use o nome de usuário, não o nome de exibição.",
+    "表示名ではなくユーザー名を使ってね。"
+  ],
+  "La opinión usa los nombres y tipos de las prendas; el personaje de una experiencia puede ser distinto.": [
+    "The opinion uses item names and types; an experience's character may look different.",
+    "A opinião usa nomes e tipos das peças; o personagem de uma experiência pode ser diferente.",
+    "感想はアイテムの名前と種類に基づいているよ。ゲーム内の姿は違うこともあるよ。"
+  ],
+  "Comenta cuando cambias tu conjunto, sin repetir la misma opinión continuamente.": [
+    "Comments when your outfit changes, without repeating the same opinion constantly.",
+    "Comenta quando seu visual muda, sem repetir a mesma opinião continuamente.",
+    "コーデが変わったらコメントするよ。同じ感想を繰り返し続けないよ。"
+  ],
+  "Capri te acompaña": [
+    "Capri keeps you company",
+    "Capri faz companhia",
+    "カプリが付き添うよ"
+  ],
+  "Acompañamiento automático": [
+    "Automatic companion",
+    "Companhia automática",
+    "自動付き添い"
+  ],
+  "Entiende el juego": [
+    "Understands the game",
+    "Entende o jogo",
+    "ゲームを理解する"
+  ],
+  "Reconoce los avisos": [
+    "Recognizes result messages",
+    "Reconhece os avisos",
+    "結果の表示を読み取る"
+  ],
+  "Pregunta si tiene dudas": [
+    "Asks when unsure",
+    "Pergunta quando tem dúvidas",
+    "分からない時は聞く"
+  ],
+  "Consulta su descripción y categoría para adaptar su personalidad automáticamente.": [
+    "Reads its description and category to adapt her personality automatically.",
+    "Lê a descrição e a categoria para adaptar sua personalidade automaticamente.",
+    "説明とカテゴリーを読んで、ゲームに合う雰囲気に自動で合わせるよ。"
+  ],
+  "Busca avisos de victoria, derrota o muerte sin que tengas que escribir palabras clave.": [
+    "Looks for win, loss or death messages without making you type keywords.",
+    "Procura avisos de vitória, derrota ou morte sem você precisar escrever palavras-chave.",
+    "キーワードを入力しなくても、勝利・敗北・死亡の表示を探すよ。"
+  ],
+  "Si solo aparece un final ambiguo, te pregunta qué ocurrió antes de celebrar o lamentarlo.": [
+    "If the ending is unclear, she asks what happened before celebrating or commiserating.",
+    "Se o final não ficar claro, pergunta o que aconteceu antes de comemorar ou lamentar.",
+    "終了の表示だけで結果が分からなければ、喜んだり励ましたりする前に聞くよ。"
+  ],
+  "Actívalo para que reaccione mientras Roblox está al frente. No necesitas contarle cada resultado.": [
+    "Turn it on to react while Roblox is in front. You do not need to report each result.",
+    "Ative para reagir enquanto Roblox está em primeiro plano. Você não precisa contar cada resultado.",
+    "オンにするとRobloxが手前にある時に反応するよ。結果を毎回伝える必要はないよ。"
+  ],
+  "Algunos juegos usan avisos que todavía no puede reconocer. No detecta todos los sucesos.": [
+    "Some games use messages she cannot recognize yet. She does not detect every event.",
+    "Alguns jogos usam avisos que ela ainda não reconhece. Ela não detecta todos os eventos.",
+    "まだ読み取れない表示を使うゲームもあるよ。すべての出来事を検知するわけではないよ。"
+  ],
+  "No graba partidas ni mueve tu personaje.": [
+    "Does not record games or move your character.",
+    "Não grava partidas nem move seu personagem.",
+    "プレイの録画やキャラクターの操作はしないよ。"
+  ],
+  "Última experiencia identificada: {0}": [
+    "Last identified experience: {0}",
+    "Última experiência identificada: {0}",
+    "最後に確認したエクスペリエンス：{0}"
+  ],
+  "Esperando a que abras una experiencia de Roblox.": [
+    "Waiting for you to open a Roblox experience.",
+    "Aguardando você abrir uma experiência de Roblox.",
+    "Robloxのエクスペリエンスを開くのを待っているよ。"
+  ],
+  "Sin accesorios identificados": [
+    "No accessories identified",
+    "Nenhum acessório identificado",
+    "アクセサリーはまだ確認できていないよ"
+  ],
+  "No hay coincidencias.": [
+    "No matches.",
+    "Nenhum resultado.",
+    "一致するものがないよ。"
+  ],
+  "Que Capri te avise.": [
+    "Let Capri remind you.",
+    "Deixe Capri avisar você.",
+    "カプリがお知らせするよ。"
+  ],
+  "Qué quieres recordar": [
+    "What to remind you about",
+    "O que você quer lembrar",
+    "覚えておきたいこと"
+  ],
   "Tus próximos avisos": [
     "Upcoming reminders",
     "Seus próximos avisos",
@@ -3393,16 +4023,6 @@
     "You have no pending reminders.",
     "Você não tem lembretes pendentes.",
     "予定されているリマインダーはないよ。"
-  ],
-  "Cancelar": [
-    "Cancel",
-    "Cancelar",
-    "キャンセル"
-  ],
-  "Recordatorio creado.": [
-    "Reminder created.",
-    "Lembrete criado.",
-    "リマインダーを作成しました。"
   ],
   "Elige un plazo entre un segundo y siete días.": [
     "Choose a delay between one second and seven days.",
@@ -3418,11 +4038,6 @@
     "Enter what you want to remember.",
     "Escreva o que quer lembrar.",
     "覚えておきたいことを入力してね。"
-  ],
-  "Los avisos esperan si Capri está hablando. Se conservan al cerrar; vuelven a estar disponibles al abrir Capri.": [
-    "Reminders wait while Capri is speaking. They are saved when closed and resume when Capri opens.",
-    "Os avisos esperam enquanto Capri fala. São salvos ao fechar e retomados ao abrir Capri.",
-    "カプリが話している間は通知を待機します。終了しても保存され、次の起動時に再開します。"
   ],
   "Puedes decir: «Capri, recuérdame en 20 minutos hacer una pausa».": [
     "Try saying: “Capri, remind me in 20 minutes to take a break”.",
@@ -3443,5 +4058,25 @@
     "I cancelled your reminders.",
     "Cancelei seus lembretes.",
     "リマインダーを取り消したよ。"
+  ],
+  "Este enlace compartido no muestra el ID. Usa la dirección de la página del juego para leer su descripción.": [
+    "This shared link does not expose the ID. Use the game's page address to read its description.",
+    "Este link compartilhado não mostra o ID. Use o endereço da página do jogo para ler a descrição.",
+    "この共有リンクではIDが分からないよ。説明を読むにはゲームページのアドレスを使ってね。"
+  ],
+  "Roblox": [
+    "Roblox",
+    "Roblox",
+    "ロブロックス"
+  ],
+  "Buscar en mis favoritos": [
+    "Search my favorites",
+    "Buscar nos meus favoritos",
+    "お気に入りを検索"
+  ],
+  "Escribe el nombre del juego…": [
+    "Type the game name…",
+    "Digite o nome do jogo…",
+    "ゲーム名を入力…"
   ]
 }

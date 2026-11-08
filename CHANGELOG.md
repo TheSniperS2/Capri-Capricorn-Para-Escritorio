@@ -6,6 +6,16 @@
 
 - Avisos en Más → Recordatorios y por voz sin nombrar un juego, con fecha persistente, cancelación individual y entrega una sola vez cuando Capri esté libre. Los avisos antiguos de Roblox conservan su hora y texto al trasladarse a la agenda general.
 
+### Roblox
+
+- Los iconos y datos públicos se conservan en memoria y disco: cambio de favoritos y reapertura sin tener que pulsar Actualizar. No se descartan imágenes que terminan al mirar otro juego; recuperación local sin red y reintentos para miniaturas temporalmente pendientes.
+- Corregido el desplazamiento vacío de listas cortas y al reducir resultados con el filtro. Buscador de favoritos con lupa, indicación para escribir y limpieza de la consulta.
+- Panel rediseñado en Experiencias, Avatar y Acompañamiento: tarjetas, iconos oficiales, filtro de favoritos, barras discretas y rueda independiente por zona. Los favoritos abren enlaces por botón/voz; nombre automático si no se personaliza. Descripción y categorías públicas determinan el perfil de Capri sin un selector manual. Las notas previas se conservan fuera de la interfaz.
+- Avatar público con miniatura y opiniones por nombre/tipo de cada pieza, incluidos accesorios de hombro y espalda. Gustos estables por objeto aunque cambie el resto del conjunto. Observación opcional de cambios del avatar de cuenta mientras Roblox está al frente; no requiere contraseñas ni cookies ni identifica disfraces exclusivos de una experiencia.
+- Perfiles automáticos Terror/Discreta reducen la voz solo durante el turno con Roblox al frente, conservando el volumen configurado.
+- Acompañamiento opcional con avisos habituales de resultado ya incorporados; eliminados botones de resultados y campos de palabras exactas. Dos observaciones, pausa entre eventos y pregunta ante un final ambiguo, compatible con escucha tras preguntas. Identificación de experiencia por ID del registro reciente del cliente. Solo recorta Roblox activo y elimina capturas temporales. No reconoce todos los juegos ni se ha validado en partidas reales; sin entradas del juego ni reclamación de recompensas.
+- Traducciones de interfaz y diálogos en cuatro idiomas. Guardas personales vacías por defecto; las órdenes ambiguas de buscar con Roblox seleccionado no inician colas de LoL. API pública y flujos simulados comprobados; faltan pruebas de eventos visuales con las experiencias reales del usuario.
+
 ### Escucha activa opcional
 
 - La conversación da prioridad a las correcciones y respeta los rechazos sin encadenar preguntas ni proponer otro tema. Comprueba el referente corregido antes de mostrar la respuesta; las salidas incoherentes de esos turnos usan un reconocimiento breve y conservan el historial final.
