@@ -91,6 +91,11 @@ class Capri:
         activar_color(self.cfg.get('color_interfaz','#ff4267'))
         self.cfg.setdefault('modo_visual','pantalla');self.cfg.setdefault('pasear_personaje',True);self.cfg.setdefault('control_ampliado',False)
         self.cfg.setdefault('monitor_pc',False)
+        self.cfg.setdefault('panel_multimedia',False);self.cfg.setdefault('multimedia_fuente','auto')
+        self.cfg.setdefault('reaccion_musica',True)
+        from reproduccion_pc import ReproduccionPC
+        self.reproduccion_multimedia=ReproduccionPC()
+        if hotkeys and self.cfg.get('panel_multimedia') and not self.es_personaje():self.reproduccion_multimedia.activar(True)
         from control_pc import ControlPC
         self.control_pc=ControlPC(lambda:bool(self.cfg.get('control_ampliado')))
         self.apagado_ui=None
@@ -153,7 +158,7 @@ class Capri:
         self.canvas.bind('<ButtonPress-1>', self._inicio_arrastre)
         self.canvas.bind('<B1-Motion>', self._arrastrar)
         self.canvas.bind('<ButtonRelease-1>', self._fin_arrastre)
-        self.canvas.bind('<Double-Button-1>', lambda e: self.dialogo.abrir())
+        self.canvas.bind('<Double-Button-1>', lambda e: None if getattr(self,'click_musica',False) else self.dialogo.abrir())
         self.canvas.bind('<Button-3>', self.menu)
         self.canvas.bind('<Control-MouseWheel>',self.rueda_tamano)
         from entrada import Entrada
@@ -165,6 +170,8 @@ class Capri:
         self.aplicar_escala(inicial=True)
         from monitor_ui import PanelMonitor
         self.monitor_pc=PanelMonitor(self)
+        from multimedia_ui import PanelMultimedia
+        self.panel_multimedia=PanelMultimedia(self)
         if self.intro_activa:self.iniciar_intro()
         from visibilidad import VisibilidadCapri
         self.visibilidad=VisibilidadCapri(self.root,self.preparar_minimizar,self.recuperar_capri)
@@ -230,6 +237,7 @@ class Capri:
             except (OSError, ValueError): pass
 
     def _inicio_arrastre(self, e):
+        self.click_musica=False
         self.ultima_interaccion=time.monotonic()
         if self.asomo and self.asomo.get('curioso'):
             self.drag_asomo=(e.x_root,e.y_root);self.drag=None;return
@@ -267,6 +275,7 @@ class Capri:
             self.foco_lateral=False
             self.root.focus_set()
             self.companera.posar(self.root.winfo_x(),self.root.winfo_y())
+            if self.cfg.get('panel_multimedia'):self.panel_multimedia.apoyar_personaje()
         self.drag = None
 
     def menu(self, evento):
@@ -337,17 +346,22 @@ class Capri:
             return
         monitor=getattr(self,'monitor_pc',None)
         # La imagen termina en y=265; con recursos basta un margen inferior de 9 px.
-        alto_visor=274 if monitor and monitor.visible else 292
+        alto_visor=274 if self.chasis_unido() else 292
         ancho=round(360*self.escala_avatar);alto=round(alto_visor*self.escala_avatar)+46
         self.canvas.configure(width=ancho,height=alto-46)
         if monitor and monitor.visible:
             monitor.ajustar();alto+=monitor.alto
+        self.entrada_compacta.unida=self.chasis_unido()
+        self.entrada_compacta.dibujar()
         self.entrada_compacta.configure(width=ancho)
         self.dialogo.control_entrada=self.entrada_compacta;self.dialogo.entrada=self.entrada_compacta.entrada
         x=self.root.winfo_screenwidth()-ancho-24 if inicial else self.root.winfo_x()
         y=self.root.winfo_screenheight()-alto-70 if inicial else self.root.winfo_y()
         x=max(0,min(x,self.root.winfo_screenwidth()-ancho));y=max(0,min(y,self.root.winfo_screenheight()-alto))
         self.root.geometry(f'{ancho}x{alto}+{x}+{y}')
+
+    def chasis_unido(self):
+        return bool(getattr(getattr(self,'monitor_pc',None),'visible',False))
 
     def es_personaje(self):return self.cfg.get('modo_visual')=='personaje'
 
@@ -394,6 +408,7 @@ class Capri:
 
     def dibujar_personaje(self,mover=True):
         p=self.companera
+        if self.cfg.get('panel_multimedia') and getattr(self,'panel_multimedia',None):self.panel_multimedia.actualizar_apoyo()
         en_llamada=bool(self.llamada_ui and not self.llamada_ui.cerrada)
         if self.asomo and time.monotonic()>=self.asomo['hasta'] and not self.transito and not self.escuchando and not self.ocupada and not en_llamada:
             destino=self.asomo['volver'];self.asomo=None;self.salto_juego(destino);return
@@ -409,6 +424,7 @@ class Capri:
             self.root.geometry(geometria);self.geometria_personaje=geometria
             self.dialogo.posicionar((max(0,round(p.x)),max(0,round(p.y)),ancho,p.alto+extra))
         p.dibujar(self.canvas,self.hablando,self.boca_activa,glitch=self.cfg.get('efecto_glitch',True) and self.cfg.get('animaciones',True),halo=self.cfg.get('halo_personaje','violeta'))
+        if self.cfg.get('panel_multimedia') and getattr(self,'panel_multimedia',None):self.panel_multimedia.dibujar_reaccion(self.canvas)
 
     def interrumpir(self):
         if self.apagado_ui and not self.apagado_ui.cerrada:self.apagado_ui.abortar();return
@@ -424,6 +440,7 @@ class Capri:
             self.ocultar_entrada_personaje();self.entrada_compacta.pack_forget()
 
     def juego_ocupada(self,ignorar_asomo=False):
+        if self.cfg.get('panel_multimedia') and getattr(self,'panel_multimedia',None) and self.panel_multimedia.disfrutando():return True
         if getattr(getattr(self,'visibilidad',None),'oculta',False):return True
         asomo=self.asomo and not (ignorar_asomo and self.asomo.get('curioso'))
         return bool(getattr(self,'radial',None) or self.transito or self.intro_activa or asomo or self.ocupada or self.escuchando or self.hablando or self.voz_ticket is not None or self.drag or self.escribiendo() or self.control_pc.pendiente or (self.ajustes and self.ajustes.winfo_exists()) or (self.llamada_ui and not self.llamada_ui.cerrada) or (self.apagado_ui and not self.apagado_ui.cerrada))
@@ -576,7 +593,7 @@ class Capri:
         if p.escala!=s or not p.fotos:p.redimensionar(s)
         origen_personaje=(anterior=='personaje') or tipo=='salto'
         if origen_personaje:
-            inicio=((salto['x'] if salto else p.x)+p.ancho/2,(salto['y'] if salto else p.y)+p.alto/2)
+            inicio=centro_panel if tipo!='salto' and self.cfg.get('panel_multimedia') and centro_panel else ((salto['x'] if salto else p.x)+p.ancho/2,(salto['y'] if salto else p.y)+p.alto/2)
             vista=Image.new('RGBA',(320,210));copia=p.originales[0].copy();copia.thumbnail((145,210),Image.Resampling.LANCZOS)
             vista.alpha_composite(copia,((320-copia.width)//2,(210-copia.height)//2))
         else:
@@ -608,7 +625,6 @@ class Capri:
                       'fragmentos':None,'imagen':imagen,'fin':fin}
         if tipo=='salto':
             from intro import TrasladoTeselas
-            from PIL import ImageTk
             origen=ImageTk.getimage(getattr(p,'imagen',None) or p.fotos[0])
             destino=ImageTk.getimage(imagen)
             from companera import con_sombra
@@ -626,15 +642,17 @@ class Capri:
             from tema_ui import actual as color_actual
             from avatar import panel_pantalla
             datos_panel=self.datos_monitor_animacion()
+            datos_media=self.datos_multimedia_animacion()
             clave_cache=(sw,sh,s,p.direccion<0,not presentacion,self.cfg.get('halo_personaje','violeta'),self.entrada_compacta.entrada.get(),self.entrada_compacta.placeholder,
-                         None if datos_panel is None else tuple(datos_panel.get(k) for k in ('cpu','ram','gpu','vram')),self.avatar.aspecto,color_actual())
+                         None if datos_panel is None else tuple(datos_panel.get(k) for k in ('cpu','ram','gpu','vram')),
+                         None if datos_media is None else tuple(datos_media.get(k) for k in ('fuente','titulo','artista','estado','posicion')),self.avatar.aspecto,color_actual())
             if not hasattr(self,'caches_morfosis'):self.caches_morfosis={}
             fotos_cache=self.caches_morfosis.get(clave_cache)
             cantidad=85 if presentacion else 31
             if fotos_cache is not None and (len(fotos_cache)!=cantidad or not all(fotos_cache)):fotos_cache=None
             morfosis=Transformacion(getattr(self.avatar,'vista_maestra',self.avatar.vistas[0]),saludo.original if saludo.original is not None else self.avatar.vistas[0],cuerpo,
                                    inicio if presentacion else fin,fin if presentacion else inicio,sw,sh,s,inversa=not presentacion,fotos=fotos_cache,directa=not presentacion,
-                                   panel=panel_pantalla(self.avatar.vista_maestra,self.avatar.aspecto,con_entrada=True,escala_avatar=s,
+                                   panel=panel_pantalla(self.vista_animacion(),self.avatar.aspecto,con_entrada=True,escala_avatar=s,
                                                         texto_entrada=self.entrada_compacta.entrada.get(),placeholder=self.entrada_compacta.placeholder,monitor=datos_panel))
             self.cache_morfosis=(clave_cache,morfosis.fotos)
             self.caches_morfosis[clave_cache]=morfosis.fotos
@@ -642,6 +660,9 @@ class Capri:
             self.transito.update(duracion=2.7 if presentacion else .7,morfosis=morfosis)
         self.ocultar_reubicacion_intro();self.entrada_compacta.pack_forget()
         self.canvas.configure(width=w,height=h);self.root.geometry(f'{w}x{h}+{x}+{y}');self.root.update_idletasks();self.pasar_clics_intro(True)
+        if getattr(self,'panel_multimedia',None):
+            self.panel_multimedia.sincronizar()
+            self.panel_multimedia.ordenar_capas()
         self.transito['inicio']=time.monotonic()
 
     def finalizar_transito(self):
@@ -663,6 +684,7 @@ class Capri:
             self.entrada_compacta.pack(fill='x')
             if getattr(self,'monitor_pc',None):self.monitor_pc.sincronizar()
             self.aplicar_escala(inicial=True)
+            if getattr(self,'panel_multimedia',None):self.panel_multimedia.sincronizar()
         if self.dialogo.objetivo and (self.control_pc.pendiente or self.dialogo.sincronizada or self.dialogo.vence>time.monotonic()) and self.dialogo.ventana:
             self.dialogo.ventana.deiconify();self.dialogo.posicionar()
             if self.dialogo.pendiente is None:self.dialogo.tick()
@@ -701,6 +723,19 @@ class Capri:
         datos=monitor.monitor.datos if monitor else {}
         return dict(datos) if datos.get('fecha') and time.monotonic()-datos['fecha']<=6 else {}
 
+    def datos_multimedia_animacion(self):
+        if not self.cfg.get('panel_multimedia',False):return None
+        panel=getattr(self,'panel_multimedia',None)
+        return (panel.datos() or {}) if panel else {}
+
+    def vista_animacion(self):
+        vista=self.avatar.vista_maestra
+        panel=getattr(self,'panel_multimedia',None)
+        if self.cfg.get('panel_multimedia') and panel and panel.disfrutando():
+            from musica_visual import vista_escucha
+            return vista_escucha(vista.size) or vista
+        return vista
+
     def iniciar_intro(self):
         from bienvenida import Bienvenida,SALUDO
         from avatar import panel_pantalla
@@ -711,6 +746,9 @@ class Capri:
         if getattr(self,'monitor_pc',None):
             self.monitor_pc.ocultar()
             self.monitor_pc.monitor.activar(bool(self.cfg.get('monitor_pc') and not self.es_personaje()))
+        if getattr(self,'panel_multimedia',None):
+            self.panel_multimedia.ocultar()
+            self.panel_multimedia.backend.activar(bool(self.cfg.get('panel_multimedia') and not self.es_personaje()))
         self.intro_en_viaje=False;self.fragmentos_intro=None
         self.intro_pausa_captura=None;self.intro_captura_hasta=0.
         self.escala_avatar=limitar_escala(self.cfg.get('escala_avatar',1));s=self.escala_avatar
@@ -726,13 +764,13 @@ class Capri:
         else:
             self.entrada_compacta.activacion=bool(self.cfg.get('activacion_voz'));self.entrada_compacta.señal(0,False,False)
             from avatar import tamano_panel
-            destino=panel_pantalla(self.avatar.vista_maestra,self.avatar.aspecto,con_entrada=True,escala_avatar=s,
+            destino=panel_pantalla(self.vista_animacion(),self.avatar.aspecto,con_entrada=True,escala_avatar=s,
                                    texto_entrada=self.entrada_compacta.entrada.get(),monitor=self.datos_monitor_animacion())
             destino=destino.resize(tamano_panel(s,self.cfg.get('monitor_pc',False)),Image.Resampling.LANCZOS)
             fin=(sw-180*s-24,sh-destino.height/2-70)
         self.bienvenida=Bienvenida(self.avatar.estados_hd or self.avatar.estados,destino,fin,sw,sh,self.frase_intro,
                                    pantalla=not self.es_personaje())
-        self.intro_monitor_actualizado=not (self.cfg.get('monitor_pc',False) and not self.es_personaje())
+        self.intro_monitor_actualizado=not ((self.cfg.get('monitor_pc',False) or self.cfg.get('panel_multimedia',False)) and not self.es_personaje())
         self.canvas.configure(width=sw,height=sh);self.root.geometry(f'{sw}x{sh}+0+0')
         # Inicializa las superficies nativas antes de mostrar la entrada.
         self.bienvenida.dibujar(self.canvas,.11)
@@ -752,7 +790,7 @@ class Capri:
             r=self.bienvenida.retrato_aprobado
             if not r.futuros:
                 from avatar import panel_pantalla
-                destino=panel_pantalla(self.avatar.vista_maestra,self.avatar.aspecto,con_entrada=True,escala_avatar=self.escala_avatar,
+                destino=panel_pantalla(self.vista_animacion(),self.avatar.aspecto,con_entrada=True,escala_avatar=self.escala_avatar,
                                       texto_entrada=self.entrada_compacta.entrada.get(),monitor=self.datos_monitor_animacion())
                 destino=destino.resize(self.bienvenida.destino_tamano,Image.Resampling.LANCZOS)
                 self.bienvenida.destino=destino;r.destino=destino.copy()
@@ -812,6 +850,7 @@ class Capri:
         self.entrada_compacta.pack(fill='x')
         if getattr(self,'monitor_pc',None):self.monitor_pc.sincronizar()
         self.aplicar_escala(inicial=True);self.fragmentos_intro=None
+        if getattr(self,'panel_multimedia',None):self.panel_multimedia.sincronizar()
         # Recuperar la prioridad sólo después de reducir la ventana al panel.
         self.restaurar_capa_intro()
 
@@ -920,9 +959,10 @@ class Capri:
         color=GREEN if self.escuchando else ('#ffc2b5' if self.hablando or self.ocupada or self.voz_ticket is not None or (self.activacion_permitida and self.cfg.get('activacion_voz') and not self.activacion_lista) else '#ed6684')
         from avatar import dibujar_marco
         fase='ESCUCHA' if self.escuchando else ('VOZ' if self.hablando else ('SINTONIZANDO' if self.voz_ticket is not None else ('RECIBIENDO' if self.ocupada else ('CONECTANDO' if self.activacion_permitida and self.cfg.get('activacion_voz') and not self.activacion_lista else ('DI CAPRI' if self.cfg.get('activacion_voz') else self.cfg.get('tecla_hablar','F8'))))))
-        dibujar_marco(c,self.fase if animaciones else 0,color,fase,self.nivel,self.avatar.glitch_activo if animaciones else False,self.escala_avatar,aspecto=self.avatar.aspecto,unido=bool(getattr(self,'monitor_pc',None) and self.monitor_pc.visible))
+        dibujar_marco(c,self.fase if animaciones else 0,color,fase,self.nivel,self.avatar.glitch_activo if animaciones else False,self.escala_avatar,aspecto=self.avatar.aspecto,unido=self.chasis_unido())
         if self.avatar.fotos:
             self.imagen_ref=self.avatar.imagen(self.hablando and self.boca_activa,glitch=self.cfg.get('efecto_glitch',True)) if animaciones else self.avatar.fotos[0]
+            if getattr(self,'panel_multimedia',None):self.imagen_ref=self.panel_multimedia.imagen_visor() or self.imagen_ref
             c.create_image(180,160,image=self.imagen_ref)
         elif self.fotos_tk:
             self.imagen_ref=self.fotos_tk[0]
@@ -942,6 +982,7 @@ class Capri:
 
     def preparar_minimizar(self):
         if getattr(self,'monitor_pc',None):self.monitor_pc.ocultar()
+        if getattr(self,'panel_multimedia',None):self.panel_multimedia.ocultar()
         self.cerrar_radial();self.finalizar_intro()
         if self.transito:self.finalizar_transito()
         if self.asomo and self.asomo.get('curioso'):self.terminar_asomo()
@@ -1511,10 +1552,30 @@ class Capri:
         self.marco_ajustes=VentanaCyber(p,'AJUSTES')
         self.panel_ajustes=ui=PanelAjustes(self.marco_ajustes.cuerpo)
         escritorio=ui.seccion('Escritorio','Forma, tamaño, movimiento y efectos de Capri.')
+        multimedia=ui.seccion('Multimedia','Música y vídeos junto a Capri.')
         micro=ui.seccion('Micrófono','Elige tu entrada y ajusta la sensibilidad y el reconocimiento local.')
         voz=ui.seccion('Voz','Elige el idioma, el perfil y la velocidad de la voz de Capri.')
         ia=ui.seccion('IA y servicios','Modelo local, navegador y música.')
         permisos=ui.seccion('Permisos','Decide qué puede hacer Capri en tu computador.')
+        tk.Label(multimedia,text='Panel multimedia',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w')
+        mostrar_media=tk.BooleanVar(value=bool(self.cfg.get('panel_multimedia',False)))
+        InterruptorCyber(multimedia,text='Mostrar panel multimedia',variable=mostrar_media,
+                        command=lambda:self.guardar('panel_multimedia',mostrar_media.get()),bg=BG,fg=FG,
+                        selectcolor=CARD,activebackground=BG,font=('Chakra Petch',10)).pack(anchor='w',pady=(8,4))
+        tk.Label(multimedia,text='Reproductor independiente. Puedes mover a Capri sobre su borde para que se siente a escuchar.',
+                 bg=BG,fg=MUTED,font=('Chakra Petch',9),wraplength=460,justify='left').pack(anchor='w',pady=(0,12))
+        reaccion_media=tk.BooleanVar(value=bool(self.cfg.get('reaccion_musica',True)))
+        InterruptorCyber(multimedia,text='Animar a Capri mientras escucha música',variable=reaccion_media,
+                        command=lambda:self.guardar('reaccion_musica',reaccion_media.get()),bg=BG,fg=FG,
+                        selectcolor=CARD,activebackground=BG,font=('Chakra Petch',10)).pack(anchor='w',pady=(0,12))
+        tk.Label(multimedia,text='Fuente preferida',bg=BG,fg=GREEN,font=('Chakra Petch',10,'bold')).pack(anchor='w')
+        fuente_media=SelectorCyber(multimedia,values=('Automático','Spotify','Navegador'))
+        preferida=self.cfg.get('multimedia_fuente','auto')
+        fuente_media.current(('auto','spotify','navegador').index(preferida if preferida in ('auto','spotify','navegador') else 'auto'))
+        fuente_media.pack(fill='x',pady=(6,8))
+        fuente_media.bind('<<ComboboxSelected>>',lambda e:self.guardar('multimedia_fuente',('auto','spotify','navegador')[fuente_media.current()]))
+        tk.Label(multimedia,text='Si hay varias sesiones, pulsa el nombre de la aplicación en el panel para cambiar entre ellas.',
+                 bg=BG,fg=MUTED,font=('Chakra Petch',9),wraplength=460,justify='left').pack(anchor='w')
         from idiomas import IDIOMAS
         tk.Label(voz,text='Idioma de Capri',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w')
         self.idioma_combo=SelectorCyber(voz,values=[v[0] for v in IDIOMAS.values()])
@@ -1763,6 +1824,7 @@ class Capri:
         self.valorant_panel=PanelValorant(self.root,self.cfg.get('valorant',{}),self.guardar,self.enviar,self.valorant,ocultar=self.minimizar_capri)
 
     def guardar(self,k,v):
+        if k=='multimedia_fuente' and v not in ('auto','spotify','navegador'):return
         if k=='juego_busqueda' and v not in ('auto','lol','valorant'):return
         if k=='valorant':
             from valorant import normalizar
@@ -1793,6 +1855,12 @@ class Capri:
         if k=='escala_avatar':v=limitar_escala(v)
         anterior=self.cfg.get(k)
         self.cfg[k]=v
+        if k in ('panel_multimedia','multimedia_fuente') and getattr(self,'panel_multimedia',None):
+            self.panel_multimedia.fuente=None;self.panel_multimedia.firma_tarjeta=None
+            self.root.after_cancel(self.panel_multimedia.tarea);self.panel_multimedia.actualizar()
+            if k=='panel_multimedia':
+                if not v and anterior and self.es_personaje():self.companera.posar(self.root.winfo_x(),self.root.winfo_y())
+                self.aplicar_escala(inicial=False)
         if k=='monitor_pc' and getattr(self,'monitor_pc',None):
             self.root.after_cancel(self.monitor_pc.tarea);self.monitor_pc.actualizar()
         if k=='juego_busqueda' and getattr(self,'juego_combo',None):self.juego_combo.current(('auto','lol','valorant').index(v))
@@ -1990,6 +2058,7 @@ class Capri:
 
     def cerrar(self):
         if getattr(self,'monitor_pc',None):self.monitor_pc.cerrar()
+        if getattr(self,'panel_multimedia',None):self.panel_multimedia.cerrar()
         if self.visibilidad.oculta:
             self.cerrar_inmediato();return
         self.valorant.cerrar()
@@ -2104,6 +2173,7 @@ class Capri:
 
     def cerrar_inmediato(self):
         if getattr(self,'monitor_pc',None):self.monitor_pc.cerrar()
+        if getattr(self,'panel_multimedia',None):self.panel_multimedia.cerrar()
         if self.cerrado:return
         salida=getattr(self,'salida',None)
         if salida:salida.detener()

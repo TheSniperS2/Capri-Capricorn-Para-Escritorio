@@ -2833,5 +2833,115 @@
     "Shared RAM: {0} GB · separate from VRAM",
     "RAM compartilhada: {0} GB · separada da VRAM",
     "共有RAM：{0} GB · VRAMとは別です"
+  ],
+  "Multimedia": [
+    "Media",
+    "Multimídia",
+    "メディア"
+  ],
+  "Música y vídeos junto a Capri.": [
+    "Music and videos alongside Capri.",
+    "Música e vídeos junto à Capri.",
+    "Capriと音楽や動画を楽しめます。"
+  ],
+  "Panel multimedia": [
+    "Media panel",
+    "Painel multimídia",
+    "メディアパネル"
+  ],
+  "Mostrar panel multimedia": [
+    "Show media panel",
+    "Mostrar painel multimídia",
+    "メディアパネルを表示"
+  ],
+  "Carátula, título, progreso y controles de Spotify y del navegador. Disponible en modo pantalla.": [
+    "Artwork, title, progress and controls for Spotify and your browser. Available in screen mode.",
+    "Capa, título, progresso e controles do Spotify e do navegador. Disponível no modo tela.",
+    "Spotifyやブラウザーの画像、タイトル、進行状況、操作ボタンを表示します。画面モードで利用できます。"
+  ],
+  "Fuente preferida": [
+    "Preferred source",
+    "Fonte preferida",
+    "優先する再生元"
+  ],
+  "Navegador": [
+    "Browser",
+    "Navegador",
+    "ブラウザー"
+  ],
+  "Si hay varias sesiones, pulsa el nombre de la aplicación en el panel para cambiar entre ellas.": [
+    "If several sessions are available, click the app name in the panel to switch between them.",
+    "Se houver várias sessões, clique no nome do aplicativo no painel para alternar entre elas.",
+    "複数の再生元がある場合、パネルのアプリ名を押すと切り替えられます。"
+  ],
+  "MULTIMEDIA": [
+    "MEDIA",
+    "MULTIMÍDIA",
+    "メディア"
+  ],
+  "SIN SESIÓN": [
+    "NO SESSION",
+    "SEM SESSÃO",
+    "再生元なし"
+  ],
+  "Nada en reproducción": [
+    "Nothing playing",
+    "Nada em reprodução",
+    "再生していません"
+  ],
+  "Abre Spotify o un vídeo en tu navegador.": [
+    "Open Spotify or a video in your browser.",
+    "Abra o Spotify ou um vídeo no navegador.",
+    "Spotifyやブラウザーで動画を開いてください。"
+  ],
+  "Reproducción en el navegador": [
+    "Browser playback",
+    "Reprodução no navegador",
+    "ブラウザーで再生中"
+  ],
+  "La pista cambió. Inténtalo de nuevo.": [
+    "The track changed. Try again.",
+    "A faixa mudou. Tente novamente.",
+    "曲が変わりました。もう一度お試しください。"
+  ],
+  "Control no disponible.": [
+    "Control unavailable.",
+    "Controle indisponível.",
+    "この操作は利用できません。"
+  ],
+  "No se pudo leer la reproducción.": [
+    "Playback could not be read.",
+    "Não foi possível ler a reprodução.",
+    "再生情報を取得できませんでした。"
+  ],
+  "Animar a Capri mientras escucha música": [
+    "Animate Capri while she listens to music",
+    "Animar Capri enquanto ela ouve música",
+    "音楽を聴くCapriをアニメーション表示"
+  ],
+  "REPRODUCIENDO": [
+    "NOW PLAYING",
+    "REPRODUZINDO",
+    "再生中"
+  ],
+  "MÚSICA / CAPRI": [
+    "MUSIC / CAPRI",
+    "MÚSICA / CAPRI",
+    "音楽 / CAPRI"
+  ],
+  "ESCUCHANDO": [
+    "LISTENING",
+    "OUVINDO",
+    "音楽を聴いています"
+  ],
+  "EN PAUSA": [
+    "PAUSED",
+    "EM PAUSA",
+    "一時停止中"
+  ],
+  "Reproductor independiente. Puedes mover a Capri sobre su borde para que se siente a escuchar.": [
+    "Independent player. Move Capri onto its top edge to let her sit and listen.",
+    "Player independente. Mova Capri para a borda superior para ela sentar e ouvir.",
+    "独立したプレーヤーです。Capriを上端に動かすと、座って音楽を聴きます。"
   ]
 }

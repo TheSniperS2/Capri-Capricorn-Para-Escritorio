@@ -72,7 +72,7 @@ class ControlArchivos(unittest.TestCase):
 
 class ModoPersonaje(PruebasTk):
     @contextmanager
-    def capri(self):
+    def capri(self,ajustes=None):
         with tempfile.TemporaryDirectory() as d,patch.object(app,'BASE',Path(d)),patch.object(app.Voz,'parar'),patch.object(app.Voz,'sonido_colgar'),patch.object(app.Voz,'preparar',return_value=None),patch('escritorio.proteger_foco',return_value=False),patch('invitados.elegir',return_value=None),patch('capturas_intro.captura_solicitada',return_value=False):
             assets=Path(d)/'assets';assets.mkdir();origen=Path(__file__).resolve().parents[1]/'assets'
             for n in ('capri-base-v2.png','capri-bocas-v2.png','capri-personaje-v1.png','capri-caminar-v1.png','capri-saludo-v1.png','capri-asomo-curioso-v1.png','capri-despedida-sonrisa-v1.png','capri-asomo-tierno-v2.png','capri-despedida-camara-v2.png','capri-despedida-camara-v3.png'):shutil.copy2(origen/n,assets/n)
@@ -83,6 +83,7 @@ class ModoPersonaje(PruebasTk):
             shutil.copy2(origen/'capri-despedida-expresiones-v10.png',assets/'capri-despedida-expresiones-v10.png')
             shutil.copy2(origen/'capri-despedida-expresiones-v11.png',assets/'capri-despedida-expresiones-v11.png')
             shutil.copy2(origen/'capri-despedida-expresiones-v12.png',assets/'capri-despedida-expresiones-v12.png')
+            if ajustes is not None:(Path(d)/'ajustes.json').write_text(json.dumps(ajustes),encoding='utf8')
             c=app.Capri(hotkeys=False);c.root.withdraw();c.cfg['voz']=False
             try:yield c,Path(d)
             finally:c.cerrar()

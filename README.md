@@ -39,6 +39,8 @@
 
 **«Pausa Spotify». «Siguiente canción». «Pon mi playlist Cyberpunk».** Usa Spotify desde Capri y [vincula tus playlists](docs/USO.md#elegir-dónde-reproducir-y-qué-resultado-abrir) para pedirlas por su nombre.
 
+En **Ajustes → Multimedia** puedes activar un reproductor flotante con miniatura, título, progreso y controles de Spotify o del navegador. Capri se mueve de forma independiente: puedes sentarla sobre su borde o dejar que se suba durante sus paseos. En modo pantalla disfruta la música dentro del visor. [Cómo usar el panel](docs/USO.md#panel-multimedia).
+
 <p align="center">
   <a href="docs/media/readme/capri-spotify.webp"><img src="docs/media/readme/capri-spotify.webp" width="100%" alt="Playlist abierta en Spotify y respuesta real de Capri a la orden Pausa Spotify."></a>
 </p>

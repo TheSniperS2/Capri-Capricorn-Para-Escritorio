@@ -2,6 +2,19 @@
 
 ## En desarrollo
 
+### Panel multimedia
+
+- Cabeceo y movimiento independiente de hombros y cabello en el visor, con cámara fija. Bucle de 72 fotogramas a 30 fps preparado fuera del hilo de la interfaz, cachés acotadas y pausa al desactivar la opción. El rojo del cabello se aproxima al arte habitual sin alterar ojos, piel verde o ropa; estática y barrido se aplican después del movimiento para conservar su definición.
+- Pose de escucha revisada con referencias originales de Capri: cara y manos geométricas, cabello rosa amplio y audífonos oscuros. Conserva el mismo procesamiento de cámara, grano, señal animada y cortes de interferencia del visor habitual.
+- Nueva ilustración de escucha para el visor: ojo azul y guiño característicos, máscara inclinada y manos sujetando audífonos, solo durante reproducción activa. Reemplaza los audífonos vectoriales anteriores; pausa, parada y ausencia de sesión recuperan el arte habitual, también en las transformaciones.
+- Reproductor flotante cyberpunk en Ajustes → Multimedia: miniatura, título grande, progreso con posición seleccionable y controles. Posición independiente guardada en ambos modos; Capri puede sentarse sobre su borde durante sus paseos o al arrastrarla, sin unir ambas ventanas ni añadir audífonos al personaje.
+- Play/pausa con respuesta visual inmediata y confirmación posterior; las órdenes se procesan antes de leer carátulas. Compatibilidad con el control alterno de Windows y carátulas WinRT redimensionadas, incluso con imágenes de origen mayores de 1 MB.
+- El reproductor conserva su posición, controles y consultas durante los teletransportes y cambios de modo de Capri.
+- Sesiones de Spotify y de navegadores mediante Windows, sin cuentas adicionales ni extensiones nuevas. Automático conserva la primera fuente detectada reproduciendo hasta que se pausa, detiene o cierra; Spotify y Navegador permiten elegir sesiones manualmente.
+- Las ausencias breves de metadatos conservan la tarjeta y su progreso, con controles desactivados hasta confirmar la sesión. Referencias de imágenes conservadas durante el reemplazo para evitar desapariciones al renovar la caché.
+- Controles ligados a la sesión y pista mostradas, comprobación de capacidades y estado pendiente; no se reintentan órdenes con resultado incierto. Datos ausentes y sesiones cerradas desactivan los controles.
+- Ayudante persistente solo mientras el reproductor se utiliza, miniaturas acotadas en memoria y presentación adaptada a la apertura y transformaciones. Sprites y tarjetas se reutilizan durante la animación; se mantiene el arte existente de Capri. Los nombres de canciones y artistas conservan su idioma original.
+
 ### Monitor del computador
 
 - Diseño unificado del visor, los recursos y la escritura: chasis continuo y misma paleta, sin tres tarjetas separadas. Al desactivar el monitor se conserva el aspecto habitual.

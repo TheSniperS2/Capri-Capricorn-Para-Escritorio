@@ -75,10 +75,12 @@ class Lienzo(tk.Canvas):
         self._textos_ui={}
         super().__init__(*args,**kw)
     def create_text(self,*args,**kw):
+        traducir=kw.pop('traducir',True)
         original=kw.get('text','');fuente_original=kw.get('font')
-        kw['text']=ui(original)
+        kw['text']=ui(original) if traducir else original
         if _actual=='ja' and isinstance(fuente_original,tuple):kw['font']=('Yu Gothic UI',)+fuente_original[1:]
-        item=super().create_text(*args,**kw);self._textos_ui[item]=(original,fuente_original)
+        item=super().create_text(*args,**kw)
+        if traducir:self._textos_ui[item]=(original,fuente_original)
         return item
     def delete(self,*args):
         if 'all' in args:self._textos_ui.clear()

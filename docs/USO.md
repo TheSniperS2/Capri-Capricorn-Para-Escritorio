@@ -198,6 +198,25 @@ La conversación refuerza el idioma seleccionado aunque el historial esté en ot
 
 El guardado de una opcion no sustituye las otras claves del archivo de preferencias. Las actualizaciones conservan el microfono, LLM, motor y modelo Whisper seleccionados. Se mantienen los valores predeterminados para opciones no elegidas; Whisper Base se indica para priorizar velocidad, Small para precision. Emma multilingue se ofrece como voz alternativa que puede leer espanol, sin sustituir la actual y sin presentarla como la voz original de Capri.
 
+## Panel multimedia
+
+Activa **Ajustes → Multimedia → Mostrar panel multimedia**. Es opcional y está desactivado por defecto.
+
+- **Modo pantalla:** reproductor flotante independiente. Arrástralo por el fondo para colocarlo donde prefieras; su posición queda guardada. Durante la reproducción, Capri sujeta los audífonos con ambas manos y muestra su guiño característico dentro del visor. Al pausar, detener o cerrar la sesión vuelve a su imagen habitual sin audífonos. Mientras habla o te escucha también usa su expresión habitual.
+- **Modo personaje:** Capri y el reproductor son ventanas separadas. Puedes arrastrar a Capri cerca del borde superior para que se siente; al moverla fuera vuelve a ser independiente. Con el paseo activado también puede subirse sola. Permanece en el borde y sigue al panel si lo mueves. Durante la reproducción se balancea suavemente y aparecen notas musicales, sin audífonos; al pausar se queda quieta.
+
+Puedes desactivar **Animar a Capri mientras escucha música** o las animaciones generales. En el visor cabecea, acompaña con los hombros y el pelo se mueve con un ligero retraso. El cabeceo y las barras son una animación visual asociada a la reproducción, sin análisis del audio ni cálculo de BPM.
+
+La pose de escucha del visor conserva el grano, el barrido y las interferencias de la cámara habitual. La cámara queda fija mientras se mueve Capri, para que el barrido y la estática mantengan su definición. El tono rosa del cabello se ajusta al rojo de la ilustración habitual. Los cortes de señal respetan **Efecto glitch** y las animaciones generales. El bucle corporal se prepara en segundo plano y se presenta a 30 fotogramas por segundo; durante la preparación inicial se mantiene la pose quieta.
+
+La tarjeta muestra miniatura o carátula, título grande, artista/canal, progreso y controles anterior/pausa/reanudar/siguiente. Play/pausa cambia de aspecto al pulsarlo y confirma después el resultado con Windows; si el control falla, recupera el estado real. Pulsar la barra de progreso cambia de posición si el reproductor lo permite. Los títulos y artistas conservan su idioma original. La cruz cierra el reproductor y desactiva la opción.
+
+En **Fuente preferida** elige Automático, Spotify o Navegador. **Automático** prioriza lo que está reproduciéndose: si empieza otra fuente mientras la primera sigue sonando, conserva la primera. Al pausarla, detenerla o cerrarla pasa a la otra que esté sonando. El orden se registra mientras Capri está consultando las sesiones; si ambas ya sonaban antes de abrirla, Windows no informa cuál empezó primero y se mantiene la primera detectada. Esto elige qué muestra y controla el panel, sin iniciar ni detener música por sí solo.
+
+Con Spotify o Navegador puedes pulsar el nombre de la aplicación o el botón inferior izquierdo para cambiar entre sesiones compatibles; en Automático esa selección está disponible cuando ninguna está reproduciéndose. Una lectura ausente se tolera brevemente para evitar que desaparezcan los datos durante un cambio de pista; mientras no se confirma la sesión, sus controles quedan desactivados. Los botones actúan sobre la sesión y pista mostradas; si cambia justo al pulsar, actualiza la información y vuelve a intentarlo.
+
+Inicia una canción en Spotify o un vídeo en el navegador para que aparezca su sesión; después puede permanecer pausado. YouTube se identifica con el nombre del navegador. Cada reproductor decide qué información y botones comparte con Windows: algunas sesiones no ofrecen carátula, duración o saltos. Requiere Windows 10 versión 1809 o posterior, sin herramientas adicionales. Los datos y las imágenes se mantienen en memoria. Ocultar Capri pausa las consultas; la apertura y las transformaciones conservan la presentación correspondiente a cada modo.
+
 ## Monitor del computador
 
 El monitor es opcional y viene **desactivado por defecto**. Actívalo en **Ajustes → Escritorio → Monitor del computador**, con el interruptor **Mostrar recursos del computador**. La elección queda guardada; puedes desactivarlo desde ese mismo interruptor.

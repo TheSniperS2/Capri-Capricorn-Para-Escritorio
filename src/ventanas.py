@@ -14,6 +14,7 @@ def registrar_apoyo(ventana):
     def retirar(evento):
         if evento.widget==ventana:APOYOS_PROPIOS.discard(hwnd)
     ventana.bind('<Destroy>',retirar,add='+')
+    return hwnd
 
 def primer_plano_propio():
     if os.name!='nt':return False

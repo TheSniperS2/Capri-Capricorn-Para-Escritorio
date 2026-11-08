@@ -44,6 +44,10 @@ def estados_originales(ruta,bocas):
 def vista_pantalla(estado,tamano=(320,210),fase=0,aspecto='original'):
     # Recorte de cámara, no redibujo: la misma silueta y pose en los tres estados.
     vista=estado.crop((0,0,estado.width,round(estado.height*148/350))).resize(tamano,Image.Resampling.LANCZOS)
+    return efecto_camara(vista,tamano,fase)
+
+
+def efecto_camara(vista,tamano,fase=0):
     # Óptica y señal de cámara: resolución algo menor, grano fino y barrido.
     reducido=(max(1,round(tamano[0]*.78)),max(1,round(tamano[1]*.82)))
     vista=vista.resize(reducido,Image.Resampling.BILINEAR).resize(tamano,Image.Resampling.BILINEAR)
