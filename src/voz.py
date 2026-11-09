@@ -392,6 +392,31 @@ class Voz:
         self.bandas_salida=(0.,)*28
         self._reloj_boca=None
         self.destino_preparado=None
+        self.ingles_local=False
+        self.modo_ingles='local'
+        self.rapida_unica=False
+        self.solo_internet=False
+        self.config_ingles_local=None
+        self.preparacion_local=None
+
+    @property
+    def preparando_local(self):return self.preparacion_local==self.generacion
+
+    def usar_voz_personal(self,invitado=None):
+        return self.ingles_local and not invitado and (
+            self.rapida_unica or self.idioma=='en' and self.acento in ('auto','en-US'))
+
+    def precalentar(self):
+        if not (self.usar_voz_personal() and self.modo_ingles=='rapida'):return
+        def preparar():
+            from voz_local import cliente,rapida_disponible
+            if rapida_disponible(self.config_ingles_local):cliente(self.config_ingles_local).precalentar()
+        threading.Thread(target=preparar,name='CapriCargarVozRapida',daemon=True).start()
+
+    def cerrar(self):
+        self.parar()
+        from voz_local import cerrar
+        cerrar(self.config_ingles_local)
 
     def _vigente(self,token,cancelar):
         return token==self.generacion and not cancelar.is_set()
@@ -411,6 +436,7 @@ class Voz:
         with self._control:
             self.bandas_salida=(0.,)*28
             self._reloj_boca=None
+            self.preparacion_local=None
             self.cancelar.set()
             self.generacion += 1
             proceso=self.proceso;self.proceso=None
@@ -424,11 +450,14 @@ class Voz:
             self.estado(False)
 
     def clave_audio(self,texto,natural=True,perfil='capri',velocidad=1.,volumen=100):
-        return (texto[:1800],natural,perfil,normalizar_velocidad(velocidad),normalizar_volumen(volumen),self.idioma,self.acento)
+        return (texto[:1800],natural,perfil,normalizar_velocidad(velocidad),normalizar_volumen(volumen),self.idioma,self.acento,self.ingles_local,self.modo_ingles,self.rapida_unica,self.solo_internet)
 
     def preparar(self,texto,natural=True,perfil='capri',velocidad=1.,volumen=100):
         preparado=AudioPreparado(self.clave_audio(texto,natural,perfil,velocidad,volumen))
         sintetizador=Voz(lambda _:None);sintetizador.idioma=self.idioma;sintetizador.acento=self.acento
+        sintetizador.ingles_local=self.ingles_local;sintetizador.config_ingles_local=self.config_ingles_local
+        sintetizador.modo_ingles=self.modo_ingles
+        sintetizador.rapida_unica=self.rapida_unica;sintetizador.solo_internet=self.solo_internet
         sintetizador.destino_preparado=preparado;preparado.sintetizador=sintetizador
         def generar():
             try:sintetizador._hablar(texto[:1800],natural,sintetizador.generacion,sintetizador.cancelar,perfil,velocidad,volumen)
@@ -438,7 +467,8 @@ class Voz:
     def _usar_preparado(self,preparado,texto,natural,token,cancelar,perfil,velocidad,volumen):
         activo=False
         try:
-            limite=time.monotonic()+25
+            espera=max(180,min(3600,len(texto)*4)) if self.usar_voz_personal() else 25
+            limite=time.monotonic()+espera
             while not preparado.listo.wait(.04):
                 if not self._vigente(token,cancelar):return
                 if time.monotonic()>=limite:break
@@ -495,16 +525,17 @@ class Voz:
     def terminar_respuesta(self):
         self.frases.put(None)
 
-    def _reproducir_archivo(self,archivo,token,cancelar,volumen=100,marcas=None,texto=None,telefono=False,conectar=False,mascara=None):
+    def _reproducir_archivo(self,archivo,token,cancelar,volumen=100,marcas=None,texto=None,telefono=False,conectar=False,mascara=None,rango=None):
         if self.destino_preparado is not None:return self.destino_preparado.capturar(archivo,marcas)
-        if not telefono:return self._reproducir_archivo_base(archivo,token,cancelar,volumen,marcas,texto)
+        extra={'rango':rango} if rango is not None else {}
+        if not telefono:return self._reproducir_archivo_base(archivo,token,cancelar,volumen,marcas,texto,**extra)
         if not self._vigente(token,cancelar):return False
         from audio_llamada import preparar,factor_mascara
         convertido,niveles,adelanto=preparar(archivo,conectar,mascara)
         try:
             factor=factor_mascara(mascara)
             marcas=[(m[0]/factor+adelanto,m[1]/factor,*m[2:]) for m in marcas] if marcas else marcas
-            return self._reproducir_archivo_base(convertido,token,cancelar,volumen,marcas,texto,niveles)
+            return self._reproducir_archivo_base(convertido,token,cancelar,volumen,marcas,texto,niveles,**extra)
         finally:convertido.unlink(missing_ok=True)
 
     def boca_despedida(self,token):
@@ -514,13 +545,15 @@ class Voz:
         from sincronia import boca_en_posicion
         return boca_en_posicion(reloj[1],time.monotonic()-reloj[2])
 
-    def _reproducir_archivo_base(self,archivo,token,cancelar,volumen=100,marcas=None,texto=None,niveles=None):
+    def _reproducir_archivo_base(self,archivo,token,cancelar,volumen=100,marcas=None,texto=None,niveles=None,rango=None):
         import ctypes
         from sincronia import avance_texto
         actividad_medida=None
-        # Solo la despedida: medir el archivo definitivo, incluida la pausa
-        # antes de choom, y consultar el mismo reloj que reproduce la voz.
-        if texto and es_despedida_choom(texto):
+        comienzo,final=rango if rango is not None else (0,len(texto or ''))
+        segmento=texto[comienzo:final] if texto else texto
+        # La voz local no aporta marcas de palabras: medir su actividad real.
+        # La despedida consulta este mismo reloj, incluida la pausa de choom.
+        if texto and (es_despedida_choom(texto) or self.usar_voz_personal()):
             try:
                 from sincronia import actividad_boca
                 actividad_medida=actividad_boca(archivo) or None
@@ -554,7 +587,7 @@ class Voz:
             self._emitir(True,token,cancelar)
             if texto:
                 inicial=self.boca_despedida(token) if actividad_medida is not None else not bool(marcas)
-                self._emitir(('avance_voz',(texto,0,inicial)),token,cancelar)
+                self._emitir(('avance_voz',(texto,comienzo,inicial)),token,cancelar)
         try:
             while not cancelar.wait(.04):
                 resultado=ctypes.create_unicode_buffer(40)
@@ -567,7 +600,7 @@ class Voz:
                             if niveles:
                                 from audio_llamada import barras
                                 self.bandas_salida=barras(niveles,segundos)
-                            indice=avance_texto(texto,segundos,duracion,marcas or ()) if texto else 0
+                            indice=comienzo+avance_texto(segmento,segundos,duracion,marcas or ()) if texto else 0
                         except ValueError:continue
                         if actividad_medida is not None:
                             from sincronia import boca_en_posicion
@@ -577,7 +610,7 @@ class Voz:
                         if texto and (indice!=ultimo or actividad!=ultima_actividad):
                             self._emitir(('avance_voz',(texto,indice,actividad)),token,cancelar)
                             ultimo=indice;ultima_actividad=actividad
-            if texto and not cancelar.is_set():self._emitir(('avance_voz',(texto,len(texto),False)),token,cancelar)
+            if texto and not cancelar.is_set():self._emitir(('avance_voz',(texto,final,False)),token,cancelar)
         finally:
             with self._control:
                 self._mci('close '+alias)
@@ -623,7 +656,57 @@ class Voz:
             from invitados import VOCES,voz as voz_invitada
             if invitado not in VOCES:invitado=None
             if invitado:acento='invitado'
-            if (natural or invitado) and (acento!='auto' or time.monotonic() >= self.natural_no_hasta):
+            if self.solo_internet and not natural and not invitado:
+                from idiomas import ui
+                self._emitir(ui('Activa las respuestas en voz alta en Ajustes para usar la voz por internet.',idioma),token,cancelar)
+                return
+            if self.usar_voz_personal(invitado):
+                try:
+                    from voz_local import cliente,ajustar_velocidad
+                    if self.modo_ingles=='rapida' and not natural:
+                        from idiomas import ui
+                        self._emitir(ui('La voz rápida necesita activar «Voz natural por internet».',idioma),token,cancelar)
+                        return
+                    self.preparacion_local=token
+                    self._emitir(('preparando_rapida' if self.modo_ingles=='rapida' else 'preparando_local',None),token,cancelar)
+                    servicio=cliente(self.config_ingles_local)
+                    if self.modo_ingles=='rapida' and self.destino_preparado is None:
+                        cursor=0
+                        for archivo,a,b in servicio.iterar(texto,cancelar):
+                            if not self._vigente(token,cancelar):return
+                            ajustado=ajustar_velocidad(archivo,normalizar_velocidad(velocidad))
+                            if ajustado!=archivo:archivo.unlink(missing_ok=True);archivo=ajustado
+                            fin=cursor
+                            for palabra in re.findall(r"\w+(?:['’]\w+)*",texto[a:b]):
+                                m=re.search(re.escape(palabra),original[fin:],re.IGNORECASE)
+                                if m:fin+=m.end()
+                            if b==len(texto):fin=len(original)
+                            canal_clip=dict(canal)
+                            if a>0 and 'conectar' in canal_clip:canal_clip['conectar']=False
+                            self.ultima_voz_usada='capri-ingles-rapida-v2'
+                            try:activo=self._reproducir_archivo(archivo,token,cancelar,volumen,texto=original,rango=(cursor,fin),**canal_clip) or activo
+                            finally:archivo.unlink(missing_ok=True)
+                            cursor=fin
+                        return
+                    archivo=(servicio.sintetizar(texto,cancelar,modo='rapida') if self.modo_ingles=='rapida'
+                             else servicio.sintetizar(texto,cancelar))
+                    if not self._vigente(token,cancelar):return
+                    ajustado=ajustar_velocidad(archivo,normalizar_velocidad(velocidad))
+                    if ajustado!=archivo:archivo.unlink(missing_ok=True);archivo=ajustado
+                    self.ultima_voz_usada='capri-ingles-rapida-v2' if self.modo_ingles=='rapida' else 'capri-ingles-local-v2'
+                    # Progreso según el reloj del WAV; no inventar marcas exactas de palabras.
+                    activo=self._reproducir_archivo(archivo,token,cancelar,volumen,texto=original,**canal)
+                except InterruptedError:return
+                except Exception as error:
+                    if not cancelar.is_set():
+                        self.ultimo_error_voz={'fase':'voz_rapida' if self.modo_ingles=='rapida' else 'voz_local','tipo':type(error).__name__,'voz':getattr(self,'ultima_voz_usada','capri-ingles-local-v2'),'acento':acento}
+                        from idiomas import ui
+                        mensaje='No pude preparar la voz rápida. Comprueba la conexión y reinicia Capri.' if self.modo_ingles=='rapida' else 'No pude preparar la voz local. Revisa la opción de voz inglesa en Ajustes.'
+                        self._emitir(ui(mensaje,idioma),token,cancelar)
+                finally:
+                    if self.preparacion_local==token:self.preparacion_local=None
+                return
+            if (natural or invitado) and (self.solo_internet or acento!='auto' or time.monotonic() >= self.natural_no_hasta):
                 try:
                     import edge_tts
                     with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as f: archivo = Path(f.name)
@@ -671,6 +754,10 @@ class Voz:
                     # ni depender de que Windows tenga instalado ese acento.
                     self.natural_no_hasta = time.monotonic()+10 if acento=='auto' else 0
                     if archivo:archivo.unlink(missing_ok=True);archivo=None
+                    if self.solo_internet and not invitado:
+                        from idiomas import ui
+                        self._emitir(ui('No pude preparar la voz rápida. Comprueba la conexión y reinicia Capri.',idioma),token,cancelar)
+                        return
                     # Nunca sustituir al invitado por la voz genérica de Capri/Windows.
                     if invitado:
                         from idiomas import texto as mensaje

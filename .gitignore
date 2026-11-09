@@ -13,6 +13,8 @@ htmlcov/
 
 # Ajustes, playlists, credenciales y diagnósticos del usuario
 ajustes.json
+voz-ingles-local.json
+**/cache/voz-local/
 playlists.json
 .env
 .env.*
