@@ -19,6 +19,18 @@ def sesion(fuente='Spotify.exe',titulo='Night City',estado='Playing'):
 
 
 class Sesiones(unittest.TestCase):
+    def test_esquinas_transparentes_sin_alfa_parcial_en_todas_las_escalas(self):
+        from multimedia_diseno import dibujar_multimedia,preparar_tarjeta_ventana,ANCHO,ALTO
+        from avatar import LienzoRaster
+        original=Image.new('RGBA',(ANCHO*2,ALTO*2))
+        dibujar_multimedia(LienzoRaster(original,2),sesion())
+        for escala in (.75,1,1.25,1.5,1.6):
+            im=preparar_tarjeta_ventana(original,(round(ANCHO*escala),round(ALTO*escala)))
+            self.assertLessEqual(set(im.getchannel('A').getdata()),{0,255})
+            w,h=im.size
+            self.assertEqual([im.getpixel(p)[3] for p in ((0,0),(w-1,0),(0,h-1),(w-1,h-1))],[0,0,0,0])
+            self.assertEqual(im.getpixel((w//2,h//2))[3],255)
+
     def test_bucle_de_escucha_se_prepara_fuera_de_la_interfaz_y_se_reutiliza(self):
         from musica_visual import AnimacionEscucha,FOTOGRAMAS_ESCUCHA,FPS_ESCUCHA
         hilos=[];entrado=threading.Event();continuar=threading.Event()

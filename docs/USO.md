@@ -294,3 +294,8 @@ falta. **Quitar** elimina únicamente ese aviso. El formulario y las tarjetas se
 adaptan al tamaño de la ventana; la agenda tiene su propio desplazamiento.
 El texto de los avisos conserva lo escrito por el usuario al cambiar de idioma.
 Los avisos se mantienen al cerrar, pero Capri debe estar abierta para entregarlos.
+
+
+El reproductor mantiene las cuatro esquinas recortadas y transparentes al cambiar
+el tamaño de Capri. El borde usa transparencia definida para evitar halos negros
+de Windows; el texto y las portadas conservan su suavizado.

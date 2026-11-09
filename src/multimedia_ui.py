@@ -4,7 +4,7 @@ import time
 from PIL import ImageTk,Image,ImageOps
 from tema_ui import tk,LienzoUI,actual,color
 from reproduccion_pc import ReproduccionPC,elegir
-from multimedia_diseno import dibujar_multimedia,portada,tiempos,ALTO,ANCHO
+from multimedia_diseno import dibujar_multimedia,portada,tiempos,preparar_tarjeta_ventana,ALTO,ANCHO
 from musica_visual import vista_escucha,balancear,AnimacionEscucha
 from idiomas import idioma_actual
 
@@ -92,7 +92,7 @@ class PanelMultimedia:
         dibujar_multimedia(LienzoRaster(im,2),d,ocupado=self.backend.ocupado,error=self.backend.error,cantidad=cantidad)
         arte=portada(d or {})
         if arte:im.alpha_composite(arte.resize((120,120),Image.Resampling.LANCZOS),(710,38))
-        self.tarjeta=im.resize((round(ANCHO*s),round(ALTO*s)),Image.Resampling.LANCZOS)
+        self.tarjeta=preparar_tarjeta_ventana(im,(round(ANCHO*s),round(ALTO*s)))
         self.tarjeta_foto=ImageTk.PhotoImage(self.tarjeta)
 
     def _pose(self,s,fase=0):

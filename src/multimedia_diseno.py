@@ -5,7 +5,7 @@ import math
 import time
 from functools import lru_cache
 from pathlib import Path
-from PIL import Image,ImageOps,ImageFont
+from PIL import Image,ImageOps,ImageFont,ImageDraw,ImageChops
 from tema_ui import color
 from fuentes import FAMILIA
 from idiomas import ui,idioma_actual
@@ -13,6 +13,19 @@ from idiomas import ui,idioma_actual
 ANCHO=440
 ALTO=198
 ALTO_SENTADA=150
+MARCO_MULTIMEDIA=(2,13,13,2,425,2,438,15,438,185,427,196,13,196,2,185)
+
+
+def preparar_tarjeta_ventana(imagen,tamano):
+    """Windows usa un color transparente: evitar halos de alfa parcial en el borde."""
+    salida=imagen.resize(tamano,Image.Resampling.LANCZOS)
+    mascara=Image.new('L',tamano,0)
+    puntos=[(round(MARCO_MULTIMEDIA[i]*tamano[0]/ANCHO),
+             round(MARCO_MULTIMEDIA[i+1]*tamano[1]/ALTO)) for i in range(0,len(MARCO_MULTIMEDIA),2)]
+    ImageDraw.Draw(mascara).polygon(puntos,fill=255)
+    alfa=salida.getchannel('A').point(lambda a:255 if a>=128 else 0)
+    salida.putalpha(ImageChops.multiply(alfa,mascara))
+    return salida
 
 @lru_cache(maxsize=16)
 def fuente_raster(tamano,negrita,japones):
@@ -69,7 +82,7 @@ def dibujar_multimedia(c,sesion=None,escala_fuente=1,ocupado=False,error='',cant
     d=sesion or {};s=escala_fuente
     def fuente(n,*estilo):return (FAMILIA,max(6,round(n*s)),*estilo)
     borde=color('#713b9d');acento=color('#ff9eaf');suave=color('#bb929f')
-    c.create_polygon(2,13,13,2,425,2,438,15,438,185,427,196,2,196,
+    c.create_polygon(*MARCO_MULTIMEDIA,
                      fill=color('#09131f'),outline=borde,width=1)
     c.create_line(14,5,92,5,fill=acento,width=2)
     c.create_line(435,21,435,61,fill=acento,width=2)

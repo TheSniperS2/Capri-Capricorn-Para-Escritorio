@@ -2,6 +2,12 @@
 
 ## En desarrollo
 
+### Bordes del reproductor
+
+- Corregidos los halos oscuros de las cuatro esquinas: contorno recortado y transparencia apta para el color transparente de Windows, incluidas escalas de 75% a160%.
+- El cambio se limita a la presentación; conserva portadas, controles, prioridad automática de fuentes y reacciones musicales.
+
+
 ### Agenda de recordatorios
 
 - Nueva interfaz con formulario y agenda separados, tarjetas por fecha, estado vacío ilustrado, cuenta restante y acceso al próximo aviso.
