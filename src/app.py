@@ -89,6 +89,12 @@ class Capri:
         try:
             self.cfg.update(json.loads((BASE/'ajustes.json').read_text(encoding='utf-8-sig')))
         except (OSError, ValueError): pass
+        # Español conserva su voz original; las versiones personales son solo inglesas.
+        self.cfg.update(voz_perfil='capri',voz_acento='auto')
+        if self.cfg.get('voz_ingles_modo') not in ('rapida','local'):self.cfg['voz_ingles_modo']='rapida'
+        # Un solo control de silencio: conserva los antiguos apagados como volumen cero.
+        if not self.cfg.get('voz',True) or not self.cfg.get('voz_natural',True):self.cfg['volumen_voz']=0
+        self.cfg['voz']=normalizar_volumen(self.cfg.get('volumen_voz',100))>0
         from recordatorios import migrar as migrar_recordatorios
         if migrar_recordatorios(self.cfg):
             (BASE/'ajustes.json').write_text(json.dumps(self.cfg,ensure_ascii=False,indent=2),encoding='utf8')
@@ -135,6 +141,7 @@ class Capri:
         self.fortnite_avisos.configurar(self.cfg.get('fortnite_avisos',{}),iniciar=hotkeys)
         self.entrada_personaje=False;self.ventana_entrada=None;self.entrada_lateral=None;self.transito=None
         self.cfg.setdefault('llamadas_capri',True);self.cfg.setdefault('asomos_automaticos',False);self.cfg.setdefault('bromas_ventanas',False)
+        self.cfg['bromas_ventanas']=False
         self.cfg.setdefault('intervalo_interacciones',15)
         self.llamada_ui=None;self.mensaje_llamada_pendiente=None;self.ventana_broma=None
         self.llamada_aplazada=False
@@ -161,7 +168,14 @@ class Capri:
         self.cfg.setdefault('idioma','es')
         activar_idioma(self.cfg['idioma'])
         self.ia.idioma=self.voz.idioma=codigo_idioma(self.cfg['idioma'])
-        self.voz.acento=self.cfg.get('voz_acento','auto')
+        from voz_local import disponible,rapida_disponible
+        self.voz.acento='auto'
+        self.voz.modo_ingles=self.cfg['voz_ingles_modo']
+        self.voz.ingles_local=rapida_disponible() if self.voz.modo_ingles=='rapida' else disponible()
+        self.voz.rapida_unica=False
+        self.voz.solo_internet=False
+        self.cfg['voz_ingles_local']=self.voz.ingles_local
+        if self.puede_narrar() and self.cfg.get('voz_natural',True):self.voz.precalentar()
         self.fase = 0
         self.drag = None
         self.fotos = []
@@ -205,7 +219,7 @@ class Capri:
         self.root.bind('<Escape>', lambda e:self.interrumpir())
         self.root.protocol('WM_DELETE_WINDOW',self.cerrar)
         self.root.protocol('WM_DELETE_WINDOW', self.cerrar)
-        self.root.after(60, self.poll)
+        self._poll_tarea=self.root.after(60, self.poll)
         self.root.after(30, self.animar)
         if hotkeys and self.cfg.get('lol_aceptar_automatico',False):self.lol.activar_auto()
         if not hotkeys or not self.cfg.get('activacion_voz'):self.precalentar_ia()
@@ -323,12 +337,11 @@ class Capri:
         estilos=[(nombre,lambda valor=valor:self.guardar('halo_personaje',valor)) for nombre,valor in
                  [('Violeta','violeta'),('Neón','neon'),('Hielo','hielo'),('Rojo','rojo'),('Sin sombra','ninguno')]]
         tamanos=[(f'{n}%',lambda n=n:self.guardar('escala_avatar',n/100)) for n in (75,100,125,150)]
-        juegos=[('Desactivar asomos automáticos' if self.cfg.get('asomos_curiosos') else 'Activar asomos automáticos',lambda:self.guardar('asomos_curiosos',not self.cfg.get('asomos_curiosos'))),
-                ('Desactivar bromas de ventanas' if self.cfg.get('bromas_ventanas') else 'Activar bromas de ventanas',lambda:self.guardar('bromas_ventanas',not self.cfg.get('bromas_ventanas')))]
-        voz=[('Hablar',self.hablar),('Activar voz' if not self.cfg.get('voz') else 'Silenciar voz',lambda:self.guardar('voz',not self.cfg.get('voz')))]
-        mas=[('YouTube',self.conectar_opera),('League of Legends',self.abrir_lol),('Valorant',self.abrir_valorant),('Counter-Strike',self.abrir_cs2),('Fortnite',self.abrir_fortnite),('Roblox',self.abrir_roblox),('Recordatorios',self.abrir_recordatorios),
+        juegos=[('Desactivar asomos automáticos' if self.cfg.get('asomos_curiosos') else 'Activar asomos automáticos',lambda:self.guardar('asomos_curiosos',not self.cfg.get('asomos_curiosos')))]
+        voz=[('Hablar',self.hablar),('Activar voz' if not self.puede_narrar() else 'Silenciar voz',self.alternar_silencio)]
+        mas=[('YouTube',self.conectar_opera),('Recordatorios',self.abrir_recordatorios),
              ('Minimizar Capri',self.minimizar_capri),('Cerrar Capri',self.cerrar)]
-        opciones=[('Ajustes',self.configurar),('Chat',self.abrir_chat),('Juegos' if self.es_personaje() else 'Color',juegos if self.es_personaje() else self.abrir_colores),('Aspecto',self.abrir_aspectos),
+        opciones=[('Ajustes',self.configurar),('Chat',self.abrir_chat),('Travesuras' if self.es_personaje() else 'Color',juegos if self.es_personaje() else self.abrir_colores),('Aspecto',self.abrir_aspectos),
                   ('Modo pantalla' if self.es_personaje() else 'Modo personaje',lambda:self.guardar('modo_visual','pantalla' if self.es_personaje() else 'personaje')),('Tamaño',tamanos),('Voz',voz),('Más',mas)]
         self.radial=MenuRadial(self.root,e.x_root,e.y_root,opciones,terminar=lambda:setattr(self,'radial',None),
                                personaje=(self.root.winfo_x(),self.root.winfo_y(),self.companera.ancho if self.es_personaje() else self.root.winfo_width(),self.companera.alto if self.es_personaje() else self.root.winfo_height()))
@@ -1576,6 +1589,10 @@ class Capri:
 
     def poll(self):
         if self.cerrado:return
+        tarea=getattr(self,'_poll_tarea',None);self._poll_tarea=None
+        if tarea:
+            try:self.root.after_cancel(tarea)
+            except tk.TclError:pass
         instancia=getattr(self,'instancia',None)
         if instancia and instancia.recibir() and not self.saliendo:
             self.finalizar_intro();self.visibilidad.mostrar()
@@ -1697,6 +1714,9 @@ class Capri:
                         if self.llamada_ui and not self.llamada_ui.cerrada and getattr(self.llamada_ui,'invitado',None):self.boca_activa=False
                         self.pintar_historial()
                     continue
+                if isinstance(valor,tuple) and valor[0] in ('preparando_local','preparando_rapida'):
+                    self.estado='Preparando voz…' if valor[0]=='preparando_rapida' else 'Preparando voz local…'
+                    continue
                 if isinstance(valor,bool):
                     if not valor:self.skin_narracion=None
                     ticket_terminado=self.voz_ticket
@@ -1777,7 +1797,7 @@ class Capri:
         self.skins.permitir(observar,codigo_idioma(self.cfg.get('idioma')))
         self.mantener_activacion()
         localizar_widgets(self.root)
-        self.root.after(60,self.poll)
+        if not self.cerrado:self._poll_tarea=self.root.after(60,self.poll)
 
     def recibir_dictado(self,texto):
         from activacion import quitar_nombre
@@ -1831,24 +1851,22 @@ class Capri:
         self.escucha_activa.cancelar()
         if self.ajustes and self.ajustes.winfo_exists():self.ajustes.lift();return
         p=self.ajustes=tk.Toplevel(self.root);p.title('Capri · Ajustes');p.configure(bg=BG)
-        p.bind('<Escape>',lambda e:self.interrumpir())
+        p.bind('<Escape>',lambda e:self.volver_de_juego() if getattr(self,'vista_juego',None) else self.interrumpir())
         p.geometry('800x'+str(min(760,max(560,self.root.winfo_screenheight()-100))));p.minsize(720,560)
         from ajustes_ui import PanelAjustes,SelectorCyber,InterruptorCyber,EscalaCyber,CapturadorTecla
         from ajustes_ui import VentanaCyber
         self.marco_ajustes=VentanaCyber(p,'AJUSTES')
-        self.panel_ajustes=ui=PanelAjustes(self.marco_ajustes.cuerpo)
-        escritorio=ui.seccion('Escritorio','Forma, tamaño, movimiento y efectos de Capri.')
+        self.vista_juego=None;self.panel_juego_actual=None
+        self.ajustes_base=tk.Frame(self.marco_ajustes.cuerpo,bg=BG);self.ajustes_base.pack(fill='both',expand=True)
+        self.panel_ajustes=ui=PanelAjustes(self.ajustes_base)
+        escritorio=ui.seccion('Escritorio','Idioma, movimiento y funciones del escritorio.')
         multimedia=ui.seccion('Multimedia','Música y vídeos junto a Capri.')
-        reacciones=ui.seccion('Reacciones','Gustos y comentarios de Capri sobre las skins.')
-        avisos_fortnite=ui.seccion('Avisos de Fortnite','Tienda y misiones con pavos para fundadores.')
+        juegos=ui.seccion('Juegos','Partidas, personajes y avisos organizados por juego.')
         micro=ui.seccion('Micrófono','Elige tu entrada y ajusta la sensibilidad y el reconocimiento local.')
-        voz=ui.seccion('Voz','Elige el idioma, el perfil y la velocidad de la voz de Capri.')
+        voz=ui.seccion('Voz','Voz por idioma, volumen y velocidad de Capri.')
         ia=ui.seccion('IA y servicios','Modelo local, navegador y música.')
         permisos=ui.seccion('Permisos','Decide qué puede hacer Capri en tu computador.')
-        from skins_ui import AjustesSkins
-        self.ajustes_skins=AjustesSkins(reacciones,self.cfg.get('reacciones_skins',{}),self.guardar,self.enviar,self.ejemplo_skin,self.skins)
-        from fortnite_avisos_ui import AjustesAvisosFortnite
-        self.ajustes_avisos_fortnite=AjustesAvisosFortnite(avisos_fortnite,self.cfg.get('fortnite_avisos',{}),self.guardar,self.fortnite_avisos)
+        self.configurar_juegos(juegos)
         tk.Label(multimedia,text='Panel multimedia',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w')
         mostrar_media=tk.BooleanVar(value=bool(self.cfg.get('panel_multimedia',False)))
         InterruptorCyber(multimedia,text='Mostrar panel multimedia',variable=mostrar_media,
@@ -1869,14 +1887,13 @@ class Capri:
         tk.Label(multimedia,text='Si hay varias sesiones, pulsa el nombre de la aplicación en el panel para cambiar entre ellas.',
                  bg=BG,fg=MUTED,font=('Chakra Petch',9),wraplength=460,justify='left').pack(anchor='w')
         from idiomas import IDIOMAS
-        tk.Label(voz,text='Idioma de Capri',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w')
-        self.idioma_combo=SelectorCyber(voz,values=[v[0] for v in IDIOMAS.values()])
+        tk.Label(escritorio,text='Idioma de Capri',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(14,0))
+        self.idioma_combo=SelectorCyber(escritorio,values=[v[0] for v in IDIOMAS.values()])
         self.idioma_combo.current(list(IDIOMAS).index(codigo_idioma(self.cfg.get('idioma'))))
         self.idioma_combo.pack(fill='x',pady=(6,6))
         self.idioma_combo.bind('<<ComboboxSelected>>',lambda e:self.guardar('idioma',list(IDIOMAS)[self.idioma_combo.current()]))
-        for ayuda in ('Cambia menús, ajustes, avisos, respuestas y voz. Se conserva tu perfil de voz en español.',
-                      'Las conversaciones y traducciones de resultados detallados usan IA local. El reconocimiento de voz mantiene su configuración.'):
-            tk.Label(voz,text=ayuda,bg=BG,fg=MUTED,font=('Chakra Petch',9),wraplength=460,justify='left').pack(anchor='w',pady=(0,7))
+        tk.Label(escritorio,text='Cambia el idioma de los menús y las respuestas.',
+                 bg=BG,fg=MUTED,font=('Chakra Petch',9),wraplength=410,justify='left').pack(anchor='w',pady=(0,12))
         f=escritorio
         tk.Label(f,text='Forma de Capri',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w')
         forma=SelectorCyber(f,state='readonly',values=['Pantalla personal','Personaje en el escritorio'],font=('Chakra Petch',10))
@@ -1892,15 +1909,16 @@ class Capri:
         paseo=tk.BooleanVar(value=self.cfg.get('pasear_personaje',True))
         InterruptorCyber(f,text='Teletransportarse, explorar ventanas y sujetarse',variable=paseo,command=lambda:self.guardar('pasear_personaje',paseo.get()),
                        bg=BG,fg=FG,selectcolor=CARD,activebackground=BG,font=('Chakra Petch',10)).pack(anchor='w')
-        for clave,etiqueta in (('llamadas_capri','Llamadas ocasionales de Capri'),('asomos_curiosos','Asomarse desde una esquina de vez en cuando'),('bromas_ventanas','Permitir bromas que minimizan la ventana activa')):
+        for clave,etiqueta in (('llamadas_capri','Llamadas ocasionales'),('asomos_curiosos','Asomarse desde una esquina de vez en cuando')):
             var=tk.BooleanVar(value=self.cfg.get(clave,False))
             InterruptorCyber(f,text=etiqueta,variable=var,command=lambda k=clave,v=var:self.guardar(k,v.get()),bg=BG,fg=FG,selectcolor=CARD,activebackground=BG,font=('Chakra Petch',10)).pack(anchor='w',pady=2)
-        tk.Label(f,text='Intervalo de interacciones · minutos',bg=BG,fg=GREEN,font=('Chakra Petch',10,'bold')).pack(anchor='w',pady=(8,0))
+        tk.Label(f,text='Intervalo entre llamadas · minutos',bg=BG,fg=GREEN,font=('Chakra Petch',10,'bold')).pack(anchor='w',pady=(8,0))
         frecuencia=EscalaCyber(f,from_=3,to=60,resolution=1,orient='horizontal',bg=BG,fg=FG)
         frecuencia.set(self.cfg.get('intervalo_interacciones',15));frecuencia.pack(fill='x')
         frecuencia.bind('<ButtonRelease-1>',lambda e:self.guardar('intervalo_interacciones',int(frecuencia.get())))
-        self.boton(f,'Ver aspectos de Capri',self.abrir_aspectos).pack(anchor='w',pady=(8,12))
-        self.boton(f,'Color',self.abrir_colores).pack(anchor='w',pady=(0,12))
+        frecuencia.bind('<KeyRelease>',lambda e:self.guardar('intervalo_interacciones',int(frecuencia.get())))
+        tk.Label(f,text='Tiempo aproximado entre llamadas. Las apariciones desde las esquinas y los viajes tienen su propio ritmo.',
+                 bg=BG,fg=MUTED,font=('Chakra Petch',9),wraplength=460,justify='left').pack(anchor='w',pady=(3,12))
         f=permisos
         control=tk.BooleanVar(value=self.cfg.get('control_ampliado',False))
         InterruptorCyber(f,text='Activar control ampliado del computador',variable=control,command=lambda:self.guardar('control_ampliado',control.get()),
@@ -1911,21 +1929,11 @@ class Capri:
             ('CON CONTROL AMPLIADO','Gestión de archivos y ventanas con tus permisos de Windows.'),
             ('TÚ CONFIRMAS','Las acciones sensibles piden confirmación. Los borrados van a la Papelera.')):
             TarjetaInfo(f,titulo,detalle).pack(fill='x',pady=6)
-        f=escritorio
-        tk.Label(f,text='A tu manera',font=('Chakra Petch',19,'bold'),fg=FG,bg=BG).pack(anchor='w',pady=(0,15))
-        texto_tamaño=tk.StringVar(value=f'Tamaño de Capri: {round(self.escala_avatar*100)}%')
-        tk.Label(f,textvariable=texto_tamaño,bg=BG,fg=GREEN,font=('Chakra Petch',11,'bold')).pack(anchor='w')
-        escala_tamaño=EscalaCyber(f,from_=75,to=160,resolution=5,orient='horizontal',bg=BG,fg=FG,troughcolor=CARD,highlightthickness=0)
-        escala_tamaño.set(round(self.escala_avatar*100))
-        escala_tamaño.configure(command=lambda v:texto_tamaño.set(f'Tamaño de Capri: {round(float(v))}%'))
-        escala_tamaño.bind('<ButtonRelease-1>',lambda e:self.guardar('escala_avatar',escala_tamaño.get()/100))
-        escala_tamaño.bind('<KeyRelease>',lambda e:self.guardar('escala_avatar',escala_tamaño.get()/100))
-        escala_tamaño.pack(fill='x',pady=(0,12))
         f=micro
-        tk.Label(voz,text='Tecla para hablar',bg=BG,fg=FG,font=('Chakra Petch',11,'bold')).pack(anchor='w',pady=(0,6))
-        self.captura_tecla=CapturadorTecla(voz,self.cfg.get('tecla_hablar','F8'),self.suspender_atajo,self.terminar_captura_tecla)
+        tk.Label(micro,text='Tecla para hablar',bg=BG,fg=FG,font=('Chakra Petch',11,'bold')).pack(anchor='w',pady=(0,6))
+        self.captura_tecla=CapturadorTecla(micro,self.cfg.get('tecla_hablar','F8'),self.suspender_atajo,self.terminar_captura_tecla)
         self.captura_tecla.pack(fill='x',pady=(0,6))
-        tk.Label(voz,text='Haz clic y pulsa una tecla o combinación. Esc cancela.',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w',pady=(0,12))
+        tk.Label(micro,text='Haz clic y pulsa una tecla o combinación. Esc cancela.',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w',pady=(0,12))
         tk.Label(f,text='01 // Entrada de audio',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w')
         fila=tk.Frame(f,bg=BG);fila.pack(fill='x',pady=(7,5))
         self.micro_combo=SelectorCyber(fila,state='disabled',font=('Chakra Petch',10))
@@ -1940,8 +1948,9 @@ class Capri:
         self.sensibilidad_microfono.pack(fill='x',pady=(0,18))
         tk.Label(f,text='Reconocimiento de voz',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w')
         motor=SelectorCyber(f,state='readonly',values=['Whisper · español y nombres en inglés','Rápido · Vosk español'],font=('Chakra Petch',10))
+        self.motor_reconocimiento_combo=motor
         motor.current(0 if self.cfg.get('reconocimiento','mixto') in ('preciso','mixto') else 1)
-        motor.bind('<<ComboboxSelected>>',lambda e:self.guardar('reconocimiento','mixto' if motor.current()==0 else 'rapido'))
+        motor.bind('<<ComboboxSelected>>',lambda e:self.elegir_reconocimiento('mixto' if motor.current()==0 else 'rapido',self.cfg.get('modelo_whisper','base')))
         motor.pack(fill='x',pady=(7,12))
         from reconocimiento import disponible,modelos_disponibles,elegir_modelo
         self.whisper_opciones=modelos_disponibles(BASE/'modelos') or ['base']
@@ -1949,24 +1958,24 @@ class Capri:
         elegido=elegir_modelo(BASE/'modelos',self.cfg.get('modelo_whisper','base'))
         self.whisper_combo.current(self.whisper_opciones.index(elegido) if elegido in self.whisper_opciones else 0)
         def elegir_whisper(event=None):
-            self.guardar('modelo_whisper',self.whisper_opciones[self.whisper_combo.current()])
-            self.guardar('reconocimiento','mixto');motor.current(0)
+            self.elegir_reconocimiento('mixto',self.whisper_opciones[self.whisper_combo.current()])
         self.whisper_combo.bind('<<ComboboxSelected>>',elegir_whisper)
         self.whisper_combo.pack(fill='x',pady=(0,4))
-        tk.Label(f,text='Para responder antes: Whisper Base. Small prioriza precisión.',wraplength=460,bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w',pady=(2,6))
-        tk.Label(f,text='Small usa más memoria y puede tardar más. Base sigue disponible como respaldo.',wraplength=460,bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w',pady=(0,10))
         if not disponible(BASE/'modelos',elegido):
             tk.Label(f,text='Preciso necesita descargar un modelo local de 148 MB.',wraplength=460,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w')
             self.boton(f,'Preparar reconocimiento preciso',self.preparar_reconocimiento).pack(anchor='w',pady=(5,12))
-        for key,texto in [('activacion_voz','Activar al decir «Capri» (escucha local)'),('voz','Responder en voz alta'),('voz_natural','Voz natural por internet'),('dialogos_escritorio','Mostrar diálogos progresivos junto a Capri'),('animaciones','Estados de boca y expresiones del avatar'),('efecto_glitch','Interferencias breves de imagen y texto'),('intro_inicio','Intro visual al abrir Capri'),('despedida_cierre','Reproducir despedida al cerrar Capri')]:
+        for key,texto in [('activacion_voz','Activar al decir «Capri» (escucha local)'),('dialogos_escritorio','Mostrar diálogos progresivos junto a Capri'),('animaciones','Estados de boca y expresiones del avatar'),('efecto_glitch','Interferencias breves de imagen y texto'),('intro_inicio','Intro visual al abrir Capri'),('despedida_cierre','Reproducir despedida al cerrar Capri')]:
             var=tk.BooleanVar(value=bool(self.cfg.get(key)))
             destino=micro if key=='activacion_voz' else (voz if key in ('voz','voz_natural') else escritorio)
             InterruptorCyber(destino,text=texto,variable=var,command=lambda k=key,v=var:self.guardar(k,v.get()),bg=BG,fg=FG,selectcolor=CARD,activebackground=BG,activeforeground=FG,font=('Chakra Petch',11)).pack(anchor='w',pady=5)
         from escucha_activa import crear_opciones
         self.escucha_combo=crear_opciones(micro,self.cfg,self.guardar)
         f=voz
+        from ajustes_voz import OpcionesVoz
+        self.opciones_voz=OpcionesVoz(f,self.cfg,self.guardar)
+        self.opciones_voz.pack(fill='x',pady=(8,8))
         volumen=normalizar_volumen(self.cfg.get('volumen_voz',100))
-        texto_volumen=tk.StringVar(value=f'Volumen de Capri: {volumen}%')
+        texto_volumen=self.texto_volumen=tk.StringVar(value=f'Volumen de Capri: {volumen}%')
         tk.Label(f,textvariable=texto_volumen,bg=BG,fg=FG,font=('Chakra Petch',10)).pack(anchor='w',pady=(10,0))
         self.escala_volumen=EscalaCyber(f,from_=0,to=100,resolution=5,orient='horizontal',showvalue=False,
                         bg=BG,fg=FG,troughcolor=CARD,highlightthickness=0,activebackground=RED)
@@ -1978,21 +1987,6 @@ class Capri:
         self.escala_volumen.configure(command=cambiar_volumen)
         self.escala_volumen.pack(fill='x',pady=(0,4))
         tk.Label(f,text='Se aplica a la siguiente respuesta. 0% silencia a Capri.',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w')
-        from voz import PERFILES_VOZ
-        from voz import ACENTOS_VOZ
-        tk.Label(f,text='Voz y acento independientes',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(16,5))
-        acentos=list(ACENTOS_VOZ)
-        self.acento_combo=SelectorCyber(f,values=[v[0] for v in ACENTOS_VOZ.values()])
-        self.acento_combo.current(acentos.index(self.cfg.get('voz_acento','auto')) if self.cfg.get('voz_acento','auto') in acentos else 0)
-        self.acento_combo.bind('<<ComboboxSelected>>',lambda e:self.guardar('voz_acento',acentos[self.acento_combo.current()]))
-        self.acento_combo.pack(fill='x',pady=(2,6))
-        tk.Label(f,text='El idioma decide qué dice Capri. Esta voz decide cómo lo pronuncia y se conserva al cambiar de idioma. Las voces multilingües son preferibles para leer otro idioma; el acento exacto depende de la voz.',wraplength=460,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w')
-        tk.Label(f,text='Voz de Capri',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(12,0))
-        perfiles=list(PERFILES_VOZ)
-        self.perfil_voz_combo=SelectorCyber(f,state='readonly',values=[PERFILES_VOZ[k][0] for k in perfiles],font=('Chakra Petch',10))
-        self.perfil_voz_combo.current(perfiles.index(self.cfg.get('voz_perfil')) if self.cfg.get('voz_perfil') in perfiles else 0)
-        self.perfil_voz_combo.bind('<<ComboboxSelected>>',lambda e:self.guardar('voz_perfil',perfiles[self.perfil_voz_combo.current()]))
-        self.perfil_voz_combo.pack(fill='x',pady=(6,5))
         velocidad=normalizar_velocidad(self.cfg.get('velocidad_voz',1.0))
         texto_velocidad=tk.StringVar(value=f'Velocidad de voz: {velocidad:.2f}×')
         tk.Label(f,textvariable=texto_velocidad,bg=BG,fg=FG,font=('Chakra Petch',10)).pack(anchor='w',pady=(10,0))
@@ -2003,7 +1997,7 @@ class Capri:
         escala.bind('<ButtonRelease-1>',lambda e:self.guardar('velocidad_voz',escala.get()))
         escala.bind('<KeyRelease>',lambda e:self.guardar('velocidad_voz',escala.get()))
         escala.pack(fill='x',pady=(0,10))
-        tk.Label(f,text='El micrófono se reconoce en tu PC. La voz natural es una interpretación sintética, no la actriz de la serie; envía solo las respuestas a Microsoft. Si la desactivas se usa Windows.',wraplength=420,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w',pady=(5,20))
+        self.opciones_voz.pie.pack(fill='x',pady=(0,12))
         f=ia
         tk.Label(f,text='Conversación libre',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w')
         self.modelo_combo=SelectorCyber(f,state='disabled',font=('Chakra Petch',10))
@@ -2018,30 +2012,64 @@ class Capri:
             try:eventos.put(('modelos_ia',(ticket_modelos,consultar_catalogo(),None)))
             except Exception:eventos.put(('modelos_ia',(ticket_modelos,[],'Abre Ollama para ver los modelos instalados.')))
         threading.Thread(target=consultar_modelos,daemon=True).start()
-        tk.Label(f,text='Ollama ejecuta la IA en tu equipo, sin clave ni pago por uso. La activación descarga un modelo de aproximadamente 2 GB.',wraplength=420,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',10)).pack(anchor='w',pady=(7,10))
+        tk.Label(f,text='Activa la IA local para conversar libremente y hacer preguntas. Usa la memoria y el procesador o la GPU de tu equipo mientras responde.',
+                 wraplength=460,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',10)).pack(anchor='w',pady=(7,10))
         self.boton(f,'Activar IA local',self.activar_ia,RED).pack(anchor='w')
+        tk.Label(f,text='Playlists de Spotify',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(22,6))
+        tk.Label(f,text='Vincula un nombre con el enlace de tu playlist para pedírsela a Capri, por ejemplo: «pon mi playlist Capricorn». También sirve si Spotify no permite encontrarla en tu biblioteca.',
+                 wraplength=460,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',10)).pack(anchor='w')
         self.boton(f,'Vincular playlist de Spotify',self.vincular_playlist).pack(anchor='w',pady=(12,0))
-        tk.Label(f,text='League of Legends',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(22,7))
-        self.boton(f,'Configurar League of Legends',self.abrir_lol,RED).pack(anchor='w',pady=(0,7))
-        aceptar_lol=self.lol_auto_var=tk.BooleanVar(value=bool(self.cfg.get('lol_aceptar_automatico',False)))
-        InterruptorCyber(f,text='Aceptar partidas automáticamente, también desde LoL',variable=aceptar_lol,
-                         command=lambda:self.guardar('lol_aceptar_automatico',aceptar_lol.get()),bg=BG,fg=FG,font=('Chakra Petch',10)).pack(anchor='w')
-        self.lol_estado=tk.StringVar(value=self.lol.estado)
-        tk.Label(f,textvariable=self.lol_estado,wraplength=460,justify='left',bg=BG,fg=GREEN,font=('Chakra Petch',9,'bold')).pack(anchor='w',pady=(7,0))
-        tk.Label(f,text='Actívalo una vez y busca desde LoL o Capri. Aceptaré al aparecer la partida sin esperar una orden. La vigilancia se conserva al reiniciar Capri y vuelve a conectarse si abres LoL después.',
-                 wraplength=460,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w',pady=(7,0))
-        tk.Label(f,text='Valorant',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(22,7))
-        self.boton(f,'Configurar Valorant',self.abrir_valorant,RED).pack(anchor='w',pady=(0,7))
-        tk.Label(f,text='Fortnite',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(22,7))
-        self.boton(f,'Configurar Fortnite',self.abrir_fortnite,RED).pack(anchor='w',pady=(0,7))
-        self.boton(f,'Configurar Counter-Strike',self.abrir_cs2,RED).pack(anchor='w',pady=(0,7))
-        tk.Label(f,text='Roblox',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(22,7))
-        self.boton(f,'Configurar Roblox',self.abrir_roblox,RED).pack(anchor='w',pady=(0,7))
-        tk.Label(f,text='No se guarda el audio ni el historial del chat.\nArrastra la imagen para mover a Capri. Clic para chatear.\nTecla configurable en Voz · Esc: detener voz.',wraplength=420,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',10)).pack(anchor='w',pady=20)
-        for widget in (self.micro_combo,self.whisper_combo,self.perfil_voz_combo,self.modelo_combo,motor,forma):widget.configure(style='Capri.TCombobox')
+        for widget in (self.micro_combo,self.whisper_combo,self.modelo_combo,motor,forma):widget.configure(style='Capri.TCombobox')
         ui.conectar_rueda()
         localizar_widgets(self.root,True)
         self.cargar_microfonos()
+
+    def configurar_juegos(self,padre):
+        from ajustes_ui import InterruptorCyber
+        from juegos_ui import AjustesJuegos,TEXTOS
+        from skins_ui import AjustesSkins
+        from fortnite_avisos_ui import AjustesAvisosFortnite
+        def refrescar():
+            p=self.panel_ajustes
+            if p.actual=='Juegos':
+                p.vistas['Juegos'][1].yview_moveto(0);p.refrescar('Juegos')
+                p.conectar_rueda()
+        self.ajustes_juegos=AjustesJuegos(padre,self.cfg.get('juego_busqueda','lol'),refrescar)
+        self.ajustes_skins={};self.botones_juegos={}
+        for indice,(juego,abrir,titulo) in enumerate((
+                ('lol',self.abrir_lol,'Configurar League of Legends'),
+                ('valorant',self.abrir_valorant,'Configurar Valorant'),
+                ('fortnite',self.abrir_fortnite,'Configurar Fortnite'),
+                ('cs2',self.abrir_cs2,'Configurar Counter-Strike'),
+                ('roblox',self.abrir_roblox,'Configurar Roblox'))):
+            f=self.ajustes_juegos.seccion(juego,'Partidas')
+            tk.Label(f,text=TEXTOS[5+indice],bg=BG,fg=FG,font=('Chakra Petch',11),
+                     wraplength=420,justify='left').pack(anchor='w',pady=(0,12))
+            boton=self.botones_juegos[juego]=self.boton(f,titulo,abrir,RED)
+            boton.pack(fill='x',pady=(0,8))
+            tk.Label(f,text=TEXTOS[10],bg=BG,fg=MUTED,font=('Chakra Petch',9),
+                     wraplength=420,justify='left').pack(anchor='w',pady=(0,16))
+            if juego=='lol':
+                aceptar=self.lol_auto_var=tk.BooleanVar(value=bool(self.cfg.get('lol_aceptar_automatico',False)))
+                InterruptorCyber(f,text='Aceptar partidas automáticamente, también desde LoL',variable=aceptar,
+                                 command=lambda:self.guardar('lol_aceptar_automatico',aceptar.get()),bg=BG,fg=FG,
+                                 font=('Chakra Petch',10)).pack(anchor='w')
+                self.lol_estado=tk.StringVar(value=self.lol.estado)
+                tk.Label(f,textvariable=self.lol_estado,wraplength=420,justify='left',bg=BG,fg=GREEN,
+                         font=('Chakra Petch',9,'bold')).pack(anchor='w',pady=(7,0))
+                tk.Label(f,text='Actívalo una vez y busca desde LoL o Capri. Aceptaré al aparecer la partida sin esperar una orden. La vigilancia se conserva al reiniciar Capri y vuelve a conectarse si abres LoL después.',
+                         wraplength=420,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',9)).pack(anchor='w',pady=(7,0))
+            if juego in ('valorant','fortnite'):
+                f=self.ajustes_juegos.seccion(juego,'Skins')
+                self.ajustes_skins[juego]=AjustesSkins(f,self.cfg.get('reacciones_skins',{}),self.guardar,
+                    self.enviar,self.ejemplo_skin,self.skins,juego=juego,
+                    leer_config=lambda:self.cfg.get('reacciones_skins',{}))
+            if juego=='fortnite':
+                f=self.ajustes_juegos.seccion(juego,'Avisos')
+                self.ajustes_avisos_fortnite=AjustesAvisosFortnite(f,self.cfg.get('fortnite_avisos',{}),self.guardar,self.fortnite_avisos)
+
+    def alternar_silencio(self):
+        self.guardar('volumen_voz',0 if self.puede_narrar() else self.cfg.get('volumen_voz_anterior',100) or 100)
 
     def cargar_microfonos(self):
         self.micro_lista_ticket+=1
@@ -2094,8 +2122,42 @@ class Capri:
         self.micro_estado.set('Guardado: '+nombre+'. Se usará en la siguiente captura.')
 
     def activar_ia(self):
-        pythonw=Path(sys.executable).with_name('pythonw.exe')
-        subprocess.Popen([str(pythonw if pythonw.exists() else sys.executable),str(BASE/'activar_ia.py')],creationflags=HIDDEN)
+        def activar():
+            pythonw=Path(sys.executable).with_name('pythonw.exe')
+            subprocess.Popen([str(pythonw if pythonw.exists() else sys.executable),str(BASE/'activar_ia.py')],creationflags=HIDDEN)
+        self.confirmar_ajuste('Activar IA local',
+            ui('Podrás conversar libremente y hacer preguntas. La primera preparación puede descargar Ollama y un modelo de unos 2 GB; otros modelos pueden necesitar más espacio.')+'\n\n'+
+            ui('Mientras responde, la IA utiliza memoria y procesador o GPU. En equipos con pocos recursos, Capri y otras aplicaciones podrían responder más despacio.'),activar)
+
+    def confirmar_ajuste(self,titulo,texto,aceptar,actual=None,nuevo=None):
+        anterior=getattr(self,'confirmacion_ajustes',None)
+        if anterior and not anterior.cerrado:
+            anterior.ventana.lift();return
+        from confirmaciones_ui import ConfirmarCambio
+        padre=self.ajustes if self.ajustes and self.ajustes.winfo_exists() else self.root
+        self.confirmacion_ajustes=ConfirmarCambio(padre,titulo,texto,aceptar,actual=actual,nuevo=nuevo)
+
+    def restaurar_selectores_reconocimiento(self):
+        if not self.ajustes or not self.ajustes.winfo_exists():return
+        self.motor_reconocimiento_combo.current(1 if self.cfg.get('reconocimiento')=='rapido' else 0)
+        from reconocimiento import elegir_modelo
+        elegido=elegir_modelo(BASE/'modelos',self.cfg.get('modelo_whisper','base'))
+        if elegido in self.whisper_opciones:self.whisper_combo.current(self.whisper_opciones.index(elegido))
+
+    def elegir_reconocimiento(self,motor,modelo):
+        actual_motor='rapido' if self.cfg.get('reconocimiento')=='rapido' else 'mixto'
+        actual_modelo=self.cfg.get('modelo_whisper','base')
+        self.restaurar_selectores_reconocimiento()
+        if motor==actual_motor and (motor=='rapido' or modelo==actual_modelo):return
+        if motor not in ('mixto','rapido') or modelo not in ('base','small'):return
+        from cambios_modelos import comparar_reconocimiento
+        def nombre(motor,modelo):return 'Vosk' if motor=='rapido' else 'Whisper '+modelo.title()
+        def aplicar():
+            self.guardar('modelo_whisper',modelo);self.guardar('reconocimiento',motor)
+            self.restaurar_selectores_reconocimiento()
+        self.confirmar_ajuste('Cambiar reconocimiento de voz',
+            comparar_reconocimiento(actual_motor,actual_modelo,motor,modelo),aplicar,
+            nombre(actual_motor,actual_modelo),nombre(motor,modelo))
 
     def preparar_reconocimiento(self):
         lanzador=BASE/'Preparar Capri.pyw'
@@ -2106,29 +2168,13 @@ class Capri:
         self.cerrar()
 
     def abrir_lol(self):
-        self.guardar('juego_busqueda','lol')
-        if self.visibilidad.oculta:self.visibilidad.mostrar()
-        if self.lol_panel and not self.lol_panel.cerrado and self.lol_panel.ventana.winfo_exists():
-            self.lol_panel.ventana.deiconify();self.lol_panel.ventana.lift();return
-        from lol_ui import PanelLoL
-        self.lol_panel=PanelLoL(self.root,self.cfg.get('lol_seleccion',{}),self.guardar,self.enviar,
-                               self.lol,self.lol_seleccion,self.cfg.get('lol_aceptar_automatico',False),ocultar=self.minimizar_capri)
+        self.abrir_juego_integrado('lol')
 
     def abrir_valorant(self):
-        self.guardar('juego_busqueda','valorant')
-        if self.visibilidad.oculta:self.visibilidad.mostrar()
-        if self.valorant_panel and not self.valorant_panel.cerrado and self.valorant_panel.ventana.winfo_exists():
-            self.valorant_panel.ventana.deiconify();self.valorant_panel.ventana.lift();return
-        from valorant_ui import PanelValorant
-        self.valorant_panel=PanelValorant(self.root,self.cfg.get('valorant',{}),self.guardar,self.enviar,self.valorant,ocultar=self.minimizar_capri)
+        self.abrir_juego_integrado('valorant')
 
     def abrir_fortnite(self):
-        self.guardar('juego_busqueda','fortnite')
-        if self.visibilidad.oculta:self.visibilidad.mostrar()
-        if self.fortnite_panel and not self.fortnite_panel.cerrado and self.fortnite_panel.ventana.winfo_exists():
-            self.fortnite_panel.ventana.deiconify();self.fortnite_panel.ventana.lift();return
-        from fortnite_ui import PanelFortnite
-        self.fortnite_panel=PanelFortnite(self.root,self.cfg.get('fortnite',{}),self.guardar,self.enviar,self.fortnite,ocultar=self.minimizar_capri)
+        self.abrir_juego_integrado('fortnite')
 
     def abrir_recordatorios(self):
         if self.visibilidad.oculta:self.visibilidad.mostrar()
@@ -2138,21 +2184,85 @@ class Capri:
         self.recordatorios_panel=PanelRecordatorios(self.root,lambda:self.cfg['recordatorios'],self.guardar,ocultar=self.minimizar_capri)
 
     def abrir_cs2(self):
-        self.guardar('juego_busqueda','cs2')
-        if self.cs2_panel and not self.cs2_panel.cerrado and self.cs2_panel.ventana.winfo_exists():
-            self.cs2_panel.ventana.deiconify();self.cs2_panel.ventana.lift();return
-        from counter_strike_ui import PanelCS2
-        self.cs2_panel=PanelCS2(self.root,self.cfg.get('cs2',{}),self.guardar,self.enviar,self.cs2)
+        self.abrir_juego_integrado('cs2')
 
     def abrir_roblox(self):
-        self.guardar('juego_busqueda','roblox')
+        self.abrir_juego_integrado('roblox')
+
+    def abrir_juego_integrado(self,juego):
+        self.guardar('juego_busqueda',juego)
         if self.visibilidad.oculta:self.visibilidad.mostrar()
-        if self.roblox_panel and not self.roblox_panel.cerrado and self.roblox_panel.ventana.winfo_exists():
-            self.roblox_panel.ventana.deiconify();self.roblox_panel.ventana.lift();return
-        from roblox_ui import PanelRoblox
-        self.roblox_panel=PanelRoblox(self.root,self.cfg['roblox'],self.guardar,self.enviar,self.roblox,ocultar=self.minimizar_capri)
+        existia=bool(self.ajustes and self.ajustes.winfo_exists())
+        self.configurar();self.ajustes.deiconify();self.ajustes.lift()
+        if not existia:
+            self.panel_ajustes.mostrar('Juegos');self.ajustes_juegos.mostrar(juego,'Partidas')
+        actual=getattr(self,'panel_juego_actual',None)
+        if actual and actual[0]==juego and not actual[1].cerrado:
+            actual[1].ventana.deiconify();return
+        self.volver_de_juego()
+        from ajustes_ui import BotonCyber
+        nombres={'lol':'League of Legends','valorant':'Valorant','fortnite':'Fortnite','cs2':'Counter-Strike','roblox':'Roblox'}
+        minimos={'lol':(850,670),'valorant':(800,620),'fortnite':(720,560),'cs2':(720,560),'roblox':(820,580)}
+        ancho,alto=minimos[juego];self.ajustes.minsize(ancho,alto)
+        self.ajustes.update_idletasks()
+        if self.ajustes.winfo_width()<ancho or self.ajustes.winfo_height()<alto:
+            self.ajustes.geometry(f'{max(ancho,self.ajustes.winfo_width())}x{max(alto,self.ajustes.winfo_height())}')
+        self.ajustes_base.pack_forget()
+        vista=self.vista_juego=tk.Frame(self.marco_ajustes.cuerpo,bg=BG);vista.pack(fill='both',expand=True)
+        cabecera=tk.Frame(vista,bg=BG);cabecera.pack(fill='x',padx=12,pady=(4,10))
+        self.volver_juegos_boton=BotonCyber(cabecera,text='Volver',command=self.volver_de_juego,bg=CARD)
+        self.volver_juegos_boton.pack(side='left',padx=(0,16))
+        tk.Label(cabecera,text=nombres[juego],bg=BG,fg=FG,font=('Chakra Petch',16,'bold')).pack(side='left')
+        contenido=tk.Frame(vista,bg=BG);contenido.pack(fill='both',expand=True)
+        opciones={'contenedor':contenido}
+        if juego=='lol':
+            from lol_ui import PanelLoL
+            panel=PanelLoL(self.root,self.cfg.get('lol_seleccion',{}),self.guardar,self.enviar,self.lol,self.lol_seleccion,
+                           self.cfg.get('lol_aceptar_automatico',False),ocultar=self.minimizar_capri,**opciones)
+        elif juego=='valorant':
+            from valorant_ui import PanelValorant
+            panel=PanelValorant(self.root,self.cfg.get('valorant',{}),self.guardar,self.enviar,self.valorant,ocultar=self.minimizar_capri,**opciones)
+        elif juego=='fortnite':
+            from fortnite_ui import PanelFortnite
+            panel=PanelFortnite(self.root,self.cfg.get('fortnite',{}),self.guardar,self.enviar,self.fortnite,ocultar=self.minimizar_capri,**opciones)
+        elif juego=='cs2':
+            from counter_strike_ui import PanelCS2
+            panel=PanelCS2(self.root,self.cfg.get('cs2',{}),self.guardar,self.enviar,self.cs2,**opciones)
+        else:
+            from roblox_ui import PanelRoblox
+            panel=PanelRoblox(self.root,self.cfg['roblox'],self.guardar,self.enviar,self.roblox,ocultar=self.minimizar_capri,**opciones)
+        setattr(self,juego+'_panel',panel);self.panel_juego_actual=(juego,panel)
+        localizar_widgets(self.ajustes,True)
+
+    def volver_de_juego(self):
+        actual=getattr(self,'panel_juego_actual',None);self.panel_juego_actual=None
+        if actual and not actual[1].cerrado:actual[1].cerrar()
+        vista=getattr(self,'vista_juego',None);self.vista_juego=None
+        if vista and vista.winfo_exists():vista.destroy()
+        if self.ajustes and self.ajustes.winfo_exists() and getattr(self,'ajustes_base',None):
+            self.ajustes.minsize(720,560);self.ajustes_base.pack(fill='both',expand=True)
 
     def guardar(self,k,v):
+        if k=='bromas_ventanas':v=False
+        if k in ('voz_perfil','voz_acento','voz_ingles_local'):return
+        if k=='voz':return self.guardar('volumen_voz',(self.cfg.get('volumen_voz_anterior',100) or 100) if v else 0)
+        if k=='voz_natural' and not v:return self.guardar('volumen_voz',0)
+        if k=='voz_ingles_modo':
+            if v not in ('rapida','local'):return
+            if v!=self.voz.modo_ingles:
+                self.interrumpir()
+                from voz_local import cerrar
+                cerrar(self.voz.config_ingles_local)
+                self.voz.modo_ingles=v
+                from voz_local import disponible,rapida_disponible
+                self.voz.ingles_local=rapida_disponible() if v=='rapida' else disponible()
+                self.cfg['voz_ingles_local']=self.voz.ingles_local
+        if k=='volumen_voz':
+            v=normalizar_volumen(v)
+            previo=normalizar_volumen(self.cfg.get('volumen_voz',100))
+            if previo>0:self.cfg['volumen_voz_anterior']=previo
+            self.cfg['voz']=v>0
+            if v>0:self.cfg['voz_natural']=True
         if k=='fortnite_avisos':
             from fortnite_avisos import normalizar
             v=normalizar(v);self.fortnite_avisos.configurar(v,iniciar=self.skins_runtime)
@@ -2194,10 +2304,6 @@ class Capri:
             if hasattr(self,'caches_morfosis'):self.caches_morfosis.clear()
         if k=='modo_visual' and self.asomo and self.asomo.get('curioso'):self.terminar_asomo()
         if k=='intervalo_interacciones':v=max(3,min(60,int(float(v))))
-        if k=='voz_acento':
-            from voz import ACENTOS_VOZ
-            if v not in ACENTOS_VOZ:return
-            self.voz.acento=v;self.voz.natural_no_hasta=0
         if k=='idioma':v=codigo_idioma(v)
         if k=='tecla_hablar':
             from voz import atajo_valido
@@ -2235,11 +2341,21 @@ class Capri:
             if not isinstance(persistido,dict):persistido=dict(self.cfg)
         except (OSError,ValueError):persistido=dict(self.cfg)
         persistido[k]=v
+        persistido['bromas_ventanas']=False
+        if k in ('idioma','voz_ingles_modo','volumen_voz'):
+            persistido.update(voz_perfil='capri',voz_acento='auto',voz_ingles_modo=self.cfg['voz_ingles_modo'],
+                              voz_ingles_local=self.voz.ingles_local)
+        if k=='volumen_voz':
+            persistido.update(voz=self.cfg['voz'],voz_natural=self.cfg.get('voz_natural',True),
+                              volumen_voz_anterior=self.cfg.get('volumen_voz_anterior',100))
         archivo.write_text(json.dumps(persistido,ensure_ascii=False,indent=2),encoding='utf8')
         if k=='idioma':
             self.interrumpir()
             activar_idioma(v)
             self.ia.idioma=self.voz.idioma=v
+            if not self.voz.usar_voz_personal():
+                from voz_local import cerrar
+                cerrar(self.voz.config_ingles_local)
             if self.ajustes and self.ajustes.winfo_exists() and hasattr(self,'idioma_combo'):
                 from idiomas import IDIOMAS
                 self.idioma_combo.current(list(IDIOMAS).index(v))
@@ -2251,11 +2367,18 @@ class Capri:
                 self.pintar_historial()
             localizar_widgets(self.root,True)
             if self.dialogo.ventana and self.dialogo.ventana.winfo_exists():self.dialogo.dibujar()
+        if k in ('idioma','voz_ingles_modo') and getattr(self,'opciones_voz',None) and self.opciones_voz.winfo_exists():
+            self.opciones_voz.actualizar()
+        if k in ('idioma','voz_ingles_modo','volumen_voz') and self.puede_narrar() and self.cfg.get('voz_natural',True):self.voz.precalentar()
         if k=='tecla_hablar' and self.atajo:
             self.atajo.cerrar()
             self.atajo=Atajo(lambda:self.eventos.put(('micro',None)),lambda t:self.eventos.put(('aviso',t)),v)
-        if k=='voz' and not v:
+        if k=='volumen_voz' and getattr(self,'escala_volumen',None) and self.escala_volumen.winfo_exists():
+            self.escala_volumen.set(v);self.texto_volumen.set(f'Volumen de Capri: {v}%')
+        if k=='volumen_voz' and not v:
             self.voz.parar();self.voz_ticket=None;self.narracion_activa=False
+            from voz_local import cerrar
+            cerrar(self.voz.config_ingles_local)
             if self.dialogo.objetivo:self.dialogo.mostrar(self.dialogo.objetivo)
         if k=='dialogos_escritorio' and not v:self.dialogo.ocultar()
         if k=='modelo_whisper':self.micro.modelo_whisper=v
@@ -2286,21 +2409,27 @@ class Capri:
 
     def elegir_modelo_ia(self,nombre):
         if nombre not in self.modelo_combo.cget('values'):return
-        self.parar()
-        self.guardar('modelo',nombre)
-        self.guardar('ia',True)
-        self.modelo_estado.set('Seleccionado: '+nombre+'. La primera carga puede tardar más.')
-        threading.Thread(target=self.preparar_ia,daemon=True).start()
+        actual=self.cfg.get('modelo','')
+        self.modelo_combo.set(actual)
+        if nombre==actual:return
+        from cambios_modelos import comparar_modelos
+        def aplicar():
+            self.parar();self.guardar('modelo',nombre);self.guardar('ia',True)
+            if self.modelo_combo.winfo_exists():
+                self.modelo_combo.set(nombre)
+                self.modelo_estado.set('Seleccionado: '+nombre+'. La primera carga puede tardar más.')
+            threading.Thread(target=self.preparar_ia,daemon=True).start()
+        self.confirmar_ajuste('Cambiar modelo de IA',
+            comparar_modelos(actual,nombre,getattr(self.ia,'detalles_modelos',{})),aplicar,
+            actual or ui('Automático'),nombre)
 
     def vincular_playlist(self):
-        nombre=simpledialog.askstring(ui('Playlist de Spotify'),ui('¿Con qué nombre quieres pedir esta playlist?'),parent=self.ajustes)
-        if not nombre:return
-        enlace=simpledialog.askstring(ui('Playlist de Spotify'),ui('Pega su enlace de Spotify. Puede seguir siendo privada:'),parent=self.ajustes)
-        if not enlace:return
-        from playlists import vincular
-        try:vincular(nombre,enlace,BASE)
-        except (OSError,ValueError) as e:messagebox.showerror(ui('Playlist de Spotify'),ui(str(e)),parent=self.ajustes);return
-        messagebox.showinfo(ui('Playlist de Spotify'),ui('Vinculada. Puedes decir «Capri, pon mi playlist '+nombre+'».'),parent=self.ajustes)
+        dialogo=getattr(self,'playlist_dialogo',None)
+        if dialogo and not dialogo.cerrado and dialogo.ventana.winfo_exists():
+            dialogo.ventana.lift();return
+        from playlists_ui import DialogoPlaylist
+        padre=self.ajustes if self.ajustes and self.ajustes.winfo_exists() else self.root
+        self.playlist_dialogo=DialogoPlaylist(padre,BASE)
 
     def conectar_opera(self):
         from puente_opera import iniciar
@@ -2548,6 +2677,7 @@ class Capri:
         self.descartar_reaccion()
         audio=getattr(self,'salida_audio',None)
         if audio:audio.descartar();self.salida_audio=None
+        self.voz.cerrar()
         if self.llamada_ui:self.llamada_ui.cerrar()
         self.restaurar_broma(activar=False)
         if self.apagado_ui and not self.apagado_ui.cerrada:self.apagado_ui.cerrar()

@@ -2,11 +2,12 @@
 
 Abre el cliente de LoL, prepara la sala y elige el modo y los roles allí. Capri utiliza esa selección; no crea una sala ni cambia el tipo de partida.
 
-En el menú radial, abre **Más → League of Legends**. También puedes escribir o decir:
+El panel se muestra dentro de Ajustes. Pulsa **Volver** para regresar a la página anterior; tus cambios quedan guardados.
+En Ajustes, abre **Ajustes → Juegos → League of Legends**. También puedes escribir o decir:
 
 ## Panel y perfiles por línea
 
-Abre **Más → League of Legends** para entrar directamente al panel, o pulsa **Configurar League of Legends** en **Ajustes → IA y servicios**. El panel reúne búsqueda, búsqueda con aceptación, aceptación de la partida actual, cancelación y vigilancia automática.
+Abre **Ajustes → Juegos → League of Legends** para entrar directamente al panel, o pulsa **Configurar League of Legends** en **Ajustes → Juegos → League of Legends**. El panel reúne búsqueda, búsqueda con aceptación, aceptación de la partida actual, cancelación y vigilancia automática.
 
 Elige **Top, Jungla, Medio, ADC o Soporte** para configurar tres **picks** y tres **baneos**, ordenados por prioridad. Pulsa una tarjeta para buscar un campeón por nombre y elegirlo con su retrato. **Quitar campeón** deja libre ese lugar. Los cambios se guardan automáticamente; cambiar de pestaña edita ese perfil y no cambia tu posición en el cliente de LoL.
 
@@ -35,7 +36,7 @@ El catálogo y los retratos oficiales de Data Dragon se incluyen con Capri (vers
 
 Portugués: «busque uma partida no LoL», «aceite a partida», «cancele a fila». Japonés: 「マッチを検索して」「マッチを承諾して」「マッチングをキャンセルして」。 Los resultados se muestran en el idioma seleccionado en Capri, sin necesitar una traducción del modelo.
 
-Activa **Aceptar partidas automáticamente, también desde LoL** en el panel **Más → League of Legends**, o la misma casilla en **Ajustes → IA y servicios**. Basta hacerlo una vez: la elección se guarda y se recupera al abrir Capri. A partir de entonces, busca desde LoL o desde Capri; puede aceptar también una cola que ya estuviera en marcha cuando activas la vigilancia. La opción viene desactivada inicialmente. Activarla no inicia una búsqueda.
+Activa **Aceptar partidas automáticamente, también desde LoL** en el panel **Ajustes → Juegos → League of Legends**, o la misma casilla en **Ajustes → Juegos → League of Legends**. Basta hacerlo una vez: la elección se guarda y se recupera al abrir Capri. A partir de entonces, busca desde LoL o desde Capri; puede aceptar también una cola que ya estuviera en marcha cuando activas la vigilancia. La opción viene desactivada inicialmente. Activarla no inicia una búsqueda.
 
 El estado de conexión y vigilancia aparece debajo de la casilla. Durante la búsqueda se consulta el cliente cada 250 ms; la aceptación se envía desde un trabajador independiente, sin esperar a una orden de voz ni al modelo. Es un intervalo de consulta, no una garantía de latencia: depende de la respuesta del cliente.
 

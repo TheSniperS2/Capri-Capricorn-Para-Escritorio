@@ -500,8 +500,10 @@ class IA:
     def modelos(self):
         with urllib.request.urlopen('http://127.0.0.1:11434/api/tags', timeout=3) as r:
             datos = json.load(r)
-        return [m['name'] for m in datos.get('models', []) if isinstance(m.get('name'), str)
-                and not m.get('remote_host') and not m.get('remote_model') and 'cloud' not in m['name'].lower()]
+        locales=[m for m in datos.get('models', []) if isinstance(m,dict) and isinstance(m.get('name'),str)
+                 and not m.get('remote_host') and not m.get('remote_model') and 'cloud' not in m['name'].lower()]
+        self.detalles_modelos={m['name']:{'size':m.get('size'),'details':m.get('details',{})} for m in locales}
+        return [m['name'] for m in locales]
 
     def conversar(self, texto, modelo=None, al_texto=None, cancelar=None,origen='texto'):
         if not modelo:

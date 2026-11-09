@@ -1,7 +1,8 @@
 # Fortnite en Capri
 
-Abre **Más → Fortnite** o **Ajustes → IA y servicios → Configurar Fortnite**.
+Abre **Ajustes → Juegos → Fortnite → Partidas** y pulsa **Configurar Fortnite**.
 El panel conserva el diseño de Capri y permite elegir:
+El panel se muestra dentro de Ajustes. Pulsa **Volver** para regresar a la página anterior; tus cambios quedan guardados.
 
 - Battle Royale, Cero construcción o conservar el modo actual.
 - Solo, Dúo, Trío, Squad o conservar el tamaño del equipo actual.
@@ -57,7 +58,7 @@ confirmación de preferencias, sin entrar en cola.
 
 ## Avisos de tienda y de misiones con pavos
 
-En **Ajustes → Avisos de Fortnite** puedes activar por separado el aviso de nueva
+En **Ajustes → Juegos → Fortnite → Avisos** puedes activar por separado el aviso de nueva
 tienda y las alertas de misiones de **Salvar el Mundo**. Para estas últimas marca
 también **Tengo una cuenta de fundador de STW**. Es una declaración local: Capri no
 inicia sesión en Epic ni comprueba tu cuenta. Los pavos de estas misiones requieren

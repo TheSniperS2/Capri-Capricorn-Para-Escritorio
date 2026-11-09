@@ -135,14 +135,14 @@ class Acento(PruebasTk):
             secuencia.return_value.cerrada=False;c.interrumpir()
             secuencia.return_value.abortar.assert_called_once();sistema.assert_not_called()
 
-    def test_voz_fija_no_cambia_al_cambiar_idioma(self):
+    def test_acento_obsoleto_no_sustituye_la_voz_del_idioma(self):
         with self.capri() as (c,ruta):
             c.guardar('voz_acento','pt-BR')
             for idioma in ('en','ja','es'):
                 c.guardar('idioma',idioma)
-                self.assertEqual(c.voz.acento,'pt-BR');self.assertEqual(c.voz.idioma,idioma)
-                self.assertEqual(elegir_voz('capri',idioma,c.voz.acento)[0],'pt-BR-ThalitaMultilingualNeural')
-            self.assertEqual(json.loads((ruta/'ajustes.json').read_text(encoding='utf8'))['voz_acento'],'pt-BR')
+                self.assertEqual(c.voz.acento,'auto');self.assertEqual(c.voz.idioma,idioma)
+            self.assertEqual(elegir_voz('capri','es',c.voz.acento)[0],'es-MX-DaliaNeural')
+            self.assertEqual(json.loads((ruta/'ajustes.json').read_text(encoding='utf8'))['voz_acento'],'auto')
 
     def test_voz_natural_recibe_espanol_sin_traducir_con_voz_brasilena(self):
         v=Voz(lambda e:None);v.acento='pt-BR';v.idioma='es';capturados=[]

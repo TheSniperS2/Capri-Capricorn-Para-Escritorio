@@ -128,6 +128,7 @@ class DisenoEIdioma(PruebasTk):
             c.panel_ajustes.mostrar('Voz');c.root.update()
             self.assertEqual(c.panel_ajustes.titulo.get(),ui('Voz','en'))
             self.assertNotEqual(c.panel_ajustes.titulo.get(),'Voz')
+            c.panel_ajustes.mostrar('Escritorio');c.root.update()
             c.idioma_combo.abrir();c.idioma_combo.popup.update()
             lista=c.idioma_combo.popup_lista
             self.assertEqual(c.idioma_combo.popup_filas,4)
@@ -135,7 +136,7 @@ class DisenoEIdioma(PruebasTk):
             textos=[lista.itemcget(i,'text') for i in lista.find_all() if lista.type(i)=='text']
             self.assertEqual(textos,['Español','English','Português','日本語'])
             lista.event_generate('<ButtonRelease-1>',x=20,y=19);c.root.update()
-            self.assertEqual(c.cfg['idioma'],'es');self.assertEqual(c.panel_ajustes.titulo.get(),'Voz')
+            self.assertEqual(c.cfg['idioma'],'es');self.assertEqual(c.panel_ajustes.titulo.get(),'Escritorio')
 
     def test_umbral_sin_bloques_y_automatico_sin_slider_innecesario(self):
         with self.capri() as (c,_):

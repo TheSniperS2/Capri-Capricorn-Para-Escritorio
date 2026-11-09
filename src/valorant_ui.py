@@ -4,7 +4,7 @@ import queue
 import threading
 from PIL import Image,ImageTk
 from tema_ui import tk,LienzoUI
-from ajustes_ui import VentanaCyber,BotonCyber,InterruptorCyber,FONDO,TARJETA,TEXTO,SUAVE,ACENTO
+from ajustes_ui import VentanaCyber,BotonCyber,InterruptorCyber,BarraCyber,FONDO,TARJETA,TEXTO,SUAVE,ACENTO
 from fuentes import FAMILIA
 from idiomas import ui
 from lol_ui import clave,CIAN
@@ -64,16 +64,16 @@ class CatalogoAgentes:
         return self.fotos[llave]
 
 class PanelValorant:
-    def __init__(self,padre,config,guardar,enviar,control,consultar=True,ocultar=None):
+    def __init__(self,padre,config,guardar,enviar,control,consultar=True,ocultar=None,contenedor=None):
         self.config=normalizar(config);self.guardar=guardar;self.enviar=enviar;self.control=control
         self.activa=0;self.cerrado=False;self._stop=threading.Event();self._consulta_error=None;self._eventos=queue.Queue()
-        self.ventana=w=tk.Toplevel(padre);w.withdraw();w.title('Capri · Valorant')
-        w.geometry(f'{min(960,w.winfo_screenwidth()-64)}x{min(900,w.winfo_screenheight()-80)}');w.minsize(800,620)
-        marco=VentanaCyber(w,'VALORANT',self.cerrar,minimizar=ocultar);w.protocol('WM_DELETE_WINDOW',self.cerrar)
+        from paneles_integrados import preparar_panel
+        self.ventana,marco=preparar_panel(padre,'Valorant',self,(960,900),(800,620),ocultar,contenedor)
+        w=self.ventana
         self.catalogo=CatalogoAgentes(w)
         cont=tk.Frame(marco.cuerpo,bg=FONDO);cont.pack(fill='both',expand=True)
         self.scroll=LienzoUI(cont,bg=FONDO,highlightthickness=0);self.scroll.pack(side='left',fill='both',expand=True)
-        barra=tk.Scrollbar(cont,command=self.scroll.yview);barra.pack(side='right',fill='y');self.scroll.configure(yscrollcommand=barra.set)
+        barra=BarraCyber(cont,self.scroll.yview);barra.pack(side='right',fill='y');self.scroll.configure(yscrollcommand=barra.set)
         f=tk.Frame(self.scroll,bg=FONDO);item=self.scroll.create_window(0,0,window=f,anchor='nw')
         def ajustar(e=None):
             ancho=self.scroll.winfo_width();alto=max(self.scroll.winfo_height(),f.winfo_reqheight())

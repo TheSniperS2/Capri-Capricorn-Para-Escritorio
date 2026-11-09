@@ -19,9 +19,13 @@ def clave(s):
 def normalizar(config):
     c=config if isinstance(config,dict) else {}
     frecuencia=c.get('frecuencia')
-    return {'activo':c.get('activo') is True,'valorant':c.get('valorant',True) is True,
+    resultado={'activo':c.get('activo') is True,'valorant':c.get('valorant',True) is True,
             'fortnite':c.get('fortnite',True) is True,
             'frecuencia':frecuencia if frecuencia in ('discreta','equilibrada','entusiasta') else 'equilibrada'}
+    for juego in ('valorant','fortnite'):
+        k='frecuencia_'+juego
+        if c.get(k) in ('discreta','equilibrada','entusiasta'):resultado[k]=c[k]
+    return resultado
 
 
 @lru_cache(maxsize=1)
@@ -158,7 +162,7 @@ class MonitorSkins:
                     if stop.is_set() or version!=self._version or not self._permitida:continue
                     self.estado=fuente.estado
                     if fuente.primer_plano()!=juego:self.motor.anular();continue
-                    plan=self.observar_seleccion(juego,lectura,c['frecuencia'],idioma)
+                    plan=self.observar_seleccion(juego,lectura,c.get('frecuencia_'+juego,c['frecuencia']),idioma)
                     if plan:self.avisar(('skin_reaccion',(version,plan)))
                 intervalo=getattr(fuente,'intervalo',.25)
                 if isinstance(intervalo,(int,float)) and intervalo>.25:stop.wait(min(3,intervalo)-.25)

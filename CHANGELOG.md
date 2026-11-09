@@ -2,9 +2,31 @@
 
 ## En desarrollo
 
+### Navegación y confirmaciones en Ajustes
+
+- LoL, Valorant, Fortnite, Counter-Strike y Roblox se configuran dentro de Ajustes, con Volver y preferencias conservadas. Vistas reutilizables, rueda local y cierre de consultas al salir; ventanas adaptables desde todos los bordes y esquinas.
+- Cambiar el modelo de IA, el motor de reconocimiento o Whisper Base/Small muestra ventajas, límites y posibles efectos en consumo/rapidez antes de confirmar. Cancelar conserva la configuración; la comparación de IA usa metadata local, sin asumir consumo por marca.
+- Explicaciones de la IA local y de las playlists junto a sus botones. Retirados textos de ayuda dispersos y párrafos innecesarios de skins.
+- Botón Pegar enlace con altura suficiente para dibujar completo su borde. Llamadas ocasionales incluye invitados; eliminadas la opción de bromas que minimizan ventanas y su activación heredada.
+
+
+### Ajustes y playlists de Spotify
+
+- Vincular playlist ahora reúne nombre y enlace en una ventana de Capri, con pegado, errores dentro del formulario y confirmación al guardar; permite vincular otra sin abrir diálogos nativos.
+- Retirados de Escritorio los controles duplicados de tamaño, aspecto y color. El intervalo se identifica como llamadas y bromas y explica que los asomos y viajes tienen su propio ritmo.
+- Voces sin mensajes adicionales de versiones; selector inglés con una indicación breve de espera, volumen y velocidad.
+
+### Voces y organización de Ajustes
+
+- Solo en inglés: Capri V1 (opción rápida actual) y Capri V2 (voz de referencia local más lenta), con diferencias explicadas. Se conserva la voz española original y las voces habituales de los otros idiomas. Sin selectores de acento o perfiles adicionales.
+- Volumen cero como único control de silencio; retirado Responder en voz alta. El acceso rápido a silenciar/restaurar recuerda el volumen anterior.
+- Ajustes → Juegos reúne las opciones por juego: partidas y preferencias, skins independientes para Valorant/Fortnite y avisos dentro de Fortnite. La frecuencia de las reacciones se guarda por juego sin sobrescribir las otras preferencias.
+- Más queda limitado a YouTube, Recordatorios, Minimizar y Cerrar. Las interacciones del personaje se llaman Travesuras.
+- V1 conserva precarga, audio por fragmentos, caché y cancelación. Los perfiles, modelos y configuración personales permanecen fuera del paquete público.
+
 ### Counter-Strike 2
 
-- Panel de mapas en Más y Ajustes, preferencias locales vacías por defecto, filtro y lectura de la lista visible del juego. Aplicar sin buscar, buscar una vez y cancelar sin reencolar, por voz o texto y con selección de juego independiente de LoL/Valorant. Recuperación desde minimizado, validación de pestañas/casillas, confirmación de cada cambio y detención si faltan mapas o cambia el foco. Aceptación manual; sin instalaciones adicionales ni cambios en los archivos del juego. Pendiente comprobar con el cliente actual del usuario.
+- Panel de mapas desde Ajustes → Juegos → Counter-Strike, preferencias locales vacías por defecto, filtro y lectura de la lista visible del juego. Aplicar sin buscar, buscar una vez y cancelar sin reencolar, por voz o texto y con selección de juego independiente de LoL/Valorant. Recuperación desde minimizado, validación de pestañas/casillas, confirmación de cada cambio y detención si faltan mapas o cambia el foco. Aceptación manual; sin instalaciones adicionales ni cambios en los archivos del juego. Pendiente comprobar con el cliente actual del usuario.
 
 ### Skins y avisos de Fortnite
 

@@ -33,7 +33,7 @@ class AvisosUI(PruebasTk):
         from test_fortnite_avisos import AHORA,misiones,html
         from fortnite_avisos import leer_misiones
         with fixtures.ModoPersonaje.capri(self) as (c,ruta):
-            c.finalizar_intro();c.configurar();c.panel_ajustes.mostrar('Avisos de Fortnite');c.root.update()
+            c.finalizar_intro();c.configurar();c.panel_ajustes.mostrar('Juegos');c.ajustes_juegos.mostrar('fortnite','Avisos');c.root.update()
             c.guardar('fortnite_avisos',{'pavos':True,'fundador':True});self.assertTrue(c.cfg['fortnite_avisos']['fundador'])
             self.assertIsNone(c.fortnite_avisos.hilo)
             c.ajustes.destroy();c.ajustes=None;c.skins_runtime=True;m=c.fortnite_avisos;m.reloj=lambda:AHORA.timestamp()

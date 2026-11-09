@@ -5,7 +5,7 @@ import threading
 import unicodedata
 from PIL import Image,ImageTk
 from tema_ui import tk,LienzoUI
-from ajustes_ui import VentanaCyber,BotonCyber,InterruptorCyber,FONDO,TARJETA,TEXTO,SUAVE,ACENTO
+from ajustes_ui import VentanaCyber,BotonCyber,InterruptorCyber,BarraCyber,FONDO,TARJETA,TEXTO,SUAVE,ACENTO
 from fuentes import FAMILIA
 from idiomas import ui
 from league import ClienteLCU,ErrorCliente,FASE
@@ -45,18 +45,16 @@ class Catalogo:
 
 
 class PanelLoL:
-    def __init__(self,padre,config,guardar,enviar,control,seleccion,auto_aceptar=False,consultar=True,ocultar=None):
+    def __init__(self,padre,config,guardar,enviar,control,seleccion,auto_aceptar=False,consultar=True,ocultar=None,contenedor=None):
         self.config=normalizar(config);self.guardar=guardar;self.enviar=enviar;self.control=control;self.seleccion=seleccion
         self.rol=ROLES[0];self.cerrado=False;self.selector=None;self._stop=threading.Event();self._eventos=queue.Queue()
-        self.ventana=w=tk.Toplevel(padre);w.withdraw();w.title('Capri · League of Legends')
-        ancho=min(980,w.winfo_screenwidth()-64);alto=min(890,w.winfo_screenheight()-80)
-        w.geometry(f'{ancho}x{alto}');w.minsize(850,670)
-        marco=VentanaCyber(w,'LEAGUE OF LEGENDS',self.cerrar,minimizar=ocultar)
-        w.protocol('WM_DELETE_WINDOW',self.cerrar)
+        from paneles_integrados import preparar_panel
+        self.ventana,marco=preparar_panel(padre,'League of Legends',self,(980,890),(850,670),ocultar,contenedor)
+        w=self.ventana
         # Conserva accesibles los controles en portátiles y con escalado de Windows.
         contenedor=tk.Frame(marco.cuerpo,bg=FONDO);contenedor.pack(fill='both',expand=True)
         self.scroll=LienzoUI(contenedor,bg=FONDO,highlightthickness=0);self.scroll.pack(side='left',fill='both',expand=True)
-        barra=tk.Scrollbar(contenedor,command=self.scroll.yview);barra.pack(side='right',fill='y')
+        barra=BarraCyber(contenedor,self.scroll.yview);barra.pack(side='right',fill='y')
         self.scroll.configure(yscrollcommand=barra.set)
         f=tk.Frame(self.scroll,bg=FONDO);item=self.scroll.create_window(0,0,window=f,anchor='nw')
         def ajustar(e=None):
@@ -159,7 +157,7 @@ class PanelLoL:
     def abrir_selector(self,tipo,indice):
         if self.selector and self.selector.winfo_exists():self.selector.destroy()
         rol=self.rol;w=self.selector=tk.Toplevel(self.ventana);w.title(ui('Elegir campeón'));w.geometry('710x580');w.minsize(600,420)
-        w.configure(bg=FONDO);w.transient(self.ventana)
+        w.configure(bg=FONDO);w.transient(self.ventana.winfo_toplevel())
         self.busqueda=tk.StringVar()
         arriba=tk.Frame(w,bg=FONDO);arriba.pack(fill='x',padx=18,pady=14)
         tk.Label(arriba,text=ui('Elegir campeón'),bg=FONDO,fg=TEXTO,font=(FAMILIA,17,'bold')).pack(side='left')

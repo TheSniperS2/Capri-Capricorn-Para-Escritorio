@@ -1,6 +1,6 @@
 """Panel Fortnite: preferencias locales y acciones explícitas del lobby."""
 from tema_ui import tk,LienzoUI
-from ajustes_ui import VentanaCyber,BotonCyber,FONDO,TARJETA,TEXTO,SUAVE,ACENTO
+from ajustes_ui import VentanaCyber,BotonCyber,BarraCyber,FONDO,TARJETA,TEXTO,SUAVE,ACENTO
 from fuentes import FAMILIA
 from idiomas import ui
 from fortnite import MODOS,EQUIPOS,normalizar
@@ -43,14 +43,14 @@ class TarjetaFortnite(LienzoUI):
 
 
 class PanelFortnite:
-    def __init__(self,padre,config,guardar,enviar,control,ocultar=None):
+    def __init__(self,padre,config,guardar,enviar,control,ocultar=None,contenedor=None):
         self.config=normalizar(config);self.guardar=guardar;self.enviar=enviar;self.control=control;self.cerrado=False
-        self.ventana=w=tk.Toplevel(padre);w.withdraw();w.title('Capri · Fortnite')
-        w.geometry(f'{min(820,w.winfo_screenwidth()-64)}x{min(840,w.winfo_screenheight()-80)}');w.minsize(680,560)
-        marco=VentanaCyber(w,'FORTNITE',self.cerrar,minimizar=ocultar);w.protocol('WM_DELETE_WINDOW',self.cerrar)
+        from paneles_integrados import preparar_panel
+        self.ventana,marco=preparar_panel(padre,'Fortnite',self,(820,840),(680,560),ocultar,contenedor)
+        w=self.ventana
         cont=tk.Frame(marco.cuerpo,bg=FONDO);cont.pack(fill='both',expand=True)
         self.scroll=LienzoUI(cont,bg=FONDO,highlightthickness=0);self.scroll.pack(side='left',fill='both',expand=True)
-        barra=tk.Scrollbar(cont,command=self.scroll.yview);barra.pack(side='right',fill='y');self.scroll.configure(yscrollcommand=barra.set)
+        barra=BarraCyber(cont,self.scroll.yview);barra.pack(side='right',fill='y');self.scroll.configure(yscrollcommand=barra.set)
         f=tk.Frame(self.scroll,bg=FONDO);item=self.scroll.create_window(0,0,window=f,anchor='nw')
         def ajustar(e=None):
             ancho=self.scroll.winfo_width();alto=max(self.scroll.winfo_height(),f.winfo_reqheight())

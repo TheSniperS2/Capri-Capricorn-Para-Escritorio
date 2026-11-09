@@ -23,15 +23,17 @@ TEXTOS=('Reacciones','Gustos y comentarios de Capri sobre las skins.','Capri tam
 
 
 class AjustesSkins:
-    def __init__(self,padre,config,guardar,enviar,ejemplo,monitor):
+    def __init__(self,padre,config,guardar,enviar,ejemplo,monitor,juego=None,leer_config=None):
         self.config=normalizar(config);self.guardar=guardar;self.enviar=enviar;self.ejemplo=ejemplo;self.monitor=monitor
+        self.juego_fijo=juego;self.leer_config=leer_config
         self.f=padre;self.raiz=padre._root();self._after=None
         tk.Label(padre,text=ui('Capri también tiene estilo.'),bg=FONDO,fg=TEXTO,font=(FAMILIA,21,'bold')).pack(anchor='w',pady=(2,12))
-        self.activo=tk.BooleanVar(value=self.config['activo'])
+        self.activo=tk.BooleanVar(value=self.config['activo'] and (not juego or self.config[juego]))
         InterruptorCyber(padre,text='Reaccionar a las skins',variable=self.activo,
                          command=lambda:self.cambiar('activo',self.activo.get()),bg=FONDO,fg=TEXTO).pack(anchor='w',pady=(0,14))
         self.juegos={}
         for juego,titulo,detalle in (('valorant','VALORANT','Equipamiento fuera de partida'),('fortnite','FORTNITE','Fichas del casillero y la tienda')):
+            if self.juego_fijo:continue
             f=tk.Frame(padre,bg=TARJETA);f.pack(fill='x',pady=(0,8))
             v=tk.BooleanVar(value=self.config[juego]);self.juegos[juego]=v
             InterruptorCyber(f,text=titulo,variable=v,command=lambda k=juego,var=v:self.cambiar(k,var.get()),
@@ -39,18 +41,15 @@ class AjustesSkins:
             tk.Label(f,text=ui(detalle),bg=TARJETA,fg=SUAVE,font=(FAMILIA,9)).pack(anchor='w',padx=12,pady=(0,10))
         tk.Label(padre,text=ui('Frecuencia de los comentarios'),bg=FONDO,fg=TEXTO,font=(FAMILIA,11,'bold')).pack(anchor='w',pady=(12,5))
         self.frecuencia=SelectorCyber(padre,values=('Discreta','Equilibrada','Entusiasta'))
-        self.frecuencia.current(('discreta','equilibrada','entusiasta').index(self.config['frecuencia']));self.frecuencia.pack(fill='x')
+        self.frecuencia.current(('discreta','equilibrada','entusiasta').index(self.config.get('frecuencia_'+str(self.juego_fijo),self.config['frecuencia'])));self.frecuencia.pack(fill='x')
         self.frecuencia.bind('<<ComboboxSelected>>',lambda e:self.cambiar('frecuencia',('discreta','equilibrada','entusiasta')[self.frecuencia.current()]))
-        for t in ('Capri toma la primera ficha como referencia. Al seleccionar otra skin, confirma su nombre y comenta sin repetirla.',
-                  'Las frases varían, pero su opinión sobre cada skin se mantiene incluso al reiniciar.',
-                  'Observa solo el juego activo. Las capturas se procesan en este equipo y no se guardan.',
-                  'No reconoce atuendos solo por su silueta: en Fortnite necesita el nombre visible en una ficha.'):
-            tk.Label(padre,text=ui(t),bg=FONDO,fg=SUAVE,font=(FAMILIA,9),wraplength=480,justify='left').pack(anchor='w',pady=(8,0))
         self.estado=tk.StringVar(value=ui(monitor.estado))
         tk.Label(padre,textvariable=self.estado,bg=FONDO,fg=ACENTO,font=(FAMILIA,9),wraplength=480,justify='left').pack(anchor='w',pady=(12,16))
         tk.Label(padre,text=ui('PRUEBA DE PERSONALIDAD'),bg=FONDO,fg=ACENTO,font=(FAMILIA,10,'bold')).pack(anchor='w',pady=(4,8))
-        self.juego=SelectorCyber(padre,values=('Valorant','Fortnite'));self.juego.current(0);self.juego.pack(fill='x',pady=(0,6))
-        self.juego.bind('<<ComboboxSelected>>',lambda e:self.llenar())
+        self.juego=None
+        if not self.juego_fijo:
+            self.juego=SelectorCyber(padre,values=('Valorant','Fortnite'));self.juego.current(0);self.juego.pack(fill='x',pady=(0,6))
+            self.juego.bind('<<ComboboxSelected>>',lambda e:self.llenar())
         self.selector=SelectorCyber(padre);self.selector.pack(fill='x')
         self.selector.bind('<<ComboboxSelected>>',lambda e:self.previsualizar())
         self.tarjeta=LienzoUI(padre,bg=FONDO,highlightthickness=0,height=60);self.tarjeta.pack(fill='x',pady=(8,0))
@@ -58,19 +57,28 @@ class AjustesSkins:
         self.texto=tk.StringVar()
         tk.Label(padre,textvariable=self.texto,bg=TARJETA,fg=TEXTO,font=(FAMILIA,12),wraplength=460,justify='left',padx=14,pady=16).pack(fill='x')
         self.escuchar=BotonCyber(padre,text='Escuchar ejemplo',command=self.probar);self.escuchar.pack(fill='x',pady=(8,4))
-        self.mirar=BotonCyber(padre,text='Mirar mi skin ahora',command=lambda:self.enviar('mira mi skin en '+('valorant' if self.juego.current()==0 else 'fortnite')))
+        self.mirar=BotonCyber(padre,text='Mirar mi skin ahora',command=lambda:self.enviar('mira mi skin en '+self.juego_actual()))
         self.mirar.pack(fill='x',pady=(4,8))
-        for texto in ('Este ejemplo no analiza el juego ni cambia tu equipamiento.',
-                      'Estos son ejemplos; Capri reconoce muchas más skins en el juego.'):
-            tk.Label(padre,text=ui(texto),bg=FONDO,fg=SUAVE,font=(FAMILIA,9),wraplength=480,justify='left').pack(anchor='w',pady=(0,8))
         self._previa={};self.llenar();self.refrescar()
         padre.bind('<Destroy>',self.destruir,add='+')
 
     def cambiar(self,k,v):
-        self.config=normalizar({**self.config,k:v});self.guardar('reacciones_skins',dict(self.config))
+        actual=normalizar(self.leer_config() if self.leer_config else self.config)
+        if self.juego_fijo:
+            if k=='activo':
+                # Activar un juego no enciende también el otro por los valores antiguos.
+                if not actual['activo']:actual.update(valorant=False,fortnite=False)
+                actual[self.juego_fijo]=bool(v);actual['activo']=actual['valorant'] or actual['fortnite']
+            elif k=='frecuencia':actual['frecuencia_'+self.juego_fijo]=v
+            else:return
+        else:actual[k]=v
+        self.config=normalizar(actual);self.guardar('reacciones_skins',dict(self.config))
+
+    def juego_actual(self):
+        return self.juego_fijo or ('valorant' if self.juego.current()==0 else 'fortnite')
 
     def llenar(self):
-        juego='valorant' if self.juego.current()==0 else 'fortnite';por_perfil={}
+        juego=self.juego_actual();por_perfil={}
         # Una muestra por colección, priorizando Vandal/Phantom frente a armas
         # secundarias, para que el probador no sea una lista interminable.
         for s in sorted(catalogo(),key=lambda s:s.get('arma') not in ('Vandal','Phantom')):
@@ -107,6 +115,11 @@ class AjustesSkins:
         self.previsualizar();self.ejemplo(self.texto.get())
 
     def refrescar(self):
+        if self.juego_fijo and self.leer_config:
+            self.config=normalizar(self.leer_config())
+            self.activo.set(self.config['activo'] and self.config[self.juego_fijo])
+            indice=('discreta','equilibrada','entusiasta').index(self.config.get('frecuencia_'+self.juego_fijo,self.config['frecuencia']))
+            if self.frecuencia.current()!=indice:self.frecuencia.current(indice)
         self.estado.set(ui(self.monitor.estado));self._after=self.raiz.after(600,self.refrescar)
 
     def destruir(self,e):

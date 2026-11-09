@@ -215,4 +215,4 @@ def mensaje(aviso,idioma='es'):
     from idiomas import ui
     if aviso.tipo=='tienda':return ui('La tienda de Fortnite acaba de cambiar. Ya puedes revisar la nueva rotación.',idioma)
     d=aviso.datos
-    return ui('Hay misiones de Salvar el Mundo con {0} pavos en total para fundadores. Revisa las zonas y los niveles en Ajustes, Avisos de Fortnite; tienes hasta {1}.',idioma).format(d['total'],datetime.fromtimestamp(d['vence']).astimezone().strftime('%d/%m %H:%M'))
+    return ui('Hay misiones de Salvar el Mundo con {0} pavos en total para fundadores. Revisa las zonas y los niveles en Ajustes → Juegos → Fortnite → Avisos; tienes hasta {1}.',idioma).format(d['total'],datetime.fromtimestamp(d['vence']).astimezone().strftime('%d/%m %H:%M'))

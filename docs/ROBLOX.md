@@ -1,7 +1,8 @@
 # Roblox con Capri
 
-Abre **Más → Roblox** o **Ajustes → IA y servicios → Configurar Roblox**.
+Abre **Ajustes → Juegos → Roblox → Partidas** y pulsa **Configurar Roblox**.
 El panel tiene tres vistas: **Experiencias**, **Avatar** y **Acompañamiento**.
+El panel se muestra dentro de Ajustes. Pulsa **Volver** para regresar a la página anterior; tus cambios quedan guardados.
 Los recordatorios tienen su propio panel en **Más → Recordatorios**.
 
 ## Experiencias: accesos rápidos y personalidad automática

@@ -58,7 +58,7 @@ class ReaccionYDespedida(PruebasTk):
                 self.assertFalse(hasattr(c,'panel_prueba'))
                 self.assertTrue(c.sensibilidad_microfono.winfo_exists())
                 self.assertIn('Sensibilidad del micrófono',textos)
-                self.assertIn('Llamadas ocasionales de Capri',textos)
+                self.assertIn('Llamadas ocasionales',textos)
                 grabar.assert_not_called();hablar.assert_not_called()
 
     def test_propias_permitidas_excluyen_mascota_y_globo(self):

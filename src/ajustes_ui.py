@@ -30,6 +30,8 @@ class VentanaCyber:
         self.item=self.canvas.create_window(14,50,window=self.cuerpo,anchor='nw')
         self.canvas.bind('<Configure>',self.dibujar)
         self.canvas.bind('<ButtonPress-1>',self.iniciar);self.canvas.bind('<B1-Motion>',self.mover)
+        self.canvas.bind('<Motion>',self.cursor_borde)
+        self.canvas.bind('<ButtonRelease-1>',self.terminar_arrastre)
         ventana.bind('<Escape>',lambda e:self.cerrar(),add='+')
         self.dibujar()
         separar_bordes(ventana)
@@ -55,8 +57,10 @@ class VentanaCyber:
 
     def iniciar(self,e):
         self.drag=None;self.resize=None
-        if e.y>self.canvas.winfo_height()-28 and e.x>self.canvas.winfo_width()-32:
-            self.resize=(e.x_root,e.y_root,self.ventana.winfo_width(),self.ventana.winfo_height());return
+        borde=self.borde(e.x,e.y)
+        if borde:
+            self.resize=(e.x_root,e.y_root,self.ventana.winfo_x(),self.ventana.winfo_y(),
+                         self.ventana.winfo_width(),self.ventana.winfo_height(),borde);return
         if e.y>37:return
         if e.x>self.canvas.winfo_width()-62:self.cerrar();return
         if self.minimizar and e.x>self.canvas.winfo_width()-100:self.minimizar();return
@@ -64,15 +68,36 @@ class VentanaCyber:
 
     def mover(self,e):
         if self.resize:
-            x,y,w,h=self.resize;minw,minh=self.ventana.minsize()
-            w=max(minw,min(self.ventana.winfo_screenwidth()-self.ventana.winfo_x(),w+e.x_root-x))
-            h=max(minh,min(self.ventana.winfo_screenheight()-self.ventana.winfo_y(),h+e.y_root-y))
-            self.ventana.geometry(f'{w}x{h}');return
+            rx,ry,x,y,w,h,borde=self.resize;minw,minh=self.ventana.minsize()
+            from companera import area_trabajo
+            l,t,r,b=area_trabajo();derecha=x+w;abajo=y+h;dx=e.x_root-rx;dy=e.y_root-ry
+            if 'w' in borde:x=max(l,min(x+dx,derecha-minw))
+            if 'e' in borde:derecha=max(x+minw,min(r,derecha+dx))
+            if 'n' in borde:y=max(t,min(y+dy,abajo-minh))
+            if 's' in borde:abajo=max(y+minh,min(b,abajo+dy))
+            self.ventana.geometry(f'{derecha-x}x{abajo-y}{x:+d}{y:+d}');return
         if not self.drag:return
         x,y,a,b=self.drag;w=self.ventana.winfo_width();h=self.ventana.winfo_height()
         a=max(0,min(self.ventana.winfo_screenwidth()-w,a+e.x_root-x))
         b=max(0,min(self.ventana.winfo_screenheight()-h,b+e.y_root-y))
         self.ventana.geometry(f'+{a}+{b}')
+
+    def borde(self,x,y):
+        w,h=self.canvas.winfo_width(),self.canvas.winfo_height()
+        if x>w-32 and y>h-28:return 'se'
+        horizontal='w' if x<9 else ('e' if x>w-9 else '')
+        vertical='n' if y<9 else ('s' if y>h-9 else '')
+        return vertical+horizontal
+
+    def cursor_borde(self,e):
+        borde=self.borde(e.x,e.y)
+        cursor={'n':'sb_v_double_arrow','s':'sb_v_double_arrow','e':'sb_h_double_arrow','w':'sb_h_double_arrow',
+                'nw':'size_nw_se','se':'size_nw_se','ne':'size_ne_sw','sw':'size_ne_sw'}.get(borde,'')
+        try:self.canvas.configure(cursor=cursor)
+        except tk.TclError:self.canvas.configure(cursor='sizing' if borde else '')
+
+    def terminar_arrastre(self,e):
+        self.drag=None;self.resize=None;self.cursor_borde(e)
 
 class PanelAjustes:
     def __init__(self,ventana):
@@ -169,6 +194,22 @@ class PanelAjustes:
     def conectar_rueda(self,widget=None):
         widget=widget or self.ventana
         if widget.winfo_toplevel() is not self.ventana.winfo_toplevel():return
+        if widget is not self.ventana and not str(widget).startswith(str(self.ventana)+'.'):return
+        if isinstance(widget,tk.Label) and widget.winfo_pixels(widget.cget('wraplength'))>0 and not hasattr(widget,'_capri_ancho_texto'):
+            widget._capri_ancho_texto=widget.winfo_pixels(widget.cget('wraplength'))
+            def ajustar(e=None,w=widget):
+                if not w.winfo_exists():return
+                padre=w.master;ancho=padre.winfo_width()
+                if ancho<100:return
+                if 'padx' in padre.keys():ancho-=2*padre.winfo_pixels(padre.cget('padx'))
+                try:
+                    margen=w.pack_info().get('padx',0)
+                    valores=margen if isinstance(margen,(tuple,list)) else w.tk.splitlist(str(margen))
+                    ancho-=sum(w.winfo_pixels(v) for v in valores)*(2 if len(valores)==1 else 1)
+                except tk.TclError:pass
+                limite=max(120,min(w._capri_ancho_texto,ancho-12))
+                if w.winfo_pixels(w.cget('wraplength'))!=limite:w.configure(wraplength=limite)
+            widget.master.bind('<Configure>',ajustar,add='+');ajustar()
         tags=widget.bindtags()
         if self.tag_rueda not in tags:widget.bindtags((self.tag_rueda,)+tags)
         for hijo in widget.winfo_children():self.conectar_rueda(hijo)
@@ -583,7 +624,7 @@ class BotonCyber(CanvasUI):
         for k in ('activebackground','activeforeground','relief','bd','cursor','disabledforeground','highlightthickness'):kw.pop(k,None)
         from idiomas import ui
         ancho=max(tkfont.Font(root=padre,font=self.fuente).measure(ui(text,k)) for k in ('es','en','pt','ja'))+padx*2+12
-        super().__init__(padre,width=ancho,height=20+pady*2,bg=padre.cget('bg'),highlightthickness=0,takefocus=True,**kw)
+        super().__init__(padre,width=ancho,height=max(28,20+pady*2),bg=padre.cget('bg'),highlightthickness=0,takefocus=True,**kw)
         self.bind('<Configure>',lambda e:self.dibujar());self.bind('<Button-1>',lambda e:self.invoke())
         self.bind('<Return>',lambda e:self.invoke());self.bind('<space>',lambda e:self.invoke())
         self.bind('<Enter>',lambda e:self.resaltar(True));self.bind('<Leave>',lambda e:self.resaltar(False))

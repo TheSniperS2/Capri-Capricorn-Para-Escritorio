@@ -36,9 +36,9 @@ class ReaccionesUI(PruebasTk):
     def test_app_guarda_configuracion_y_abrir_ajustes_no_observa_juegos(self):
         import test_companera_control as fixtures
         with fixtures.ModoPersonaje.capri(self) as (c,ruta),patch.object(c.skins,'_fuentes') as fuente:
-            c.configurar();c.panel_ajustes.mostrar('Reacciones');c.root.update()
-            self.assertIn('Reacciones',c.panel_ajustes.secciones)
-            c.ajustes_skins.cambiar('activo',True)
+            c.configurar();c.panel_ajustes.mostrar('Juegos');c.ajustes_juegos.mostrar('valorant','Skins');c.root.update()
+            self.assertNotIn('Reacciones',c.panel_ajustes.secciones)
+            c.ajustes_skins['valorant'].cambiar('activo',True)
             self.assertTrue(c.cfg['reacciones_skins']['activo']);self.assertIsNone(c.skins.hilo)
             self.assertTrue(json.loads((ruta/'ajustes.json').read_text(encoding='utf8'))['reacciones_skins']['activo'])
             fuente.assert_not_called()
@@ -68,8 +68,8 @@ class ReaccionesUI(PruebasTk):
     def test_mirar_fortnite_desde_ajustes_no_deja_la_ficha_tapada(self):
         import test_companera_control as fixtures
         with fixtures.ModoPersonaje.capri(self) as (c,_),patch.object(c.skins,'opinar',return_value='Fry tiene estilo.') as opinar:
-            c.configurar();c.panel_ajustes.mostrar('Reacciones');c.root.update()
-            c.ajustes_skins.juego.current(1);c.ajustes_skins.llenar();c.ajustes_skins.mirar.invoke()
+            c.configurar();c.panel_ajustes.mostrar('Juegos');c.ajustes_juegos.mostrar('fortnite','Skins');c.root.update()
+            c.ajustes_skins['fortnite'].mirar.invoke()
             limite=time.monotonic()+3
             while c.ocupada and time.monotonic()<limite:c.poll();time.sleep(.005)
             self.assertIsNone(c.ajustes);self.assertFalse(c.ocupada)

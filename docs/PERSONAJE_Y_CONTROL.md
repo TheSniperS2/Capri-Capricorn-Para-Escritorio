@@ -20,15 +20,14 @@ Durante el aviso y la llamada se pausan los viajes automáticos y el regreso de 
 
 En **Ajustes → Escritorio**:
 
-- **Llamadas ocasionales de Capri**, activadas inicialmente: 24 bromas absurdas con centralitas falsas, toc-toc, una pizzería dimensional o una villana desastrosa. Seis de ellas usan un disfraz temporal de voz: ardilla aguda, villana grave o robot. Se modifica únicamente ese audio y sus marcas de sincronía; no se guarda otro perfil de voz ni cambia el idioma. La selección mezcla la lista sin repetir una broma hasta recorrerla entera. Asomos y bromas de ventana tienen sus propias listas de seis y cinco bromas.
+- **Llamadas ocasionales**, activadas inicialmente: 24 bromas absurdas con centralitas falsas, toc-toc, una pizzería dimensional o una villana desastrosa. Seis de ellas usan un disfraz temporal de voz: ardilla aguda, villana grave o robot. Se modifica únicamente ese audio y sus marcas de sincronía; no se guarda otro perfil de voz ni cambia el idioma. La selección mezcla la lista sin repetir una broma hasta recorrerla entera. Los asomos tienen su propia lista de bromas.
 - **Asomarse desde una esquina de vez en cuando**, activado inicialmente para la nueva forma curiosa: tras 3–6 minutos y al menos dos minutos sin interacción con Capri, la pantalla o el personaje se transforma en un retrato recortado contra un lateral o abajo. Sigue el cursor con las pupilas y parpadea. Arrástralo fuera del borde para recuperar su forma anterior. Puedes desactivarlo; no cambia tu modo guardado.
-- **Permitir bromas que minimizan la ventana activa**, desactivado inicialmente: minimiza una ventana normal y muestra la llamada. Puedes recuperarla con **Restaurar ventana**; también se restaura al contestar, rechazar o caducar el aviso. No cierra aplicaciones ni modifica documentos.
 
-El intervalo inicial de llamadas y bromas de ventana es de unos **15 minutos**, con variación aleatoria del 15 %. Puedes elegir de 3 a 60 minutos. El asomo curioso usa su propio intervalo de 3–6 minutos. Los temporizadores esperan si estás conversando, escribiendo o usando Ajustes. No acumulan una serie de llamadas pendientes.
+El intervalo inicial entre llamadas es de unos **15 minutos**, con variación aleatoria del 15 %. Puedes elegir de 3 a 60 minutos. El asomo curioso usa su propio intervalo de 3–6 minutos. Los temporizadores esperan si estás conversando, escribiendo o usando Ajustes. No acumulan una serie de llamadas pendientes.
 
-**Más → Simular llamada** y el botón de Escritorio muestran el aviso inmediatamente, sin minimizar ventanas ni abrir aplicaciones. **Juegos**, en modo personaje, permite activar los asomos y las bromas por separado. «Juega conmigo» muestra una llamada; «asómate por una esquina» solicita un asomo y «deja de jugar» desactiva los dos juegos automáticos.
+**Travesuras**, en modo personaje, permite activar o desactivar los asomos. La opción de bromas que minimizan ventanas se retiró; las preferencias antiguas se desactivan al abrir Capri.
 
-El asomo es automático y tiene una [ilustración propia](PROMPT_ASOMO.md), recortada contra el borde izquierdo, derecho o inferior, sin saltos ni llamadas asociadas. **Simular asomo**, en Ajustes → Escritorio, Más y Juegos, permite verlo sin cambiar el modo guardado. Un clic lo mantiene en su sitio: arrástralo para sacarlo del borde y recuperar la forma habitual. No vence por tiempo; una llamada, una orden o abrir Ajustes también lo retiran. No aparece sobre un juego en primer plano.
+El asomo tiene una [ilustración propia](PROMPT_ASOMO.md), recortada contra el borde izquierdo, derecho o inferior. Arrástralo fuera del borde para recuperar la forma habitual. Una llamada, una orden o abrir Ajustes también lo retiran. No aparece sobre un juego en primer plano.
 
 Las llamadas y sus globos usan ventanas sin activación. Además se aplazan mientras LoL, otro juego reconocido o una aplicación a pantalla completa tienen el primer plano; se vuelven a comprobar cada dos segundos. No se usan Alt+Tab, teclas ni cambios de foco para mostrarlas. Las reacciones de Capri también esperan a que salgas del juego.
 
@@ -105,7 +104,7 @@ Detección de ventanas: [Windows, ventanas de nivel superior](https://learn.micr
 
 ## Menú circular y sombra
 
-Clic derecho sobre el personaje abre ocho sectores: Ajustes, Chat, Juegos, Aspecto, Modo pantalla, Tamaño, Voz y Más. Los sectores con opciones abren otro círculo; pulsa el centro para volver. Esc, otro clic derecho o un clic fuera lo cierran. También se puede seleccionar con las flechas izquierda/derecha y Enter. Capri pausa sus desplazamientos mientras está abierto.
+Clic derecho sobre el personaje abre ocho sectores: Ajustes, Chat, Travesuras, Aspecto, Modo pantalla, Tamaño, Voz y Más. Los sectores con opciones abren otro círculo; pulsa el centro para volver. Esc, otro clic derecho o un clic fuera lo cierran. También se puede seleccionar con las flechas izquierda/derecha y Enter. Capri pausa sus desplazamientos mientras está abierto.
 
 **Aspecto** permite elegir una sombra de contorno con cortes digitales: Violeta, Neón, Hielo, Rojo o Sin sombra. La elección se conserva. Es una copia coloreada de la silueta, desplazada hacia un lado y completa, sin cortes, que se dibuja detrás del cuerpo; no un contorno alrededor de toda la figura. No añade un fondo negro.
 

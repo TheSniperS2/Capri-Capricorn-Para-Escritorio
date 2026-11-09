@@ -35,15 +35,15 @@ TEXTOS=('Tu próxima partida, con Capri.','Experiencias','Avatar','Acompañamien
  'Avatar de tu cuenta','Sin accesorios identificados','No hay coincidencias.','Cargando miniatura…')
 
 class PanelRoblox:
-    def __init__(self,padre,config,guardar,enviar,control,ocultar=None):
+    def __init__(self,padre,config,guardar,enviar,control,ocultar=None,contenedor=None):
         self.config=normalizar(config);self.guardar=guardar;self.enviar=enviar;self.control=control;self.cerrado=False
         self.cola=queue.Queue();self._after=None;self._seleccion=None;self._avatar_clave=None;self._cargando_info=set()
         self._fotos_juegos={};self._stop=threading.Event()
         self.foto=None;self.foto_juego=None;self._firmas=None;self.formulario=None;self.ayudas=[]
         self.estado=tk.StringVar(value=ui('Guardado en este equipo.'));self.filtro=tk.StringVar();self._idioma=None
-        self.ventana=w=tk.Toplevel(padre);w.withdraw();w.title('Capri · Roblox')
-        w.geometry(f'{min(1040,w.winfo_screenwidth()-64)}x{min(760,w.winfo_screenheight()-80)}');w.minsize(820,580)
-        self.marco=VentanaCyber(w,'ROBLOX',self.cerrar,minimizar=ocultar);w.protocol('WM_DELETE_WINDOW',self.cerrar)
+        from paneles_integrados import preparar_panel
+        self.ventana,self.marco=preparar_panel(padre,'Roblox',self,(1040,760),(820,580),ocultar,contenedor)
+        w=self.ventana
         f=self.marco.cuerpo
         cab=tk.Frame(f,bg=FONDO);cab.pack(fill='x',padx=20,pady=(5,16))
         self.etiqueta(cab,'Tu próxima partida, con Capri.',TEXTO,21,negrita=True).pack(anchor='w')

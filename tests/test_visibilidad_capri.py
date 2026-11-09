@@ -88,13 +88,12 @@ class Visibilidad(PruebasTk):
             c.ajustes.destroy()
             from lol_ui import PanelLoL
             from valorant_ui import PanelValorant
-            for nombre,modulo,constructor,atributo in (('League of Legends','lol_ui.PanelLoL',PanelLoL,'lol_panel'),('Valorant','valorant_ui.PanelValorant',PanelValorant,'valorant_panel')):
-                c.abrir_menu_radial(SimpleNamespace(x_root=800,y_root=500));c.root.update()
-                radial=c.radial;radial.ejecutar(next(i for i,(n,_) in enumerate(radial.opciones) if n=='Más'))
+            for nombre,modulo,constructor,atributo in (('lol','lol_ui.PanelLoL',PanelLoL,'lol_panel'),('valorant','valorant_ui.PanelValorant',PanelValorant,'valorant_panel')):
+                c.configurar();c.panel_ajustes.mostrar('Juegos');c.ajustes_juegos.mostrar(nombre,'Partidas');c.root.update()
                 with patch(modulo,side_effect=lambda *a,**kw:constructor(*a,**kw,consultar=False)) as panel:
-                    radial.ejecutar(next(i for i,(n,_) in enumerate(radial.opciones) if n==nombre))
+                    c.botones_juegos[nombre].invoke()
                     panel.assert_called_once()
-                self.assertIsNone(c.root.grab_current());self.assertIsNone(c.radial)
+                self.assertIsNone(c.root.grab_current());self.assertIsNone(getattr(c,'radial',None))
                 c.root.update();juego=getattr(c,atributo)
                 self.assertTrue(juego.ventana.winfo_viewable())
                 self.assertTrue(juego.ventana.attributes('-topmost'))

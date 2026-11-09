@@ -20,7 +20,7 @@ TEXTOS=('Avisos de Fortnite','Tienda y misiones con pavos para fundadores.',
         'Las fuentes son comunitarias; Capri espera una rotación confirmada. No accede a tu cuenta Epic.',
         'Fuente de la tienda: Fortnite-API','Fuente de misiones: V-Bucks Daily',
         'La tienda de Fortnite acaba de cambiar. Ya puedes revisar la nueva rotación.',
-        'Hay misiones de Salvar el Mundo con {0} pavos en total para fundadores. Revisa las zonas y los niveles en Ajustes, Avisos de Fortnite; tienes hasta {1}.')
+        'Hay misiones de Salvar el Mundo con {0} pavos en total para fundadores. Revisa las zonas y los niveles en Ajustes → Juegos → Fortnite → Avisos; tienes hasta {1}.')
 
 
 class AjustesAvisosFortnite:

@@ -1,6 +1,6 @@
 # Capri y las skins
 
-**Ajustes → Reacciones** reúne la activación, los juegos, la frecuencia y un
+**Ajustes → Juegos → Fortnite/Valorant → Skins** reúne la activación y frecuencia propias de ese juego y un
 probador de personalidad. El probador permite escuchar comentarios sin abrir el
 juego ni modificar el equipamiento. Las reacciones automáticas son opcionales;
 una instalación nueva empieza con ellas desactivadas.
@@ -50,8 +50,7 @@ afirman que una skin mejore la puntería o dé ventajas.
   Una cuadrícula ambigua con varias skins se descarta. No adivina la identidad por
   la silueta del personaje ni ve skins que no muestran su nombre.
 
-Para activarlo, abre **Ajustes → Reacciones**, activa **Reaccionar a las skins** y
-el juego que quieras. Luego selecciona otra skin y deja visible su ficha con el
+Para activarlo, abre **Ajustes → Juegos → Fortnite/Valorant → Skins**, activa **Reaccionar a las skins** para ese juego. Luego selecciona otra skin y deja visible su ficha con el
 nombre: no hace falta pulsar el botón ni pedirlo por voz. En Valorant
 también puede detectar el cambio al equiparla. Solo navegar por miniaturas sin
 nombre legible no basta.

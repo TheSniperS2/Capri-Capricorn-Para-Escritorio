@@ -3,7 +3,12 @@
 Si Capri ya está funcionando, vuelve a abrir su acceso directo para mostrarla.
 También la recupera si está minimizada, sin iniciar otra copia de la aplicación.
 
-En **Más → Roblox** puedes guardar experiencias favoritas y abrir sus enlaces por voz.
+En **Ajustes → Voz** ajustas volumen y velocidad. Solo en inglés puedes elegir
+**Capri V1** (respuesta más ágil) o **Capri V2** (voz de referencia local con más
+espera). Español conserva su voz original. El volumen cero silencia a Capri.
+[Detalles de las voces](VOZ_LOCAL.md).
+
+En **Ajustes → Juegos → Roblox** puedes guardar experiencias favoritas y abrir sus enlaces por voz.
 Capri consulta su descripción/categoría para adaptar el perfil automáticamente. Avatar
 comenta prendas y accesorios concretos; Acompañamiento intenta reconocer resultados y
 pregunta si son ambiguos, sin campos de palabras clave. Sigue siendo experimental y no
@@ -34,19 +39,19 @@ La calidad de la charla también depende del modelo local elegido.
 
 **Ctrl+Alt+C** recupera solo el avatar de Capri, sin abrir el chat, o la oculta si ya la tienes al frente. También puedes ocultarla con el botón **—** del chat o de los paneles de juego, y recuperarla con ese atajo. La voz y las automatizaciones continúan mientras está oculta. Abre el chat o los paneles desde el menú de Capri cuando los necesites. En el chat, elige **Valorant** en **Juego para buscar** para escribir «busca partida» aunque el juego esté en segundo plano; abrir su panel también guarda ese destino.
 
-En **Más → Valorant** puedes buscar o cancelar partidas y configurar tres preferencias de agente. Si un aliado ocupa la primera, se prueba la segunda y después la tercera; si no queda ninguna válida, no se selecciona otro agente. La selección automática es opcional y viene apagada. Consulta la [guía de Valorant](VALORANT.md).
+En **Ajustes → Juegos → Valorant** puedes buscar o cancelar partidas y configurar tres preferencias de agente. Si un aliado ocupa la primera, se prueba la segunda y después la tercera; si no queda ninguna válida, no se selecciona otro agente. La selección automática es opcional y viene apagada. Consulta la [guía de Valorant](VALORANT.md).
 
-En **Más → Fortnite** puedes elegir Battle Royale o Cero construcción y Solo, Dúo, Trío o Squad. También puedes conservar las opciones del juego, aplicarlas sin buscar, iniciar la búsqueda y cancelarla. Deja el lobby preparado: Capri usa reconocimiento de texto local de Windows y controles normales del juego, sin programas adicionales. La cancelación nunca inicia otra búsqueda. Consulta la [guía de Fortnite](FORTNITE.md).
+En **Ajustes → Juegos → Fortnite** puedes elegir Battle Royale o Cero construcción y Solo, Dúo, Trío o Squad. También puedes conservar las opciones del juego, aplicarlas sin buscar, iniciar la búsqueda y cancelarla. Deja el lobby preparado: Capri usa reconocimiento de texto local de Windows y controles normales del juego, sin programas adicionales. La cancelación nunca inicia otra búsqueda. Consulta la [guía de Fortnite](FORTNITE.md).
 
 Puedes dar las órdenes de Fortnite aunque lo tengas minimizado. Capri lo restaura automáticamente y espera a que el lobby esté listo antes de actuar; el juego aparece en primer plano durante la operación.
 
-En **Más → Counter-Strike** guarda tus mapas de **Competitivo de CS2**. Puedes usar **Leer mapas del juego**, **Aplicar mapas sin buscar**, **Buscar partida** y **Cancelar búsqueda**, también por voz: «Capri, busca partida en Counter-Strike». La selección debe quedar exactamente confirmada antes de buscar; si un mapa no aparece o no se leen todas las casillas, Capri se detiene. Recupera el juego desde minimizado durante la operación. Cancelar no reinicia la cola y la aceptación de partida es manual. Consulta la [guía de Counter-Strike 2](COUNTER_STRIKE.md).
+En **Ajustes → Juegos → Counter-Strike** guarda tus mapas de **Competitivo de CS2**. Puedes usar **Leer mapas del juego**, **Aplicar mapas sin buscar**, **Buscar partida** y **Cancelar búsqueda**, también por voz: «Capri, busca partida en Counter-Strike». La selección debe quedar exactamente confirmada antes de buscar; si un mapa no aparece o no se leen todas las casillas, Capri se detiene. Recupera el juego desde minimizado durante la operación. Cancelar no reinicia la cola y la aceptación de partida es manual. Consulta la [guía de Counter-Strike 2](COUNTER_STRIKE.md).
 
-En **Ajustes → Reacciones**, activa **Reaccionar a las skins** y el juego que quieras. Elige una skin y deja su ficha con el nombre visible: Capri puede comentarla automáticamente. También detecta cambios de equipamiento propio en Valorant fuera de partida. Incluye Goku Black y miles de skins; las que no tienen diálogo propio reciben una opinión genérica positiva, neutral o negativa que se mantiene incluso al reiniciar. Acepta **«mira mi skin en Fortnite/Valorant»** y **«¿qué te parece esta skin?»**. Las reacciones esperan mientras conversas con Capri y no cambian el foco del juego. La primera ficha sirve de referencia: comenta al seleccionar otra skin y confirmar su nombre dos veces. El OCR reutilizable reduce la espera; aún depende de que el nombre sea legible y esté en el catálogo. Consulta la [guía de reacciones](REACCIONES_SKINS.md).
+En **Ajustes → Juegos → Fortnite/Valorant → Skins**, activa **Reaccionar a las skins** y el juego que quieras. Elige una skin y deja su ficha con el nombre visible: Capri puede comentarla automáticamente. También detecta cambios de equipamiento propio en Valorant fuera de partida. Incluye Goku Black y miles de skins; las que no tienen diálogo propio reciben una opinión genérica positiva, neutral o negativa que se mantiene incluso al reiniciar. Acepta **«mira mi skin en Fortnite/Valorant»** y **«¿qué te parece esta skin?»**. Las reacciones esperan mientras conversas con Capri y no cambian el foco del juego. La primera ficha sirve de referencia: comenta al seleccionar otra skin y confirmar su nombre dos veces. El OCR reutilizable reduce la espera; aún depende de que el nombre sea legible y esté en el catálogo. Consulta la [guía de reacciones](REACCIONES_SKINS.md).
 
-En **Ajustes → Avisos de Fortnite**, activa los avisos de cambio de tienda y, si eres fundador, los de misiones con pavos de Salvar el Mundo. El panel muestra zonas, niveles y caducidad y permite **Comprobar ahora**. Son fuentes públicas comunitarias, sin cuenta Epic ni programas adicionales. Capri debe estar abierta y espera a que termines de hablar para avisar. Consulta la [guía de Fortnite](FORTNITE.md).
+En **Ajustes → Juegos → Fortnite → Avisos**, activa los avisos de cambio de tienda y, si eres fundador, los de misiones con pavos de Salvar el Mundo. El panel muestra zonas, niveles y caducidad y permite **Comprobar ahora**. Son fuentes públicas comunitarias, sin cuenta Epic ni programas adicionales. Capri debe estar abierta y espera a que termines de hablar para avisar. Consulta la [guía de Fortnite](FORTNITE.md).
 
-Para LoL, abre **Más → League of Legends** en el menú radial para entrar directamente al panel, o pulsa el botón de LoL en **Ajustes → IA y servicios**. En un mismo panel puedes buscar, aceptar y cancelar partidas, activar la aceptación automática y guardar tres picks y tres baneos por cada línea. La confirmación automática de campeones se activa por separado y viene apagada. Consulta la [guía de LoL](LEAGUE_OF_LEGENDS.md).
+Para LoL, abre **Ajustes → Juegos → League of Legends** en el menú radial para entrar directamente al panel, o pulsa el botón de LoL en **Ajustes → Juegos → League of Legends**. En un mismo panel puedes buscar, aceptar y cancelar partidas, activar la aceptación automática y guardar tres picks y tres baneos por cada línea. La confirmación automática de campeones se activa por separado y viene apagada. Consulta la [guía de LoL](LEAGUE_OF_LEGENDS.md).
 
 ¿Todavía no tienes el lanzador o falla la preparación? Consulta la [instalación paso a paso](../README.md#empieza-a-usarla) y los [errores frecuentes](INSTALACION.md).
 
@@ -72,7 +77,7 @@ Para Spotify: **«reproduce la música»**, **«reanuda la canción»** y **«po
 
 Para elegir otra canción: «busca Never Fade Away en Spotify» o «reproduce Never Fade Away en Spotify». La búsqueda usa la aplicación instalada. Para reproducir un título concreto, Capri intenta invocar un control accesible cuyo nombre coincida con la búsqueda. Necesita una sesión iniciada y controles accesibles en Spotify. No pulsa coordenadas ni envía teclas a otra ventana. Si no puede confirmar el control, mantiene abierta la búsqueda y lo informa.
 
-Para playlists: **«pon mi playlist Cyberpunk»** intenta encontrarla en **Tu biblioteca**, sin buscarla entre playlists públicas. Si Spotify no expone la biblioteca mediante controles accesibles, usa **Ajustes → Vincular playlist de Spotify**: introduce el nombre y pega su enlace. Puede seguir siendo privada; debe ser accesible desde tu cuenta iniciada. Se guarda solo el nombre y el identificador de playlist en `playlists.json`, sin contraseña ni tokens. Una vez vinculada, también admite «pon Cyberpunk». No hace públicas listas ni cambia permisos. Si abre una playlist pero no puede confirmar su reproducción, lo informa. La reproducción real y el acceso a la biblioteca no han podido verificarse desde el entorno restringido de desarrollo.
+Para playlists: **«pon mi playlist Cyberpunk»** intenta encontrarla en **Tu biblioteca**, sin buscarla entre playlists públicas. Si Spotify no expone la biblioteca mediante controles accesibles, usa **Ajustes → IA y servicios → Vincular playlist de Spotify**: introduce el nombre y pega su enlace en una sola ventana. Los errores aparecen dentro del formulario y, al guardar, muestra una frase para pedirla por voz. Puede seguir siendo privada; debe ser accesible desde tu cuenta iniciada. Se guarda solo el nombre y el identificador de playlist en `playlists.json`, sin contraseña ni tokens. Una vez vinculada, también admite «pon Cyberpunk». No hace públicas listas ni cambia permisos. Si abre una playlist pero no puede confirmar su reproducción, lo informa. La reproducción real y el acceso a la biblioteca no han podido verificarse desde el entorno restringido de desarrollo.
 
 El nombre del navegador se detecta automáticamente, con preferencia por Opera GX. Las búsquedas se abren como una pestaña de Google; la aplicación no lee ni resume sus resultados. Solo abre las aplicaciones que tiene registradas.
 
@@ -125,11 +130,11 @@ Ejemplos: «abre Discord», «puedes mutearme en Discord», «desmutéame en Dis
 
 Las actualizaciones de Discord, el idioma de su interfaz, una ventana cerrada o sus controles de accesibilidad pueden impedir la acción. No se garantiza control con Discord oculto o minimizado. Los controles de silencio/ensordecimiento están preparados para etiquetas españolas, inglesas y algunas portuguesas. El ejecutor solo confirma un cambio de estado cuando lo puede leer; al entrar en un canal informa que envió la solicitud.
 
-### Idioma, perfil y voz/acento
+### Idioma y voz
 
-**Idioma de Capri** cambia la interfaz y el idioma del contenido escrito/hablado. **Voz y acento independientes** elige el timbre/origen de quien lee ese mismo contenido. Elegir portugués aquí no traduce una respuesta española. Puedes cambiar después el idioma a inglés o japonés y se conserva la voz elegida. Para volver al comportamiento anterior, selecciona **Seguir el idioma de Capri**; en español se recupera el perfil español que tenías seleccionado.
+En **Ajustes → Escritorio → Idioma de Capri** puedes cambiar la interfaz y el idioma de las respuestas. La sección Voz ofrece Capri V1 y Capri V2 solo en inglés; español conserva su voz original. No hay selectores de acento ni perfiles adicionales. La tecla para hablar se configura en **Micrófono**.
 
-Thalita y Emma son voces multilingües. Si la síntesis de Thalita falla, se intenta Francisca de Brasil sin traducir el texto ni cambiar tu selección guardada. El tiempo de espera se adapta al texto y una voz fija no queda bloqueada por el fallo de una petición anterior. Las otras voces pueden pronunciar idiomas ajenos de forma menos natural; la elección no garantiza un acento regional exacto. La voz natural necesita conexión y transmite el texto de respuesta a Microsoft. Si se usa el respaldo de Windows, debe existir una voz instalada de la cultura elegida. La selección no modifica el micrófono, el reconocedor ni el modelo de IA.
+La voz necesita conexión y transmite el texto de respuesta a Microsoft. Las referencias vocales se procesan en el equipo. Si falla la generación, se conserva el texto y se informa del problema sin sustituirla por una voz de Windows. Puedes apagar las respuestas habladas o dejar el volumen en cero. Las voces invitadas conservan su función propia. Esto no modifica el micrófono, el reconocimiento ni el modelo de IA.
 
 ## Elegir modelos
 
@@ -199,7 +204,7 @@ La cabecera resume los estados como Conectando, Enlace activo, Escucha, Recibien
 
 ## Tamaño, tipografía e intro
 
-Usa **Ctrl + rueda** sobre Capri, **clic derecho → Tamaño de Capri**, o el control en Ajustes para cambiar entre 75% y 160%. El tamaño se guarda; las imágenes se recalculan solo al cambiarlo. La fuente Chakra Petch se incluye con su licencia OFL y se carga de forma privada dentro del proceso de Capri, sin instalarla para otros programas.
+Usa **Ctrl + rueda** sobre Capri, **clic derecho → Tamaño** para cambiar entre 75% y 160%. El tamaño se guarda; las imágenes se recalculan solo al cambiarlo. La fuente Chakra Petch se incluye con su licencia OFL y se carga de forma privada dentro del proceso de Capri, sin instalarla para otros programas.
 
 Al abrir se reproduce una intro visual con Capri sujetando la pantalla y el saludo «¡Hola! / Capricorn Desktop». Después se transforma en el visor del escritorio. Escape, F8, enviar una petición o detectar el nombre la interrumpen. Puedes desactivarla en **Intro visual al abrir Capri**. El saludo es mudo.
 
@@ -208,19 +213,22 @@ Al abrir se reproduce una intro visual con Capri sujetando la pantalla y el salu
 La boca normal se retira antes de aplicar la expresión de habla o sonrisa. Los emojis permanecen en el chat, pero no se envían a la voz. El diálogo compacto muestra hasta seis líneas recientes de respuesta y una línea de pregunta; el historial conserva el texto completo.
 
 
-En **Ajustes → Voz** puedes elegir el perfil, el volumen y la velocidad de la voz de Capri. La selección se conserva al actualizar. Las voces naturales son sintéticas y requieren internet.
+En **Ajustes → Voz** ajustas volumen y velocidad. **0% silencia a Capri**, sin un interruptor adicional para responder en voz alta. Solo en inglés puedes elegir **Capri V1** (conversación más ágil, internet y conversión local) o **Capri V2** (voz de referencia generada localmente, con más espera). La voz original en español se conserva. Las versiones necesitan sus recursos preparados; no se incluyen perfiles personales en la descarga. Consulta [Voces de Capri](VOZ_LOCAL.md).
 
+Ajustes se puede ampliar o reducir arrastrando sus bordes y esquinas; conserva un tamaño mínimo para que los controles sigan accesibles. Los paneles de los juegos se muestran dentro de la misma ventana y tienen **Volver** para recuperar la página anterior.
 
-Ajustes se organiza en Escritorio, Micrófono, Voz, IA y servicios, y Permisos. Las opciones se guardan al cambiarlas. Aspecto abre una galería para elegir la apariencia de Capri.
+Ajustes se organiza en **Escritorio, Multimedia, Juegos, Micrófono, Voz, IA y servicios, y Permisos**. En **Juegos** eliges League of Legends, Valorant, Fortnite, Counter-Strike o Roblox. Cada uno reúne su acceso a partidas y preferencias; Valorant y Fortnite tienen su propia pestaña **Skins**, con activación y frecuencia independientes. Los avisos de tienda/STW están en **Juegos → Fortnite → Avisos**. Abrir estos ajustes no inicia partidas ni consultas de skins o avisos.
+
+El menú **Más** contiene únicamente **YouTube, Recordatorios, Minimizar Capri y Cerrar Capri**. Los asomos del personaje se activan desde **Travesuras**. Las opciones se guardan al cambiarlas. Aspecto abre una galería para elegir la apariencia.
 
 Con los viajes activados, Capri se teletransporta a distintas posiciones del escritorio y puede preferir el borde de una ventana cercana. Si queda en el aire, cae lentamente y a veces clava un anclaje temporal para sujetarse. El anclaje desaparece al viajar. Arrastrarla permite elegir el punto inicial sin bloquear sus viajes posteriores. Pausar viajes detiene tambien la caida y las sujeciones nuevas.
 
 
-Diseño rojo y controles: Ajustes, Aspectos y Conversación usan marcos angulares propios y permanecen por encima de las ventanas normales. Arrastra su barra superior para moverlos y la marca inferior derecha para ajustar el tamaño. Las tarjetas de Aspectos muestran la vista seleccionada. El panel y la entrada indican DI CAPRI; la activación por nombre se puede desactivar en Micrófono. En Ajustes > Voz > Tecla para hablar, pulsa CAMBIAR y presiona la tecla o combinación deseada (por ejemplo, Ctrl+Espacio); Esc cancela. F8 es el valor predeterminado. El cambio se aplica sin reiniciar. Si otra aplicación ocupa la tecla se informa para elegir otra. El menú Voz conserva Hablar y Activar/Silenciar.
+Diseño rojo y controles: Ajustes, Aspectos y Conversación usan marcos angulares propios y permanecen por encima de las ventanas normales. Arrastra su barra superior para moverlos y la marca inferior derecha para ajustar el tamaño. Las tarjetas de Aspectos muestran la vista seleccionada. El panel y la entrada indican DI CAPRI; la activación por nombre se puede desactivar en Micrófono. En Ajustes > Micrófono > Tecla para hablar, pulsa CAMBIAR y presiona la tecla o combinación deseada (por ejemplo, Ctrl+Espacio); Esc cancela. F8 es el valor predeterminado. El cambio se aplica sin reiniciar. Si otra aplicación ocupa la tecla se informa para elegir otra. El menú Voz conserva Hablar y Activar/Silenciar.
 
 La rueda desplaza la sección de ajustes incluso sobre selectores o deslizadores, sin modificar sus valores. Los selectores se abren con un clic y las barras de desplazamiento solo aparecen cuando el contenido no cabe. Permisos reúne la información y su interruptor al principio de la sección. Ambos modos de Capri comparten el menú radial al hacer clic derecho. Las transformaciones mantienen la paleta roja del panel.
 
-En **Ajustes > Voz > Idioma de Capri** puedes elegir español, inglés, portugués de Brasil o japonés. Se aplica a menús, ajustes, ayudas, estados, campos y a las siguientes respuestas escritas y habladas. La interfaz se traduce con un catálogo incluido, sin esperar una petición al modelo. No traduce retroactivamente los mensajes del historial ni cambia el modelo, micrófono o reconocimiento de voz. Las voces naturales son Aria para inglés, Francisca para portugués y Nanami para japonés; al volver al español recuperas tu perfil guardado. Sin voz natural se necesita una voz de Windows instalada en ese idioma.
+En **Ajustes > Escritorio > Idioma de Capri** puedes elegir español, inglés, portugués de Brasil o japonés. Se aplica a menús, ajustes, ayudas, estados, campos y a las siguientes respuestas escritas y habladas. La interfaz se traduce con un catálogo incluido, sin esperar una petición al modelo. No traduce retroactivamente los mensajes del historial ni cambia el modelo, micrófono o reconocimiento de voz. Las voces habituales son Dalia para español, Aria para inglés, Francisca para portugués y Nanami para japonés; los perfiles personales V1/V2 se aplican solo al inglés. Sin voz natural se necesita una voz de Windows instalada en ese idioma.
 
 Las conversaciones y la traducción de resultados detallados utilizan Ollama local. Los saludos y avisos comunes tienen traducciones incluidas. Si la IA no puede traducir un resultado, Capri lo indica en el idioma elegido y conserva el resultado original para no ocultar un fallo ni inventar una ejecución. Las rutas, URL y títulos entre comillas se conservan literalmente, incluyendo las frases exactas de confirmación de operaciones.
 
@@ -238,7 +246,7 @@ Al soltar a Capri, una entrada oculta no mantiene la física en pausa: no hace f
 
 La conversación refuerza el idioma seleccionado aunque el historial esté en otro idioma. Si detecta una respuesta claramente desviada, la corrige antes de mostrarla o narrarla; esto puede añadir espera. El cambio de voz y el idioma del contenido se comprueban por separado. Los nombres de canciones, programas y archivos conservan su escritura.
 
-El guardado de una opcion no sustituye las otras claves del archivo de preferencias. Las actualizaciones conservan el microfono, LLM, motor y modelo Whisper seleccionados. Se mantienen los valores predeterminados para opciones no elegidas; Whisper Base se indica para priorizar velocidad, Small para precision. Emma multilingue se ofrece como voz alternativa que puede leer espanol, sin sustituir la actual y sin presentarla como la voz original de Capri.
+El guardado de una opcion no sustituye las otras claves del archivo de preferencias. Las actualizaciones conservan el microfono, LLM, motor y modelo Whisper seleccionados. Se mantienen los valores predeterminados para opciones no elegidas; Whisper Base se indica para priorizar velocidad, Small para precision. La voz española original se conserva, y las versiones personales solo se eligen para inglés.
 
 ## Panel multimedia
 
@@ -258,6 +266,12 @@ En **Fuente preferida** elige Automático, Spotify o Navegador. **Automático** 
 Con Spotify o Navegador puedes pulsar el nombre de la aplicación o el botón inferior izquierdo para cambiar entre sesiones compatibles; en Automático esa selección está disponible cuando ninguna está reproduciéndose. Una lectura ausente se tolera brevemente para evitar que desaparezcan los datos durante un cambio de pista; mientras no se confirma la sesión, sus controles quedan desactivados. Los botones actúan sobre la sesión y pista mostradas; si cambia justo al pulsar, actualiza la información y vuelve a intentarlo.
 
 Inicia una canción en Spotify o un vídeo en el navegador para que aparezca su sesión; después puede permanecer pausado. YouTube se identifica con el nombre del navegador. Cada reproductor decide qué información y botones comparte con Windows: algunas sesiones no ofrecen carátula, duración o saltos. Requiere Windows 10 versión 1809 o posterior, sin herramientas adicionales. Los datos y las imágenes se mantienen en memoria. Ocultar Capri pausa las consultas; la apertura y las transformaciones conservan la presentación correspondiente a cada modo.
+
+Tamaño, Aspecto y Color se ajustan desde el menú radial; sus controles duplicados se retiraron de Escritorio. En **Ajustes → Escritorio**, **Intervalo entre llamadas · minutos** controla el tiempo aproximado entre llamadas de Capri y sus invitados. El valor inicial es 15 minutos, con variación del 15%; espera mientras conversas o usas Ajustes. Los asomos de las esquinas y los viajes conservan sus propios temporizadores.
+
+En **IA y servicios** se explica para qué sirve la IA local y cómo vincular playlists por nombre. Activar la preparación de IA y cambiar su modelo requieren confirmar una alerta de consumo, espera y posibles cambios de calidad. La comparación usa los datos del modelo instalado cuando están disponibles; cambiar de Qwen a Llama no implica automáticamente más consumo. En **Micrófono**, cambiar entre Vosk/Whisper o entre Whisper Base/Small también muestra sus ventajas y limitaciones antes de guardar. **Cancelar**, Esc o cerrar la alerta conserva la selección anterior.
+
+Se retiró la opción de bromas que minimizan ventanas, también del menú Travesuras. Las preferencias antiguas que la activaban quedan apagadas. **Llamadas ocasionales** incluye las llamadas de Capri y de sus invitados.
 
 ## Monitor del computador
 

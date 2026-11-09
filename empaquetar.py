@@ -8,6 +8,9 @@ ARCHIVOS.append('assets/capri-saludo-v1.png')
 ARCHIVOS.append('PROMPT_SALUDO.md')
 ARCHIVOS.append('menu_radial.py')
 ARCHIVOS.append('ajustes_ui.py')
+ARCHIVOS.extend(['ajustes_voz.py','juegos_ui.py'])
+ARCHIVOS.append('playlists_ui.py')
+ARCHIVOS.extend(['paneles_integrados.py','confirmaciones_ui.py','cambios_modelos.py'])
 ARCHIVOS.extend(['tema_ui.py','disenos_pantalla.py'])
 ARCHIVOS.append('bienvenida.py')
 ARCHIVOS.append('capturas_intro.py')
@@ -61,9 +64,11 @@ ARCHIVOS.extend(['assets/capri-asomo-fiel-v3.png','assets/capri-despedida-expres
 ARCHIVOS.append('traducciones.json')
 ARCHIVOS.append('REFERENCIAS_VOZ.md')
 ARCHIVOS.append('escucha_activa.py')
+ARCHIVOS.extend(['voz_local.py','voz_local_motor.py','voz_rapida.py','VOZ_LOCAL.md'])
 ARCHIVOS.extend(['despedida.py','assets/capri-base-hd-v1.png','PROMPT_HD.md'])
 
 def origen(nombre):
+    if nombre=='VOZ_LOCAL.md':return BASE/'docs'/nombre
     if nombre=='COUNTER_STRIKE.md':return BASE/'docs'/nombre
     if nombre=='REACCIONES_SKINS.md':return BASE/'docs'/nombre
     if nombre=='FORTNITE.md':return BASE/'docs'/nombre

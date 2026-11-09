@@ -36,11 +36,12 @@ class TarjetaMapa(LienzoUI):
 
 
 class PanelCS2:
-    def __init__(self,raiz,config,guardar,enviar,control):
+    def __init__(self,raiz,config,guardar,enviar,control,contenedor=None):
         self.config=normalizar(config);self.guardar=guardar;self.enviar=enviar;self.control=control;self.cerrado=False;self._after=None
-        self.ventana=w=tk.Toplevel(raiz);w.withdraw();w.title('Capri · Counter-Strike 2');w.geometry('850x730');w.minsize(680,540)
-        w.protocol('WM_DELETE_WINDOW',self.cerrar);w.bind('<Escape>',lambda e:self.cerrar())
-        marco=VentanaCyber(w,'COUNTER-STRIKE 2',cerrar=self.cerrar);f=marco.cuerpo
+        from paneles_integrados import preparar_panel
+        self.ventana,marco=preparar_panel(raiz,'Counter-Strike 2',self,(850,730),(680,540),contenedor=contenedor)
+        w=self.ventana;f=marco.cuerpo
+        if contenedor is None:w.bind('<Escape>',lambda e:self.cerrar())
         self.titulo=self.etiqueta(f,'Tus mapas. Tu próxima partida.',TEXTO,23);self.titulo.pack(anchor='w',padx=18,pady=(6,4))
         self.etiqueta(f,'COMPETITIVO · COUNTER-STRIKE 2',ACENTO,10).pack(anchor='w',padx=18,pady=(0,8))
         self.descripcion=self.etiqueta(f,'Selecciona los mapas que quieras. Capri los comprueba en el juego antes de buscar.',SUAVE,10);self.descripcion.pack(fill='x',padx=18,pady=(0,10))

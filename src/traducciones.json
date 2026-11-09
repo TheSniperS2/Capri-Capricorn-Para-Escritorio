@@ -1520,9 +1520,9 @@
     "準備中：Capriの画像..."
   ],
   "Preparando voz…": [
-    "Preparing voice...",
-    "Preparando voz...",
-    "準備中：声..."
+    "Preparing voice…",
+    "Preparando voz…",
+    "音声を準備中…"
   ],
   "Preparar Capri.pyw": [
     "Preparar Capri.pyw",
@@ -4408,5 +4408,495 @@
     "Match acceptance in Counter-Strike is manual. Confirm it in the game.",
     "A aceitação da partida em Counter-Strike é manual. Confirme no jogo.",
     "Counter-Strike の試合承諾は手動です。ゲームで確認してください。"
+  ],
+  "Usar la nueva voz de Capri en inglés": [
+    "Use Capri’s new English voice",
+    "Usar a nova voz de Capri em inglês",
+    "Capriの新しい英語音声を使う"
+  ],
+  "Se usa al elegir inglés, con acento automático o inglés. Se genera en tu equipo y puede tardar. Las frases guardadas se reutilizan.": [
+    "Used when English is selected, with automatic or English accent. Generated on your computer; it may take time. Saved phrases are reused.",
+    "Usada ao escolher inglês, com sotaque automático ou inglês. Gerada no computador; pode demorar. Frases salvas são reutilizadas.",
+    "英語と自動または英語のアクセントを選ぶと使用します。端末で生成するため時間がかかる場合があります。保存した音声は再利用します。"
+  ],
+  "El micrófono se reconoce en tu PC. La voz por internet envía las respuestas a Microsoft. La voz local inglesa tiene su propio interruptor y no necesita internet.": [
+    "Speech recognition runs on your PC. Online speech sends responses to Microsoft. The local English voice has its own switch and works offline.",
+    "O reconhecimento de fala ocorre no PC. A voz pela internet envia respostas à Microsoft. A voz local em inglês tem seu próprio interruptor e funciona offline.",
+    "音声認識はPC内で処理します。オンライン音声は返答をMicrosoftに送ります。ローカル英語音声は専用のスイッチで切り替え、オフラインで使えます。"
+  ],
+  "No pude preparar la voz local. Revisa la opción de voz inglesa en Ajustes.": [
+    "I couldn’t prepare the local voice. Check the English voice option in Settings.",
+    "Não consegui preparar a voz local. Confira a opção de voz em inglês nos Ajustes.",
+    "ローカル音声を準備できませんでした。設定の英語音声を確認してください。"
+  ],
+  "Preparando voz local…": [
+    "Preparing local voice…",
+    "Preparando voz local…",
+    "ローカル音声を準備中…"
+  ],
+  "Se usa al elegir inglés, con acento automático o inglés. Las frases guardadas se reutilizan.": [
+    "Used with English and automatic or English accent. Saved phrases are reused.",
+    "Usada com inglês e sotaque automático ou inglês. Frases salvas são reutilizadas.",
+    "英語と自動または英語のアクセントで使います。保存した音声を再利用します。"
+  ],
+  "Generación de la voz inglesa": [
+    "English speech generation",
+    "Geração da voz em inglês",
+    "英語音声の生成"
+  ],
+  "Rápida (internet)": [
+    "Fast (internet)",
+    "Rápida (internet)",
+    "高速（インターネット）"
+  ],
+  "Local (más lenta)": [
+    "Local (slower)",
+    "Local (mais lenta)",
+    "ローカル（低速）"
+  ],
+  "Rápida prepara el texto hablado por internet y aplica el timbre de referencia en tu PC. Local funciona sin internet, pero tarda más.": [
+    "Fast mode prepares speech online and applies the reference voice on your PC. Local mode works offline and takes longer.",
+    "O modo rápido prepara a fala online e aplica o timbre de referência no PC. O modo local funciona offline e demora mais.",
+    "高速モードはオンラインで音声を生成し、PCで参照音声の声質を適用します。ローカルモードはオフラインで動作しますが、時間がかかります。"
+  ],
+  "El micrófono se reconoce en tu PC. La voz por internet envía las respuestas a Microsoft. El modo local inglés funciona sin internet.": [
+    "Speech recognition runs on your PC. Online speech sends responses to Microsoft. Local English mode works offline.",
+    "O reconhecimento de fala ocorre no PC. A voz online envia respostas à Microsoft. O modo local em inglês funciona offline.",
+    "音声認識はPC内で処理します。オンライン音声は返答をMicrosoftに送ります。ローカル英語モードはオフラインで使えます。"
+  ],
+  "La voz rápida necesita activar «Voz natural por internet».": [
+    "Fast speech requires “Natural voice over the internet” to be enabled.",
+    "A voz rápida exige ativar “Voz natural pela internet”.",
+    "高速音声には「インターネット経由の自然な音声」を有効にしてください。"
+  ],
+  "No pude preparar la voz inglesa. Revisa su configuración en Ajustes.": [
+    "I couldn’t prepare the English voice. Check its configuration in Settings.",
+    "Não consegui preparar a voz em inglês. Confira sua configuração nos Ajustes.",
+    "英語音声を準備できませんでした。設定を確認してください。"
+  ],
+  "Una sola voz de Capri. Ajusta únicamente su volumen y velocidad.": [
+    "One Capri voice. Adjust only its volume and speed.",
+    "Uma única voz da Capri. Ajuste apenas o volume e a velocidade.",
+    "カプリの音声はひとつです。音量と速度を調整できます。"
+  ],
+  "La voz necesita internet y envía el texto de las respuestas a Microsoft. Las muestras de referencia permanecen en tu PC.": [
+    "Voice requires internet and sends response text to Microsoft. Reference samples stay on your PC.",
+    "A voz precisa de internet e envia o texto das respostas à Microsoft. As amostras de referência ficam no seu PC.",
+    "音声にはインターネット接続が必要で、返答のテキストを Microsoft に送信します。参照音声は PC 内に保存されます。"
+  ],
+  "No pude preparar la voz rápida. Comprueba la conexión y reinicia Capri.": [
+    "I couldn't prepare the fast voice. Check your connection and restart Capri.",
+    "Não consegui preparar a voz rápida. Verifique a conexão e reinicie a Capri.",
+    "高速音声を準備できませんでした。接続を確認し、カプリを再起動してください。"
+  ],
+  "Activa las respuestas en voz alta en Ajustes para usar la voz por internet.": [
+    "Enable spoken responses in Settings to use the internet voice.",
+    "Ative as respostas em voz alta nos Ajustes para usar a voz pela internet.",
+    "インターネット音声を使うには、設定で音声による返答を有効にしてください。"
+  ],
+  "Una sola voz por internet, con volumen y velocidad ajustables.": [
+    "One internet voice, with adjustable volume and speed.",
+    "Uma única voz pela internet, com volume e velocidade ajustáveis.",
+    "インターネット音声の音量と速度を調整できます。"
+  ],
+  "Cambia menús y respuestas. La voz de Capri sigue fija.": [
+    "Changes menus and replies. Capri's voice stays the same.",
+    "Muda os menus e as respostas. A voz da Capri continua a mesma.",
+    "メニューと返答の言語を変更します。カプリの音声は変わりません。"
+  ],
+  "Voz por idioma, volumen y velocidad de Capri.": [
+    "Capri's voice by language, volume and speaking speed.",
+    "Voz por idioma, volume e velocidade de Capri.",
+    "言語別の音声、音量、話す速さを設定。"
+  ],
+  "Voz en inglés": [
+    "English voice",
+    "Voz em inglês",
+    "英語の音声"
+  ],
+  "Versiones disponibles solo en inglés": [
+    "Voice versions are available only in English",
+    "Versões disponíveis apenas em inglês",
+    "音声バージョンは英語のみ"
+  ],
+  "Capri V1 · Conversación ágil": [
+    "Capri V1 · Quick conversation",
+    "Capri V1 · Conversa ágil",
+    "Capri V1 · すばやい会話"
+  ],
+  "Capri V2 · Voz de referencia": [
+    "Capri V2 · Reference voice",
+    "Capri V2 · Voz de referência",
+    "Capri V2 · リファレンス音声"
+  ],
+  "Capri V1 responde antes. Usa internet para generar la voz y la adapta al timbre de Capri en tu PC.": [
+    "Capri V1 responds sooner. It generates speech over the internet, then adapts it to Capri’s voice on your PC.",
+    "Capri V1 responde mais rápido. Gera a voz pela internet e adapta o timbre de Capri no seu PC.",
+    "Capri V1は待ち時間が短い音声です。インターネットで生成し、PC上でCapriの声質に変換します。"
+  ],
+  "Capri V2 conserva la voz inglesa de referencia. Genera el audio en tu PC y puede tardar alrededor de un minuto por frase nueva.": [
+    "Capri V2 keeps the reference English voice. It generates audio on your PC and may take around a minute for each new sentence.",
+    "Capri V2 mantém a voz inglesa de referência. Gera o áudio no seu PC e pode levar cerca de um minuto por frase nova.",
+    "Capri V2は基準の英語音声を使います。PC上で生成するため、新しい文ごとに約1分かかることがあります。"
+  ],
+  "V1 y V2 tienen diferencias de timbre y entonación. Puedes cambiar de versión sin modificar la voz española.": [
+    "V1 and V2 differ in tone and intonation. Switching versions does not change the Spanish voice.",
+    "V1 e V2 diferem no timbre e na entonação. Trocar de versão não muda a voz em espanhol.",
+    "V1とV2は声質や抑揚が異なります。切り替えてもスペイン語の声は変わりません。"
+  ],
+  "Esta versión necesita el perfil de voz preparado en este equipo. Se conserva la voz inglesa habitual hasta instalarlo.": [
+    "This version needs a voice profile prepared on this PC. The usual English voice is used until it is installed.",
+    "Esta versão precisa do perfil de voz preparado neste PC. A voz inglesa habitual é usada até a instalação.",
+    "このバージョンにはPCに音声プロファイルの準備が必要です。未導入の場合は通常の英語音声を使います。"
+  ],
+  "Voz original en español": [
+    "Original Spanish voice",
+    "Voz original em espanhol",
+    "従来のスペイン語音声"
+  ],
+  "Se conserva la voz española de Capri. Las versiones V1 y V2 solo se aplican al inglés.": [
+    "Capri’s Spanish voice is preserved. V1 and V2 apply only to English.",
+    "A voz espanhola de Capri foi mantida. V1 e V2 se aplicam apenas ao inglês.",
+    "Capriのスペイン語音声を維持します。V1とV2は英語にのみ適用されます。"
+  ],
+  "Voz del idioma seleccionado": [
+    "Voice for the selected language",
+    "Voz do idioma selecionado",
+    "選択中の言語の音声"
+  ],
+  "Se usa la voz habitual de este idioma. Capri V1 y Capri V2 están disponibles en inglés.": [
+    "The usual voice for this language is used. Capri V1 and Capri V2 are available in English.",
+    "A voz habitual deste idioma é usada. Capri V1 e Capri V2 estão disponíveis em inglês.",
+    "この言語の従来の音声を使います。Capri V1とCapri V2は英語で利用できます。"
+  ],
+  "La voz por internet envía el texto de las respuestas a Microsoft. Las referencias de voz permanecen en tu PC.": [
+    "Online speech sends the response text to Microsoft. Voice references stay on your PC.",
+    "A voz pela internet envia o texto das respostas à Microsoft. As referências de voz ficam no seu PC.",
+    "オンライン音声は応答テキストをMicrosoftに送信します。参照音声はPC上に保存されます。"
+  ],
+  "Capri V2 genera la voz sin enviar el texto a un servicio de voz. La IA de conversación mantiene su configuración.": [
+    "Capri V2 generates speech without sending text to a speech service. Your conversation AI settings still apply.",
+    "Capri V2 gera a voz sem enviar texto a um serviço de voz. A IA de conversa mantém sua configuração.",
+    "Capri V2は音声サービスへテキストを送らずに生成します。会話AIの設定はそのまま適用されます。"
+  ],
+  "Partidas, personajes y avisos organizados por juego.": [
+    "Matches, characters and alerts grouped by game.",
+    "Partidas, personagens e avisos organizados por jogo.",
+    "対戦、キャラクター、通知をゲーム別に設定。"
+  ],
+  "Juego": [
+    "Game",
+    "Jogo",
+    "ゲーム"
+  ],
+  "Partidas": [
+    "Matches",
+    "Partidas",
+    "対戦"
+  ],
+  "Skins": [
+    "Skins",
+    "Skins",
+    "スキン"
+  ],
+  "Avisos": [
+    "Alerts",
+    "Avisos",
+    "通知"
+  ],
+  "Búsqueda, aceptación y prioridades de campeones por línea.": [
+    "Queueing, match acceptance and champion priorities by role.",
+    "Busca, aceitação e prioridades de campeões por rota.",
+    "マッチ検索、自動承認、レーン別のチャンピオン優先順位。"
+  ],
+  "Búsqueda y hasta tres agentes por orden de preferencia.": [
+    "Queueing and up to three agents in preference order.",
+    "Busca e até três agentes por ordem de preferência.",
+    "マッチ検索と最大3人のエージェントの優先順位。"
+  ],
+  "Modo de juego, tamaño del equipo y búsqueda de partida.": [
+    "Game mode, team size and matchmaking.",
+    "Modo de jogo, tamanho da equipe e busca de partida.",
+    "ゲームモード、チーム人数、マッチ検索。"
+  ],
+  "Mapas preferidos y búsqueda de partida.": [
+    "Preferred maps and matchmaking.",
+    "Mapas preferidos e busca de partida.",
+    "優先マップとマッチ検索。"
+  ],
+  "Experiencias favoritas, avatar y reacciones a lo que juegas.": [
+    "Favorite experiences, avatar and reactions to your gameplay.",
+    "Experiências favoritas, avatar e reações ao que você joga.",
+    "お気に入りの体験、アバター、プレイへの反応。"
+  ],
+  "Abre el panel del juego para ajustar sus opciones y controlar las partidas.": [
+    "Open the game panel to adjust its settings and control matchmaking.",
+    "Abra o painel do jogo para ajustar as opções e controlar as partidas.",
+    "ゲームのパネルで各種設定とマッチ検索を操作できます。"
+  ],
+  "Cambia menús y respuestas. En inglés puedes elegir Capri V1 o Capri V2 en Voz.": [
+    "Changes menus and responses. In English, choose Capri V1 or Capri V2 under Voice.",
+    "Altera menus e respostas. Em inglês, escolha Capri V1 ou Capri V2 em Voz.",
+    "メニューと応答の言語を変更します。英語では「音声」でCapri V1またはV2を選べます。"
+  ],
+  "No se guarda el audio ni el historial del chat.\nArrastra la imagen para mover a Capri. Clic para chatear.\nTecla configurable en Micrófono · Esc: detener voz.": [
+    "Audio and chat history are not saved.\nDrag Capri to move her. Click to chat.\nSet your talk key under Microphone · Esc: stop speech.",
+    "O áudio e o histórico do chat não são salvos.\nArraste Capri para movê-la. Clique para conversar.\nTecla configurável em Microfone · Esc: parar voz.",
+    "音声とチャット履歴は保存しません。\nCapriをドラッグで移動、クリックでチャット。\n話すキーは「マイク」で設定 · Escで音声停止。"
+  ],
+  "Hay misiones de Salvar el Mundo con {0} pavos en total para fundadores. Revisa las zonas y los niveles en Ajustes → Juegos → Fortnite → Avisos; tienes hasta {1}.": [
+    "Save the World missions have {0} V-Bucks in total for founders. Check zones and levels in Settings → Games → Fortnite → Alerts; available until {1}.",
+    "As missões de Salve o Mundo têm {0} V-Bucks no total para fundadores. Veja zonas e níveis em Ajustes → Jogos → Fortnite → Avisos; até {1}.",
+    "ファウンダー向け「世界を救え」ミッションで合計{0} V-Bucks獲得できます。設定 → ゲーム → Fortnite → 通知でエリアとレベルを確認。有効期限は{1}です。"
+  ],
+  "Travesuras": [
+    "Mischief",
+    "Travessuras",
+    "いたずら"
+  ],
+  "Cambia el idioma de los menús y las respuestas.": [
+    "Changes the language of menus and responses.",
+    "Altera o idioma dos menus e das respostas.",
+    "メニューと応答の言語を変更します。"
+  ],
+  "Llamadas y bromas · intervalo en minutos": [
+    "Calls and pranks · interval in minutes",
+    "Chamadas e brincadeiras · intervalo em minutos",
+    "電話といたずら · 間隔（分）"
+  ],
+  "Tiempo aproximado entre llamadas y bromas de ventanas, si están activadas. Capri espera mientras conversas con ella. Los asomos y los viajes tienen su propio ritmo.": [
+    "Approximate time between calls and window pranks, when enabled. Capri waits while you talk to her. Peeking and exploring follow their own timing.",
+    "Tempo aproximado entre chamadas e brincadeiras com janelas, quando ativadas. Capri espera enquanto você conversa com ela. Espiadas e passeios têm seu próprio ritmo.",
+    "有効時の電話とウィンドウのいたずらの、およその間隔です。会話中は待機します。のぞき見や移動は別のタイミングで行います。"
+  ],
+  "Responde con menos espera. Necesita internet.": [
+    "Responds with less waiting. Requires internet.",
+    "Responde com menos espera. Precisa de internet.",
+    "待ち時間が短い音声です。インターネット接続が必要です。"
+  ],
+  "Tarda más en preparar cada respuesta.": [
+    "Takes longer to prepare each reply.",
+    "Leva mais tempo para preparar cada resposta.",
+    "応答の準備に時間がかかります。"
+  ],
+  "Esta voz no está disponible en este equipo. Se usará la voz habitual.": [
+    "This voice is unavailable on this PC. The usual voice will be used.",
+    "Esta voz não está disponível neste PC. A voz habitual será usada.",
+    "このPCではこの音声を利用できません。通常の音声を使います。"
+  ],
+  "Vincular playlist": [
+    "Link playlist",
+    "Vincular playlist",
+    "プレイリストを登録"
+  ],
+  "Guarda su nombre y pídesela a Capri cuando quieras.": [
+    "Save its name and ask Capri to play it whenever you like.",
+    "Salve o nome e peça a Capri para tocar quando quiser.",
+    "名前を登録すると、いつでもCapriに再生を頼めます。"
+  ],
+  "Nombre para pedirla": [
+    "Name to ask for",
+    "Nome para pedir",
+    "呼び出す名前"
+  ],
+  "Por ejemplo: Capricorn": [
+    "For example: Capricorn",
+    "Por exemplo: Capricorn",
+    "例：Capricorn"
+  ],
+  "Enlace de la playlist": [
+    "Playlist link",
+    "Link da playlist",
+    "プレイリストのリンク"
+  ],
+  "Copia el enlace desde Spotify. También puedes pegar una URI de Spotify.": [
+    "Copy the link from Spotify. You can also paste a Spotify URI.",
+    "Copie o link do Spotify. Você também pode colar uma URI do Spotify.",
+    "Spotifyからリンクをコピーしてください。Spotify URIも使用できます。"
+  ],
+  "La playlist puede seguir siendo privada.": [
+    "The playlist can stay private.",
+    "A playlist pode continuar privada.",
+    "非公開のプレイリストも登録できます。"
+  ],
+  "Pegar enlace": [
+    "Paste link",
+    "Colar link",
+    "リンクを貼り付け"
+  ],
+  "Escribe un nombre para pedir esta playlist.": [
+    "Enter a name to ask for this playlist.",
+    "Digite um nome para pedir esta playlist.",
+    "プレイリストを呼び出す名前を入力してください。"
+  ],
+  "Pega un enlace de playlist de Spotify válido.": [
+    "Paste a valid Spotify playlist link.",
+    "Cole um link válido de playlist do Spotify.",
+    "有効なSpotifyプレイリストのリンクを貼り付けてください。"
+  ],
+  "No pude guardar la playlist. Inténtalo de nuevo.": [
+    "Could not save the playlist. Try again.",
+    "Não foi possível salvar a playlist. Tente novamente.",
+    "プレイリストを保存できませんでした。もう一度お試しください。"
+  ],
+  "El portapapeles no contiene texto.": [
+    "The clipboard contains no text.",
+    "A área de transferência não contém texto.",
+    "クリップボードにテキストがありません。"
+  ],
+  "Playlist vinculada": [
+    "Playlist linked",
+    "Playlist vinculada",
+    "プレイリストを登録しました"
+  ],
+  "Pídela por su nombre.": [
+    "Ask for it by name.",
+    "Peça pelo nome.",
+    "登録した名前で頼んでください。"
+  ],
+  "PUEDES DECIR": [
+    "YOU CAN SAY",
+    "VOCÊ PODE DIZER",
+    "声で頼んでみよう"
+  ],
+  "Capri, pon mi playlist «{0}».": [
+    "Capri, play my playlist “{0}”.",
+    "Capri, toque minha playlist “{0}”.",
+    "Capri、「{0}」のプレイリストを再生して。"
+  ],
+  "Vincular otra": [
+    "Link another",
+    "Vincular outra",
+    "別のプレイリストを登録"
+  ],
+  "Listo": [
+    "Done",
+    "Pronto",
+    "完了"
+  ],
+  "Idioma, movimiento y funciones del escritorio.": [
+    "Language, movement and desktop features.",
+    "Idioma, movimento e funções da área de trabalho.",
+    "言語、移動、デスクトップの機能を設定。"
+  ],
+  "Pega su enlace de Spotify. Puede seguir siendo privada.": [
+    "Paste its Spotify link. The playlist can stay private.",
+    "Cole o link do Spotify. A playlist pode continuar privada.",
+    "Spotifyのリンクを貼り付けてください。非公開のままで利用できます。"
+  ],
+  "Llamadas ocasionales": [
+    "Occasional calls",
+    "Chamadas ocasionais",
+    "時々電話がかかってくる"
+  ],
+  "Intervalo entre llamadas · minutos": [
+    "Time between calls · minutes",
+    "Intervalo entre chamadas · minutos",
+    "電話の間隔（分）"
+  ],
+  "Tiempo aproximado entre llamadas. Las apariciones desde las esquinas y los viajes tienen su propio ritmo.": [
+    "Approximate time between calls. Corner appearances and exploring follow their own timing.",
+    "Tempo aproximado entre chamadas. Aparições nos cantos e passeios têm seu próprio ritmo.",
+    "電話のおよその間隔です。隅からの登場や移動は別のタイミングで行います。"
+  ],
+  "Activa la IA local para conversar libremente y hacer preguntas. Usa la memoria y el procesador o la GPU de tu equipo mientras responde.": [
+    "Enable local AI to have open conversations and ask questions. It uses your PC’s memory and CPU or GPU while replying.",
+    "Ative a IA local para conversar livremente e fazer perguntas. Ela usa a memória e o processador ou a GPU do PC ao responder.",
+    "ローカルAIを有効にすると自由な会話や質問ができます。応答中はPCのメモリとCPUまたはGPUを使用します。"
+  ],
+  "Playlists de Spotify": [
+    "Spotify playlists",
+    "Playlists do Spotify",
+    "Spotifyのプレイリスト"
+  ],
+  "Vincula un nombre con el enlace de tu playlist para pedírsela a Capri, por ejemplo: «pon mi playlist Capricorn». También sirve si Spotify no permite encontrarla en tu biblioteca.": [
+    "Link a name to your playlist’s URL so you can ask Capri to play it, such as “play my Capricorn playlist”. This also helps when Capri cannot find it in your Spotify library.",
+    "Vincule um nome ao link da playlist para pedir a Capri, como “toque minha playlist Capricorn”. Também ajuda quando Capri não consegue encontrá-la na biblioteca do Spotify.",
+    "名前とプレイリストのリンクを登録すると、「Capricornのプレイリストを再生して」などと頼めます。Spotifyのライブラリで見つからない場合にも使えます。"
+  ],
+  "Podrás conversar libremente y hacer preguntas. La primera preparación puede descargar Ollama y un modelo de unos 2 GB; otros modelos pueden necesitar más espacio.": [
+    "You will be able to have open conversations and ask questions. Initial setup may download Ollama and a model of about 2 GB; other models may need more space.",
+    "Você poderá conversar livremente e fazer perguntas. A preparação inicial pode baixar o Ollama e um modelo de cerca de 2 GB; outros modelos podem precisar de mais espaço.",
+    "自由な会話や質問ができます。初回の準備ではOllamaと約2 GBのモデルをダウンロードする場合があります。別のモデルにはさらに容量が必要な場合があります。"
+  ],
+  "Mientras responde, la IA utiliza memoria y procesador o GPU. En equipos con pocos recursos, Capri y otras aplicaciones podrían responder más despacio.": [
+    "While replying, AI uses memory and your CPU or GPU. On PCs with limited resources, Capri and other apps may respond more slowly.",
+    "Ao responder, a IA usa memória e processador ou GPU. Em PCs com poucos recursos, Capri e outros aplicativos podem ficar mais lentos.",
+    "応答中はメモリとCPUまたはGPUを使用します。リソースの少ないPCでは、Capriや他のアプリの動作が遅くなる場合があります。"
+  ],
+  "El modelo elegido tiene más parámetros. Puede necesitar más memoria y tardar más al responder.": [
+    "The selected model has more parameters. It may need more memory and take longer to reply.",
+    "O modelo escolhido tem mais parâmetros. Pode precisar de mais memória e demorar mais para responder.",
+    "選択したモデルはパラメーター数が多く、メモリ使用量や応答時間が増える場合があります。"
+  ],
+  "El modelo elegido tiene menos parámetros. Puede consumir menos y responder antes, pero perder detalle en algunas respuestas.": [
+    "The selected model has fewer parameters. It may use fewer resources and reply sooner, but give less detail in some answers.",
+    "O modelo escolhido tem menos parâmetros. Pode consumir menos e responder antes, mas perder detalhes em algumas respostas.",
+    "選択したモデルはパラメーター数が少なく、消費リソースや待ち時間が減る一方、回答の詳しさが下がる場合があります。"
+  ],
+  "El consumo y la rapidez dependen del tamaño del modelo y de tu equipo. Cambiar de familia no garantiza una mejora.": [
+    "Resource use and speed depend on model size and your PC. Switching model families does not guarantee an improvement.",
+    "O consumo e a velocidade dependem do tamanho do modelo e do PC. Trocar de família não garante melhora.",
+    "消費リソースと速さはモデルの大きさやPCによって変わります。モデルの種類を変えても改善するとは限りません。"
+  ],
+  "La calidad de las respuestas puede variar. La primera respuesta puede tardar más mientras se carga el modelo.": [
+    "Answer quality may change. The first reply may take longer while the model loads.",
+    "A qualidade das respostas pode variar. A primeira resposta pode demorar mais enquanto o modelo carrega.",
+    "回答の質が変わる場合があります。最初の応答はモデルの読み込みで時間がかかる場合があります。"
+  ],
+  "Whisper Small suele reconocer mejor frases y nombres difíciles, pero necesita más memoria y tiempo que Base.": [
+    "Whisper Small tends to recognize difficult phrases and names better, but needs more memory and time than Base.",
+    "Whisper Small costuma reconhecer melhor frases e nomes difíceis, mas precisa de mais memória e tempo que Base.",
+    "Whisper Smallは難しい言い回しや名前の認識に強い傾向がありますが、Baseよりメモリと時間を必要とします。"
+  ],
+  "Whisper Base consume menos memoria y suele responder antes que Small, pero puede perder precisión con frases o nombres difíciles.": [
+    "Whisper Base uses less memory and usually responds sooner than Small, but may be less accurate with difficult phrases or names.",
+    "Whisper Base usa menos memória e costuma responder antes que Small, mas pode perder precisão com frases ou nomes difíceis.",
+    "Whisper BaseはSmallよりメモリ使用量が少なく速い傾向がありますが、難しい表現や名前の認識精度が下がる場合があります。"
+  ],
+  "Vosk usa menos recursos y responde rápido. Puede reconocer peor los nombres en inglés y las frases difíciles.": [
+    "Vosk uses fewer resources and responds quickly. It may be less accurate with English names and difficult phrases.",
+    "Vosk usa menos recursos e responde rápido. Pode reconhecer pior nomes em inglês e frases difíceis.",
+    "Voskはリソース消費が少なく高速ですが、英語の名前や難しい表現の認識精度が下がる場合があります。"
+  ],
+  "Whisper suele reconocer mejor frases y nombres en inglés que Vosk, pero utiliza más recursos y puede tardar más.": [
+    "Whisper tends to recognize phrases and English names better than Vosk, but uses more resources and may take longer.",
+    "Whisper costuma reconhecer melhor frases e nomes em inglês que Vosk, mas usa mais recursos e pode demorar mais.",
+    "WhisperはVoskより英語の名前や表現の認識に強い傾向がありますが、消費リソースや処理時間が増える場合があります。"
+  ],
+  "Este cambio afecta a cómo se entiende tu voz; no cambia la voz con la que responde Capri.": [
+    "This changes how your speech is understood; it does not change Capri’s speaking voice.",
+    "Isto muda como sua fala é entendida; não muda a voz de Capri.",
+    "この変更は声の認識方法に影響します。Capriの話す声は変わりません。"
+  ],
+  "Confirmar cambio": [
+    "Confirm change",
+    "Confirmar alteração",
+    "変更を確認"
+  ],
+  "Confirmar": [
+    "Confirm",
+    "Confirmar",
+    "確定"
+  ],
+  "Actual: {0}": [
+    "Current: {0}",
+    "Atual: {0}",
+    "現在：{0}"
+  ],
+  "Nuevo: {0}": [
+    "New: {0}",
+    "Novo: {0}",
+    "変更後：{0}"
+  ],
+  "Cambiar reconocimiento de voz": [
+    "Change speech recognition",
+    "Alterar reconhecimento de voz",
+    "音声認識を変更"
+  ],
+  "Cambiar modelo de IA": [
+    "Change AI model",
+    "Alterar modelo de IA",
+    "AIモデルを変更"
   ]
 }

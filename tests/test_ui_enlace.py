@@ -123,6 +123,8 @@ class Enlace(PruebasTk):
             c.cfg['reconocimiento']='rapido';c.configurar()
             c.whisper_combo.current(0);c.whisper_combo.event_generate('<<ComboboxSelected>>')
             c.root.update()
+            self.assertEqual(c.cfg['reconocimiento'],'rapido')
+            c.confirmacion_ajustes.aceptar()
             self.assertEqual(c.cfg['modelo_whisper'],'base')
             self.assertEqual(c.cfg['reconocimiento'],'mixto')
 

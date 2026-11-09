@@ -1,7 +1,8 @@
 # Valorant: búsqueda y preferencias de agente
 
-Abre **Más → Valorant** para entrar directamente al panel. También está disponible en **Ajustes → IA y servicios → Configurar Valorant**.
+Abre **Ajustes → Juegos → Valorant → Partidas** y pulsa **Configurar Valorant**.
 
+El panel se muestra dentro de Ajustes. Pulsa **Volver** para regresar a la página anterior; tus cambios quedan guardados.
 ## Tres preferencias
 
 1. Pulsa una de las tarjetas de **Prioridad 1, 2 o 3**.
@@ -38,14 +39,14 @@ Con la activación por voz encendida puedes decir **«Capri, busca partida»** s
 
 ### Usar Capri con Valorant detrás
 
-En el chat, el selector **Juego para buscar** permite elegir **Valorant**, **League of Legends** o **Automático**. Al elegir Valorant, «busca partida» y «cancela la cola» funcionan por texto o voz aunque Capri tenga el foco y Valorant esté en segundo plano. Abrir **Más → Valorant** también selecciona ese destino y lo guarda para la siguiente sesión. Las órdenes que mencionan expresamente el juego se dirigen a él y actualizan esa elección para las siguientes órdenes.
+En el chat, el selector **Juego para buscar** permite elegir **Valorant**, **League of Legends** o **Automático**. Al elegir Valorant, «busca partida» y «cancela la cola» funcionan por texto o voz aunque Capri tenga el foco y Valorant esté en segundo plano. Abrir **Ajustes → Juegos → Valorant** también selecciona ese destino y lo guarda para la siguiente sesión. Las órdenes que mencionan expresamente el juego se dirigen a él y actualizan esa elección para las siguientes órdenes.
 
 En **Automático** se conserva la detección de Valorant en primer plano para las órdenes de voz. Si quieres usar los comandos genéricos desde el escritorio sin depender del foco, selecciona Valorant. Los botones del panel siempre indican el juego explícitamente y tampoco necesitan que Valorant esté en primer plano.
 
 ### Mostrar y minimizar Capri
 
 - **Ctrl+Alt+C** recupera solo el avatar, sin abrir ni enfocar el chat. Si ya estás usando una ventana de Capri, la misma combinación la oculta.
-- El botón **—** del chat y de los paneles de LoL/Valorant, o **Más → Minimizar Capri**, minimiza sus ventanas.
+- El botón **—** del chat o **Más → Minimizar Capri** oculta Capri y sus ventanas.
 - Puedes recuperarla con **Ctrl+Alt+C**. El chat y los paneles permanecen cerrados visualmente hasta que los abras desde el menú de Capri.
 - Minimizar no cierra Capri ni cancela la cola. La voz y la selección automática de agentes continúan; los avisos visuales y las interacciones espontáneas quedan ocultos mientras esté minimizada.
 

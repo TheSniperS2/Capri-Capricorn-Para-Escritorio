@@ -1,7 +1,8 @@
 # Counter-Strike 2 en Capri
 
-Abre **Más → Counter-Strike** o **Ajustes → IA y servicios → Configurar Counter-Strike**.
+Abre **Ajustes → Juegos → Counter-Strike → Partidas** y pulsa **Configurar Counter-Strike**.
 Esta integración está preparada para el ejecutable `cs2.exe` y su menú **Competitivo**.
+El panel se muestra dentro de Ajustes. Pulsa **Volver** para regresar a la página anterior; tus cambios quedan guardados.
 
 ## Guardar y aplicar mapas
 
