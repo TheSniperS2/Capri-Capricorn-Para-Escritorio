@@ -2,6 +2,13 @@
 
 ## En desarrollo
 
+### Agenda de recordatorios
+
+- Nueva interfaz con formulario y agenda separados, tarjetas por fecha, estado vacío ilustrado, cuenta restante y acceso al próximo aviso.
+- Plazos en minutos/horas/días, accesos rápidos y Ctrl+Enter para crear. Validación sin perder el mensaje, eliminación individual, desplazamiento local y versión compacta con acciones visibles.
+- El contenido del usuario conserva su idioma al traducir la interfaz; no cambia el formato ni la entrega de los avisos guardados.
+
+
 ### Navegación y confirmaciones en Ajustes
 
 - LoL, Valorant, Fortnite, Counter-Strike y Roblox se configuran dentro de Ajustes, con Volver y preferencias conservadas. Vistas reutilizables, rueda local y cierre de consultas al salir; ventanas adaptables desde todos los bordes y esquinas.

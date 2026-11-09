@@ -105,7 +105,7 @@ class Lienzo(tk.Canvas):
 def localizar_widgets(raiz,forzar=False):
     """Localiza textos visibles; selectores, modelos y rutas conservan su identidad."""
     def recorrer(w):
-        if isinstance(w,(tk.Label,tk.Button,tk.Checkbutton,tk.LabelFrame)):
+        if isinstance(w,(tk.Label,tk.Button,tk.Checkbutton,tk.LabelFrame)) and not getattr(w,'_capri_contenido_usuario',False):
             try:
                 variable=w.cget('textvariable') if 'textvariable' in w.keys() else ''
                 visible=str(w.getvar(variable)) if variable else str(w.cget('text'))

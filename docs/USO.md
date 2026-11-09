@@ -280,3 +280,17 @@ El monitor es opcional y viene **desactivado por defecto**. Actívalo en **Ajust
 En modo pantalla aparece una franja de iconos entre el visor y la barra donde se escribe, del ancho del visor e integrada en la misma ventana de Capri: CPU, RAM, GPU y VRAM utilizada. El visor, los recursos y la barra de escritura comparten un chasis continuo, con bordes, fondo y colores coordinados. Al mover Capri, los iconos se desplazan con ella. Al desactivar el monitor se recupera el diseño habitual del visor y la entrada. Las barras indican la carga de CPU/RAM/GPU; al dejar el puntero sobre un icono aparecen los detalles, incluida la RAM usada/total y la memoria gráfica compartida, separada de la VRAM dedicada. La lectura de GPU corresponde al motor más ocupado y la memoria gráfica se suma entre adaptadores.
 
 Los datos se actualizan cada dos segundos, sin instalar herramientas adicionales. La primera lectura de CPU/GPU necesita un intervalo de muestreo; los datos ausentes se muestran con una raya. La apertura y las transformaciones entre pantalla y personaje incluyen el monitor dentro del mismo panel animado cuando está activado. Durante el viaje se utiliza una instantánea de las métricas; al terminar se recupera el panel completo sin esperar otra actualización. Ocultar Capri o usar el modo personaje pausa las consultas; al preparar el regreso al modo pantalla se reanudan en segundo plano.
+
+
+## Agenda de recordatorios
+
+Abre **Más → Recordatorios**. El formulario muestra el mensaje, el plazo en minutos,
+horas o días y una previsión de la fecha y hora. Los accesos **5 min, 15 min, 30 min
+y 1 h** solo preparan el plazo; pulsa **Crear recordatorio** o **Ctrl + Enter** para
+guardarlo.
+
+La agenda ordena los avisos por fecha, los agrupa por día y muestra el tiempo que
+falta. **Quitar** elimina únicamente ese aviso. El formulario y las tarjetas se
+adaptan al tamaño de la ventana; la agenda tiene su propio desplazamiento.
+El texto de los avisos conserva lo escrito por el usuario al cambiar de idioma.
+Los avisos se mantienen al cerrar, pero Capri debe estar abierta para entregarlos.
