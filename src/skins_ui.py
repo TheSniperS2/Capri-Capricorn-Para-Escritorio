@@ -16,7 +16,7 @@ TEXTOS=('Reacciones','Gustos y comentarios de Capri sobre las skins.','Capri tam
         'Este ejemplo no analiza el juego ni cambia tu equipamiento.',
         'No reconoce atuendos solo por su silueta: en Fortnite necesita el nombre visible en una ficha.',
         'Reacciones a skins desactivadas','Esperando una skin reconocible fuera de partida',
-        'Elige una skin y deja su ficha visible unos segundos: Capri comenta automáticamente.',
+        'Capri toma la primera ficha como referencia. Al seleccionar otra skin, confirma su nombre y comenta sin repetirla.',
         'Las frases varían, pero su opinión sobre cada skin se mantiene incluso al reiniciar.',
         'Le gusta','Opinión neutral','No es de sus favoritas',
         'Estos son ejemplos; Capri reconoce muchas más skins en el juego.')
@@ -41,7 +41,7 @@ class AjustesSkins:
         self.frecuencia=SelectorCyber(padre,values=('Discreta','Equilibrada','Entusiasta'))
         self.frecuencia.current(('discreta','equilibrada','entusiasta').index(self.config['frecuencia']));self.frecuencia.pack(fill='x')
         self.frecuencia.bind('<<ComboboxSelected>>',lambda e:self.cambiar('frecuencia',('discreta','equilibrada','entusiasta')[self.frecuencia.current()]))
-        for t in ('Elige una skin y deja su ficha visible unos segundos: Capri comenta automáticamente.',
+        for t in ('Capri toma la primera ficha como referencia. Al seleccionar otra skin, confirma su nombre y comenta sin repetirla.',
                   'Las frases varían, pero su opinión sobre cada skin se mantiene incluso al reiniciar.',
                   'Observa solo el juego activo. Las capturas se procesan en este equipo y no se guardan.',
                   'No reconoce atuendos solo por su silueta: en Fortnite necesita el nombre visible en una ficha.'):

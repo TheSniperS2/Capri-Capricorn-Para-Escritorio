@@ -85,6 +85,30 @@ class Skins(unittest.TestCase):
         self.assertEqual(set(exacta),{'Character_DualParadox'})
         self.assertIsNone(f.fortnite_visible(ficha(('PHILIP J. FRY', 'GOKU BLACK'))))
 
+    def test_rotulo_y_nombre_en_una_linea(self):
+        p=ficha((),tipo=False)
+        p=Pantalla(p.ventana,p.rect,(*p.textos,Texto('ATUENDO: GOKU BLACK',(890,900,400,30))),p.momento)
+        self.assertEqual(FuentesSkins().fortnite_visible(p).skins[0]['id'],'Character_DualParadox')
+
+    def test_seleccion_real_referencia_inicial_y_descarte_al_cambiar(self):
+        m=MonitorSkins(Mock(),Mock());self.addCleanup(m.cerrar)
+        a=Lectura('fortnite','ficha',(skin('fry','fortnite'),))
+        b=Lectura('fortnite','ficha',(next(s for s in catalogo() if s['id']=='Character_DualParadox'),))
+        for _ in range(3):self.assertIsNone(m.observar_seleccion('fortnite',a))
+        self.assertIsNone(m.observar_seleccion('fortnite',b))
+        p=m.observar_seleccion('fortnite',b);self.assertIsNotNone(p)
+        m.observar_seleccion('fortnite',a);self.assertFalse(m.motor.confirmar(p))
+        m.configurar({'activo':True},False)
+        self.assertIsNone(m.observar_seleccion('fortnite',None))
+        self.assertIsNone(m.observar_seleccion('fortnite',b));self.assertIsNotNone(m.observar_seleccion('fortnite',b))
+
+    def test_ficha_valorant_visible_no_espera_servicios_riot(self):
+        s=skin('rgx');nombre=s['nombres']['es'];p=Pantalla(123,(0,0,1920,1080),(
+            Texto('COLECCION',(400,40,200,30)),Texto('EQUIPAR',(600,900,200,30)),Texto(nombre,(600,300,700,35))),0)
+        v=Mock();v.capturar.return_value=p;c=Mock();c.pedir.side_effect=AssertionError('No consultar Riot para una ficha visible')
+        f=FuentesSkins(cliente=c,vista_valorant=v)
+        self.assertEqual(f.leer('valorant',manual=True).skins[0]['id'],s['id']);c.pedir.assert_not_called()
+
     def test_rotulo_atuendo_separado_por_ocr_no_se_confunde_con_pestana(self):
         from fortnite_vision import VistaFortnite
         f=FuentesSkins();p=ficha(('GOKU BLACK',))
@@ -103,7 +127,7 @@ class Skins(unittest.TestCase):
         reloj.return_value=9;m.observar(b);q=m.observar(b)
         self.assertEqual(q.skin['id'],nueva['id'])
         m.observar(a);self.assertFalse(m.confirmar(q))
-        for frecuencia,intervalo in (('discreta',18),('equilibrada',8),('entusiasta',3)):
+        for frecuencia,intervalo in (('discreta',8),('equilibrada',3),('entusiasta',1.5)):
             m=GustosCapri(reloj);m.observar(a);m.confirmar(m.observar(a))
             reloj.return_value+=intervalo-1;m.observar(b);self.assertIsNone(m.observar(b,frecuencia))
             reloj.return_value+=1;self.assertIsNotNone(m.observar(b,frecuencia))

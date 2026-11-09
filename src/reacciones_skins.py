@@ -67,7 +67,7 @@ class GustosCapri:
             self._muestras=self._muestras+1 if self._estable==firma else 1;self._estable=firma
             if not manual:
                 if self._muestras<2 or firma==self._ultima_firma:return None
-                if ahora-self._ultima<{'discreta':18,'equilibrada':8,'entusiasta':3}.get(frecuencia,8):return None
+                if ahora-self._ultima<{'discreta':8,'equilibrada':3,'entusiasta':1.5}.get(frecuencia,3):return None
                 if self.pendiente and ahora-self.pendiente.momento<18:return None
             candidatas=list(lectura.skins)
             if not manual:
@@ -98,6 +98,10 @@ class GustosCapri:
     def anular(self):
         with self._lock:self.pendiente=None;self._estable=None;self._muestras=0
 
+    def referencia(self,lectura):
+        with self._lock:
+            self._ultima_firma=lectura.firma;self._ultimos_ids={s['id'] for s in lectura.skins}
+
 
 def interpretar_skins(texto):
     n=clave(texto)
@@ -120,10 +124,12 @@ class MonitorSkins:
         self.config=normalizar({});self.estado='Reacciones a skins desactivadas';self.ultima=None
         self._stop=threading.Event();self._lock=threading.RLock();self._version=0
         self._permitida=False;self._idioma='es';self.hilo=None
+        self._referencias={};self._observada=None;self._anunciada=None;self._muestras_cambio=0
 
     def configurar(self,config,iniciar=True):
         with self._lock:
             self.config=normalizar(config);self._version+=1;self.motor.anular()
+            self._referencias={};self._observada=None;self._anunciada=None;self._muestras_cambio=0
             self.estado='Esperando una skin reconocible fuera de partida' if self.config['activo'] else 'Reacciones a skins desactivadas'
             if iniciar and self.config['activo'] and (self.hilo is None or not self.hilo.is_alive()):
                 self._stop=threading.Event();self.hilo=threading.Thread(target=self._vigilar,args=(self._stop,),daemon=True);self.hilo.start()
@@ -140,26 +146,42 @@ class MonitorSkins:
         return self.fuentes
 
     def _vigilar(self,stop):
-        ultimo=0
-        while not stop.wait(1):
+        while not stop.wait(.25):
             with self._lock:
                 c=dict(self.config);permitida=self._permitida;version=self._version;idioma=self._idioma
             if not c['activo'] or not permitida:continue
             fuente=self._fuentes();juego=fuente.primer_plano()
             if juego not in ('valorant','fortnite') or not c[juego]:self.motor.anular();continue
-            if self.reloj()-ultimo<3:continue
-            ultimo=self.reloj()
             try:
                 lectura=fuente.leer(juego)
                 with self._lock:
                     if stop.is_set() or version!=self._version or not self._permitida:continue
                     self.estado=fuente.estado
                     if fuente.primer_plano()!=juego:self.motor.anular();continue
-                    plan=self.motor.observar(lectura,c['frecuencia'],idioma)
+                    plan=self.observar_seleccion(juego,lectura,c['frecuencia'],idioma)
                     if plan:self.avisar(('skin_reaccion',(version,plan)))
+                intervalo=getattr(fuente,'intervalo',.25)
+                if isinstance(intervalo,(int,float)) and intervalo>.25:stop.wait(min(3,intervalo)-.25)
             except Exception:
                 # El fallo de una observación nunca altera el juego ni se narra.
                 self.estado='No pude confirmar una skin; esperaré otra ocasión';self.motor.anular()
+                stop.wait(2)
+
+    def observar_seleccion(self,juego,lectura,frecuencia='equilibrada',idioma='es'):
+        """La primera ficha es referencia; las selecciones nuevas se confirman dos veces."""
+        firma=lectura.firma if lectura and lectura.skins else None
+        if self._observada!=(juego,firma):
+            self._observada=(juego,firma);self._muestras_cambio=0;self.motor.anular()
+        self._muestras_cambio+=1
+        if self._muestras_cambio>=2 and self._anunciada!=self._observada:
+            self._anunciada=self._observada
+            self.avisar(('skin_cambio',(self._version,firma)))
+        if juego not in self._referencias:
+            self._referencias[juego]=firma
+            if firma is not None:
+                self.motor.referencia(lectura)
+                return None
+        return self.motor.observar(lectura,frecuencia,idioma)
 
     def aceptar(self,version,plan):
         with self._lock:
@@ -190,3 +212,6 @@ class MonitorSkins:
 
     def cerrar(self):
         with self._lock:self._version+=1;self._permitida=False;self.motor.anular();self._stop.set()
+        # Cerrar fuera del hilo de Tk: una lectura en curso tiene su propio plazo.
+        if self.fuentes is not None and callable(getattr(self.fuentes,'cerrar',None)):
+            threading.Thread(target=self.fuentes.cerrar,daemon=True).start()

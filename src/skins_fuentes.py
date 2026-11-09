@@ -3,7 +3,7 @@
 La observación automática conserva el foco. Una petición manual puede recuperar
 Fortnite para leer la ficha que el usuario dejó abierta.
 """
-import hashlib
+import hashlib,threading
 import time
 from functools import lru_cache
 from reacciones_skins import Lectura,catalogo,clave
@@ -38,6 +38,8 @@ def resolver_nombres(juego,textos):
 class FuentesSkins:
     def __init__(self,cliente=None,vista=None,vista_valorant=None):
         self.cliente=cliente;self.vista=vista;self.vista_valorant=vista_valorant
+        self._lock=threading.RLock();self._cerrada=False
+        self.intervalo=.25
         self._cliente_real=cliente is None;self.estado='Esperando una skin reconocible fuera de partida'
         self.catalogo=catalogo();self.ids={ident:s for s in self.catalogo if s['juego']=='valorant' for ident in s['ids']}
 
@@ -49,15 +51,12 @@ class FuentesSkins:
         return ''
 
     def leer(self,juego,manual=False):
-        return self._valorant(manual=manual) if juego=='valorant' else self._fortnite(manual=manual) if juego=='fortnite' else None
+        with self._lock:
+            if self._cerrada:return None
+            self.intervalo=.25
+            return self._valorant(manual=manual) if juego=='valorant' else self._fortnite(manual=manual) if juego=='fortnite' else None
 
     def _valorant(self,manual=False):
-        if self.cliente is None:
-            from valorant_cliente import ClienteValorant
-            self.cliente=ClienteValorant()
-        c=self.cliente;yo=c.jugador
-        if c.pedir('GET',f'/core-game/v1/players/{yo}') or c.pedir('GET',f'/pregame/v1/players/{yo}'):
-            self.estado='En partida o selección: Capri reserva sus comentarios';return None
         # La ficha inspeccionada tiene prioridad sobre cualquier otra arma
         # equipada. No confundir "esta skin" con una favorita del inventario.
         visible=None;ficha_abierta=False
@@ -70,9 +69,16 @@ class FuentesSkins:
                 ficha_abierta=self.es_ficha_valorant(p);visible=self.valorant_visible(p)
             except (ErrorFortnite,OSError):pass
         if visible or ficha_abierta:
-            if c.pedir('GET',f'/core-game/v1/players/{yo}') or c.pedir('GET',f'/pregame/v1/players/{yo}'):return None
             self.estado='Ficha de Valorant reconocida' if visible else 'Muestra el nombre completo de la skin de Valorant'
             return visible
+        # Mantener el ritmo anterior de consultas al equipamiento de Riot.
+        self.intervalo=3
+        if self.cliente is None:
+            from valorant_cliente import ClienteValorant
+            self.cliente=ClienteValorant()
+        c=self.cliente;yo=c.jugador
+        if c.pedir('GET',f'/core-game/v1/players/{yo}') or c.pedir('GET',f'/pregame/v1/players/{yo}'):
+            self.estado='En partida o selección: Capri reserva sus comentarios';return None
         datos=c.pedir('GET',f'/personalization/v2/players/{yo}/playerloadout')
         if not isinstance(datos,dict) or datos.get('Subject')!=yo:return None
         encontrados={}
@@ -121,8 +127,8 @@ class FuentesSkins:
         # La observación automática no restaura el juego ni cambia el foco.
         if not manual and self.primer_plano()!='fortnite':return None
         if self.vista is None:
-            from fortnite_vision import VistaFortnite
-            self.vista=VistaFortnite()
+            from skins_vision import VistaSkins
+            self.vista=VistaSkins()
         p=self.vista.capturar(activar=manual)
         lectura=self._reconocer_ficha(p)
         if manual:
@@ -153,7 +159,7 @@ class FuentesSkins:
         if not p.contiene(acciones):return None
         if p.contiene(('buscando partida','emparejamiento','matchmaking','tiempo restante','storm eye','ojo de la tormenta')):return None
         alto=p.rect[3]-p.rect[1];ancho=p.rect[2]-p.rect[0]
-        anclas=[t for t in p.textos if es_rotulo_atuendo(t.texto)]
+        anclas=[t for t in p.textos if es_rotulo_atuendo(t.texto) or clave(t.texto).startswith(('atuendo ','a tuendo ','outfit ','traje '))]
         if not anclas:return None
         # Las fichas de detalles tienen un único nombre; una cuadrícula con
         # varias skins del catálogo se considera ambigua y permanece en silencio.
@@ -163,9 +169,19 @@ class FuentesSkins:
             cerca=any(abs(a.rect[0]-t.rect[0])<ancho*.16 and abs(a.rect[1]-t.rect[1])<alto*.16 for a in anclas)
             if not cerca:continue
             textos.append(clave(t.texto))
+            # Windows puede unir el rótulo y el nombre en una misma línea.
+            import re
+            separado=re.sub(r'^(?:atuendo|a tuendo|outfit|traje)\s*[:|·-]?\s+','',clave(t.texto))
+            if separado!=clave(t.texto):textos.append(separado)
             for otro in p.textos:
                 if 0<otro.rect[1]-t.rect[1]<t.rect[3]*1.7 and abs(otro.rect[0]-t.rect[0])<ancho*.04:
                     textos.append(clave(t.texto+' '+otro.texto))
         posibles=resolver_nombres('fortnite',textos)
         if len(posibles)!=1:return None
         return Lectura('fortnite','ficha',tuple(posibles.values()))
+
+    def cerrar(self):
+        with self._lock:
+            self._cerrada=True
+            for vista in (self.vista,self.vista_valorant):
+                if vista is not None and callable(getattr(vista,'cerrar',None)):vista.cerrar()

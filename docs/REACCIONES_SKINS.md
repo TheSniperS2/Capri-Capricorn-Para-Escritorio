@@ -7,13 +7,19 @@ una instalación nueva empieza con ellas desactivadas.
 
 ## Estado actual
 
-La función está en desarrollo: todavía puede tardar demasiado en responder y
-fallar intermitentemente al identificar una skin visible, incluso al preguntar
-«¿qué te parece esta skin?». La reacción automática se basa en observar una
-ficha estable; queda pendiente detectar de forma explícita una nueva selección
-del usuario y comentar a partir de ese cambio. El reconocimiento de fichas de
-Valorant se ha probado con simulaciones y aún requiere validación con el cliente
-real. Estos puntos siguen pendientes aunque el código ya esté publicado.
+La detección ahora compara selecciones: toma la primera ficha como referencia y
+comenta cuando cambia el nombre reconocido o el equipamiento, tras dos lecturas
+coincidentes. Si primero observa el menú sin ficha, puede comentar la primera
+selección posterior. No registra clics globales ni deduce una selección solo por
+el movimiento del ratón. Un comentario pendiente se descarta si la selección cambia.
+
+El motor OCR local se mantiene preparado y reutiliza lecturas de una interfaz sin
+cambios. Las ampliaciones se reconocen juntas y conservan el contexto de la ficha;
+también se admite el rótulo y el nombre en una misma línea. En una captura guardada
+del casillero con Fry se verificó el reconocimiento, con unos 1,1 segundos en frío
+y 0,05 segundos al repetirla sin cambios en el equipo de desarrollo. No son tiempos
+garantizados de voz o de partida. La selección real de Fortnite y Valorant requiere
+comprobarse en los clientes; no se iniciaron partidas para estas pruebas.
 
 ## Personalidad y catálogo
 
@@ -45,21 +51,22 @@ afirman que una skin mejore la puntería o dé ventajas.
   la silueta del personaje ni ve skins que no muestran su nombre.
 
 Para activarlo, abre **Ajustes → Reacciones**, activa **Reaccionar a las skins** y
-el juego que quieras. Luego elige una skin y deja visible su ficha con el nombre
-unos segundos: no hace falta pulsar el botón ni pedirlo por voz. En Valorant
+el juego que quieras. Luego selecciona otra skin y deja visible su ficha con el
+nombre: no hace falta pulsar el botón ni pedirlo por voz. En Valorant
 también puede detectar el cambio al equiparla. Solo navegar por miniaturas sin
 nombre legible no basta.
 
 Dos observaciones consecutivas deben coincidir antes de una reacción automática.
-El trabajador comprueba aproximadamente cada tres segundos; la lectura puede
+El trabajador comprueba aproximadamente cada cuarto de segundo; el OCR puede
 tardar más según el equipo. La frecuencia establece una separación mínima de
-18, 8 o 3 segundos (Discreta, Equilibrada, Entusiasta), para no hablar mientras
+8, 3 o 1,5 segundos (Discreta, Equilibrada, Entusiasta), para no hablar mientras
 pasas rápidamente por varias skins. Ya no hay una espera de minutos por skin.
 La misma selección continua no se repite. Se alternan las frases y los
 reencuentros mantienen el mismo gusto, también si no le gustaba esa skin.
 
-Capri espera mientras habla, escucha, responde, estás escribiendo o tienes
-Ajustes abiertos. Los comentarios caducan; una reacción atrasada no se narra tras
+Capri espera para comentar mientras habla, escucha, responde, estás escribiendo o
+tienes Ajustes abiertos. Puede seguir observando durante su narración para descartar
+comentarios pendientes de una selección anterior. Los comentarios caducan; una reacción atrasada no se narra tras
 cambiar de juego. La observación no restaura ventanas ni roba el foco. Los
 comentarios van por el diálogo y la voz habituales de Capri.
 
@@ -86,7 +93,9 @@ el repositorio. La lectura de pantalla utiliza el OCR local de Windows
 y archivos temporales eliminados al terminar cada captura; ninguna imagen se
 envía a un servicio. No hay modelos ni programas adicionales que instalar.
 
-Valorant reutiliza el transporte de lectura del cliente ya integrado, con un
+Las fichas visibles de Valorant se leen antes de consultar el equipamiento para
+evitar esperas de red cuando el nombre ya está en pantalla. Si hace falta consultar
+el equipamiento, reutiliza el transporte de lectura del cliente ya integrado, con un
 acceso GET limitado al equipamiento del jugador autenticado. No cambia skins,
 agentes, colas, saldo ni compras. La vigilancia utiliza un transporte independiente
 para no bloquear las órdenes de partida con el mismo candado.

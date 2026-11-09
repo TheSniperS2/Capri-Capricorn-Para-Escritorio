@@ -8,6 +8,14 @@ from skins_ui import AjustesSkins,TEXTOS
 
 
 class ReaccionesUI(PruebasTk):
+    def test_cambio_descarta_voz_automatica_pero_no_una_narracion_nueva(self):
+        import test_companera_control as fixtures
+        with fixtures.ModoPersonaje.capri(self) as (c,_),patch.object(c.voz,'parar') as parar:
+            c.skin_narracion=(1,('anterior',),c.voz.generacion,c.peticion);c.voz_ticket=c.peticion
+            c.cambiar_skin_observada(1,('nueva',));parar.assert_called_once();self.assertIsNone(c.voz_ticket)
+            parar.reset_mock();c.skin_narracion=(1,('anterior',),c.voz.generacion-1,c.peticion)
+            c.cambiar_skin_observada(1,('nueva',));parar.assert_not_called()
+
     def test_panel_catalogo_preferencias_demo_y_traducciones_sin_lecturas(self):
         from idiomas import catalogo as traducciones,ui
         root=tk.Tk();root.withdraw();f=tk.Frame(root);f.pack();guardar=Mock();enviar=Mock();ejemplo=Mock();fuente=Mock()

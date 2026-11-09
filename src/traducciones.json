@@ -4078,5 +4078,10 @@
     "Type the game name…",
     "Digite o nome do jogo…",
     "ゲーム名を入力…"
+  ],
+  "Capri toma la primera ficha como referencia. Al seleccionar otra skin, confirma su nombre y comenta sin repetirla.": [
+    "Capri uses the first item as a reference. Select another skin and she confirms its name before commenting, without repeating it.",
+    "Capri usa a primeira ficha como referência. Ao selecionar outra skin, confirma o nome e comenta sem repetir.",
+    "最初のスキンを基準にします。別のスキンを選ぶと名前を確認してコメントし、繰り返しません。"
   ]
 }

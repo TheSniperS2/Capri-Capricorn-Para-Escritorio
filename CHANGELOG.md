@@ -2,6 +2,10 @@
 
 ## En desarrollo
 
+### Reacciones a skins
+
+- OCR local reutilizable y caché visual para fichas de skins; ampliaciones agrupadas que conservan el contexto y admiten pantallas 4K. Valorant lee la ficha visible antes de consultar el equipamiento. Dos confirmaciones de una selección nueva, primera ficha como referencia y descarte de comentarios pendientes de selecciones anteriores; gustos conservados.
+
 ### Recordatorios generales
 
 - Avisos en Más → Recordatorios y por voz sin nombrar un juego, con fecha persistente, cancelación individual y entrega una sola vez cuando Capri esté libre. Los avisos antiguos de Roblox conservan su hora y texto al trasladarse a la agenda general.

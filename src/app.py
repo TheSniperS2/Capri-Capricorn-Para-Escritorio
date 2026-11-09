@@ -127,6 +127,7 @@ class Capri:
         from reacciones_skins import MonitorSkins
         self.skins_runtime=hotkeys;self.skins=MonitorSkins(self.eventos.put)
         self.skins.configurar(self.cfg.get('reacciones_skins',{}),iniciar=hotkeys)
+        self.skin_pendiente=None;self.skin_narracion=None
         self.entrada_personaje=False;self.ventana_entrada=None;self.entrada_lateral=None;self.transito=None
         self.cfg.setdefault('llamadas_capri',True);self.cfg.setdefault('asomos_automaticos',False);self.cfg.setdefault('bromas_ventanas',False)
         self.cfg.setdefault('intervalo_interacciones',15)
@@ -465,6 +466,7 @@ class Capri:
         return bool(getattr(self,'radial',None) or self.transito or self.intro_activa or asomo or self.ocupada or self.escuchando or self.hablando or self.voz_ticket is not None or self.drag or self.escribiendo() or self.control_pc.pendiente or (self.ajustes and self.ajustes.winfo_exists()) or (self.llamada_ui and not self.llamada_ui.cerrada) or (self.apagado_ui and not self.apagado_ui.cerrada))
 
     def decir_juego(self,texto,autor='Capri',fin_voz=3):
+        self.skin_narracion=None
         invitado=bool(self.llamada_ui and not self.llamada_ui.cerrada and getattr(self.llamada_ui,'invitado',None))
         self.dialogo.usuario='';self.dialogo.autor=autor.upper();self.poner_chat(autor,texto,mostrar=not self.puede_narrar() and not invitado)
         if invitado and not self.puede_narrar():
@@ -510,6 +512,26 @@ class Capri:
         if vencidos:
             r=vencidos[0];self.guardar('recordatorios',[x for x in self.cfg['recordatorios'] if x['id']!=r['id']])
             self.ejemplo_skin(ui('Recordatorio: {0}').format(r['texto']))
+
+    def mantener_skins_y_avisos(self):
+        if not self.puede_reaccionar_skins():return
+        p=self.skin_pendiente
+        if p:
+            self.skin_pendiente=None
+            version,plan=p
+            if self.skins.aceptar(version,plan):
+                self.avatar.sonreir();self.decir_juego(plan.texto)
+                if self.voz_ticket is not None:self.skin_narracion=(version,plan.lectura.firma,self.voz.generacion,self.peticion)
+                return
+
+    def cambiar_skin_observada(self,version,firma):
+        anterior=self.skin_narracion
+        if not anterior or anterior[0]!=version or anterior[1]==firma:return
+        self.skin_narracion=None
+        if anterior[2]!=self.voz.generacion or anterior[3]!=self.peticion:return
+        # Solo cancelar la narración automática de esa skin, nunca una conversación.
+        self.voz.parar();self.voz_ticket=None;self.hablando=False;self.narracion_activa=False;self.boca_activa=False
+        self.dialogo.ocultar();self.estado='Lista para ti'
 
     def descartar_reaccion(self):
         self.reaccion_pendiente=None
@@ -1620,9 +1642,8 @@ class Capri:
             elif tipo=='travesura_resultado':
                 if not self.ocupada and not self.escuchando and not self.hablando:self.decir_juego(valor)
             elif tipo=='skin_reaccion':
-                version,plan=valor
-                if self.puede_reaccionar_skins() and self.skins.aceptar(version,plan):
-                    self.avatar.sonreir();self.decir_juego(plan.texto)
+                self.skin_pendiente=valor
+            elif tipo=='skin_cambio':self.cambiar_skin_observada(*valor)
             elif tipo=='roblox_aviso':self.roblox_aviso_pendiente=valor
             elif tipo=='voz':
                 if isinstance(valor,tuple):
@@ -1640,6 +1661,7 @@ class Capri:
                         self.pintar_historial()
                     continue
                 if isinstance(valor,bool):
+                    if not valor:self.skin_narracion=None
                     ticket_terminado=self.voz_ticket
                     fin_turno=not valor and self.narracion_activa and self.voz_ticket==self.peticion
                     anterior=self.hablando;self.hablando=valor;self.boca_activa=valor
@@ -1711,7 +1733,11 @@ class Capri:
         self.revisar_interacciones()
         self.mantener_roblox()
         self.mantener_recordatorios()
-        self.skins.permitir(self.skins_runtime and self.puede_reaccionar_skins(),codigo_idioma(self.cfg.get('idioma')))
+        self.mantener_skins_y_avisos()
+        # Observar durante una narración permite descartar una selección vieja.
+        observar=self.skins_runtime and not (self.cerrado or self.saliendo or self.intro_activa or self.transito
+                    or self.escuchando or self.escribiendo() or (self.ajustes and self.ajustes.winfo_exists()))
+        self.skins.permitir(observar,codigo_idioma(self.cfg.get('idioma')))
         self.mantener_activacion()
         localizar_widgets(self.root)
         self.root.after(60,self.poll)
