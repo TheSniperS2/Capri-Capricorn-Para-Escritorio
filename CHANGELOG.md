@@ -2,9 +2,10 @@
 
 ## En desarrollo
 
-### Reacciones a skins
+### Skins y avisos de Fortnite
 
 - OCR local reutilizable y caché visual para fichas de skins; ampliaciones agrupadas que conservan el contexto y admiten pantallas 4K. Valorant lee la ficha visible antes de consultar el equipamiento. Dos confirmaciones de una selección nueva, primera ficha como referencia y descarte de comentarios pendientes de selecciones anteriores; gustos conservados.
+- Ajustes → Avisos de Fortnite: avisos opcionales de nueva tienda y misiones de STW con pavos para fundadores. Fuentes públicas sin cuenta Epic, fechas UTC verificadas, zonas/niveles/recompensas y caducidad local, deduplicación entre sesiones y espera mientras conversas. Datos incompletos o antiguos se muestran como fallo, no como ausencia de misiones.
 
 ### Recordatorios generales
 

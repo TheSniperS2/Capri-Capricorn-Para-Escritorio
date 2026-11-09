@@ -29,6 +29,7 @@ respaldo-*/
 
 # Recursos descargados y archivos generados
 cache/roblox/
+**/cache/fortnite/
 modelos/
 models/
 src/assets/

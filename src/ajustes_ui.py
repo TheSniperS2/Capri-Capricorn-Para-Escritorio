@@ -105,12 +105,13 @@ class PanelAjustes:
         cuerpo=tk.Frame(ventana,bg=FONDO);cuerpo.pack(fill='both',expand=True)
         self.lateral=tk.Frame(cuerpo,bg='#190d13',width=172);self.lateral.pack(side='left',fill='y',padx=(12,0),pady=12)
         self.lateral.pack_propagate(False)
+        self.lateral.bind('<Configure>',lambda e:self.adaptar_menu(e.height))
         tk.Label(self.lateral,text='CONFIGURACIÓN',bg='#190d13',fg=VERDE,font=(FAMILIA,10,'bold')).pack(anchor='w',padx=16,pady=(16,12))
         self.contenedor=tk.Frame(cuerpo,bg=FONDO);self.contenedor.pack(side='left',fill='both',expand=True,padx=16,pady=12)
         tk.Label(self.contenedor,textvariable=self.titulo,bg=FONDO,fg=TEXTO,font=(FAMILIA,18,'bold')).pack(anchor='w')
         tk.Label(self.contenedor,textvariable=self.detalle,bg=FONDO,fg=SUAVE,font=(FAMILIA,9),wraplength=490,justify='left').pack(anchor='w',pady=(4,12))
         self.zona=tk.Frame(self.contenedor,bg=FONDO);self.zona.pack(fill='both',expand=True)
-        pie=tk.Frame(ventana,bg=FONDO);pie.pack(fill='x',padx=12,pady=(0,6))
+        pie=tk.Frame(ventana,bg=FONDO);pie.pack(side='bottom',fill='x',before=cuerpo,padx=12,pady=(0,6))
         tk.Frame(pie,bg='#542333',height=1).pack(fill='x',pady=(0,8))
         tk.Label(pie,text='● GUARDADO AUTOMÁTICO',bg=FONDO,fg=VERDE,font=(FAMILIA,9)).pack(side='left',padx=10,pady=10)
         BotonCyber(pie,text='VOLVER AL ESCRITORIO',command=ventana.winfo_toplevel().destroy,bg='#4b1427',fg=TEXTO,
@@ -135,7 +136,15 @@ class PanelAjustes:
         self.vistas[nombre]=(exterior,lienzo,descripcion)
         self.barras[nombre]=barra
         if self.actual is None:self.mostrar(nombre)
+        self.adaptar_menu(self.lateral.winfo_height())
         return interior
+
+    def adaptar_menu(self,altura):
+        if altura<100 or not self.botones:return
+        alto=min(46,max(28,(altura-60)//len(self.botones)-4));margen=3 if alto==46 else 2
+        for boton in self.botones.values():
+            if int(boton.cget('height'))!=alto:boton.configure(height=alto)
+            boton.pack_configure(pady=margen)
 
     def mostrar(self,nombre):
         if self.actual:self.vistas[self.actual][0].pack_forget();self.botones[self.actual].configure(bg='#190d13',fg=SUAVE)

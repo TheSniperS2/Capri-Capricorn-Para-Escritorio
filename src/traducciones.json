@@ -4079,6 +4079,121 @@
     "Digite o nome do jogo…",
     "ゲーム名を入力…"
   ],
+  "Avisos de Fortnite": [
+    "Fortnite alerts",
+    "Avisos de Fortnite",
+    "Fortnite の通知"
+  ],
+  "Tienda y misiones con pavos para fundadores.": [
+    "Shop and V-Bucks missions for Founders.",
+    "Loja e missões com V-Bucks para Fundadores.",
+    "ショップとファウンダー向け V-Bucks ミッション。"
+  ],
+  "Tu próxima visita a Fortnite": [
+    "Your next visit to Fortnite",
+    "Sua próxima visita ao Fortnite",
+    "次の Fortnite に向けて"
+  ],
+  "Avisar cuando cambie la tienda": [
+    "Notify me when the shop rotates",
+    "Avisar quando a loja mudar",
+    "ショップ更新時に通知する"
+  ],
+  "Tengo una cuenta de fundador de STW": [
+    "I have a STW Founder account",
+    "Tenho uma conta de Fundador do STW",
+    "STW ファウンダーアカウントを持っている"
+  ],
+  "Avisar si hay misiones con pavos": [
+    "Notify me of V-Bucks missions",
+    "Avisar sobre missões com V-Bucks",
+    "V-Bucks ミッションを通知する"
+  ],
+  "Los pavos de estas alertas requieren una cuenta de fundador y acceso a la misión. Las demás cuentas reciben rayos X.": [
+    "These V-Bucks rewards require a Founder account and access to the mission. Other accounts receive X-Ray Tickets.",
+    "Esses V-Bucks exigem uma conta de Fundador e acesso à missão. Outras contas recebem Tíquetes de Raio X.",
+    "V-Bucks 報酬にはファウンダーアカウントとミッションへのアクセスが必要です。他のアカウントは X 線チケットを受け取ります。"
+  ],
+  "Capri consulta datos públicos mientras está abierta. Los avisos esperan a que termines de hablar.": [
+    "Capri checks public data while open. Alerts wait until you finish talking.",
+    "Capri consulta dados públicos enquanto está aberta. Os avisos esperam você terminar de falar.",
+    "Capri の起動中に公開データを確認します。会話が終わってから通知します。"
+  ],
+  "Comprobar ahora": [
+    "Check now",
+    "Verificar agora",
+    "今すぐ確認"
+  ],
+  "Consultando las fuentes…": [
+    "Checking sources…",
+    "Consultando as fontes…",
+    "情報源を確認中…"
+  ],
+  "Todavía no se han consultado los datos.": [
+    "Data has not been checked yet.",
+    "Os dados ainda não foram consultados.",
+    "まだデータを確認していません。"
+  ],
+  "No pude verificar los datos actuales. Volveré a intentarlo.": [
+    "I could not verify the current data. I will try again.",
+    "Não consegui verificar os dados atuais. Tentarei novamente.",
+    "現在のデータを確認できませんでした。もう一度試します。"
+  ],
+  "Tienda actualizada · {0}": [
+    "Shop updated · {0}",
+    "Loja atualizada · {0}",
+    "ショップ更新 · {0}"
+  ],
+  "Rotación STW · {0} · {1} pavos": [
+    "STW rotation · {0} · {1} V-Bucks",
+    "Rotação STW · {0} · {1} V-Bucks",
+    "STW 更新 · {0} · {1} V-Bucks"
+  ],
+  "No hay misiones con pavos en esta rotación verificada.": [
+    "No V-Bucks missions in this verified rotation.",
+    "Não há missões com V-Bucks nesta rotação verificada.",
+    "確認済みの今回の更新には V-Bucks ミッションがありません。"
+  ],
+  "{0} · nivel {1} · {2} pavos · {3}": [
+    "{0} · level {1} · {2} V-Bucks · {3}",
+    "{0} · nível {1} · {2} V-Bucks · {3}",
+    "{0} · レベル {1} · {2} V-Bucks · {3}"
+  ],
+  "Disponible hasta {0}": [
+    "Available until {0}",
+    "Disponível até {0}",
+    "{0} まで利用可能"
+  ],
+  "Próximo reinicio previsto: {0} (hora local).": [
+    "Next expected reset: {0} (local time).",
+    "Próxima atualização prevista: {0} (hora local).",
+    "次の更新予定: {0}（現地時間）。"
+  ],
+  "Las fuentes son comunitarias; Capri espera una rotación confirmada. No accede a tu cuenta Epic.": [
+    "Sources are community run; Capri waits for a confirmed rotation. It does not access your Epic account.",
+    "As fontes são comunitárias; Capri espera uma rotação confirmada. Não acessa sua conta Epic.",
+    "コミュニティの情報源で更新を確認してから通知します。Epic アカウントにはアクセスしません。"
+  ],
+  "Fuente de la tienda: Fortnite-API": [
+    "Shop source: Fortnite-API",
+    "Fonte da loja: Fortnite-API",
+    "ショップ情報源: Fortnite-API"
+  ],
+  "Fuente de misiones: V-Bucks Daily": [
+    "Mission source: V-Bucks Daily",
+    "Fonte das missões: V-Bucks Daily",
+    "ミッション情報源: V-Bucks Daily"
+  ],
+  "La tienda de Fortnite acaba de cambiar. Ya puedes revisar la nueva rotación.": [
+    "The Fortnite shop has just changed. You can check the new rotation now.",
+    "A loja do Fortnite acabou de mudar. Já pode conferir a nova rotação.",
+    "Fortnite のショップが更新されました。新しい品ぞろえを確認できます。"
+  ],
+  "Hay misiones de Salvar el Mundo con {0} pavos en total para fundadores. Revisa las zonas y los niveles en Ajustes, Avisos de Fortnite; tienes hasta {1}.": [
+    "There are Save the World missions worth {0} V-Bucks in total for Founders. Check zones and levels in Settings, Fortnite alerts; available until {1}.",
+    "Há missões de Salve o Mundo com {0} V-Bucks no total para Fundadores. Veja zonas e níveis em Configurações, Avisos de Fortnite; disponíveis até {1}.",
+    "ファウンダー向けの世界を救えミッションで合計 {0} V-Bucks を獲得できます。設定の Fortnite 通知でゾーンとレベルを確認してください。期限は {1} です。"
+  ],
   "Capri toma la primera ficha como referencia. Al seleccionar otra skin, confirma su nombre y comenta sin repetirla.": [
     "Capri uses the first item as a reference. Select another skin and she confirms its name before commenting, without repeating it.",
     "Capri usa a primeira ficha como referência. Ao selecionar outra skin, confirma o nome e comenta sem repetir.",

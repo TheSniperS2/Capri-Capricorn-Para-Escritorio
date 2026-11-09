@@ -45,7 +45,7 @@ ARCHIVOS.extend(['valorant_cliente.py','valorant.py','valorant_ui.py','assets/va
 ARCHIVOS.extend(['fortnite.py','fortnite_vision.py','fortnite_ui.py','FORTNITE.md'])
 ARCHIVOS.extend(['roblox.py','roblox_cache.py','roblox_ui.py','roblox_dialogos.py','roblox_vision.py','roblox_info.py','desplazamiento_ui.py','recordatorios.py','recordatorios_ui.py','ROBLOX.md'])
 ARCHIVOS.extend(['reacciones_skins.py','skins_fuentes.py','skins_dialogos.py','skins_ui.py','skins_vision.py','assets/skins/catalogo.json','REACCIONES_SKINS.md'])
-ARCHIVOS.append('ocr_skins.py')
+ARCHIVOS.extend(['ocr_skins.py','fortnite_avisos.py','fortnite_avisos_ui.py'])
 ARCHIVOS.append('LEAGUE_OF_LEGENDS.md')
 ARCHIVOS.extend('assets/lol/'+p.name for p in sorted((BASE/'assets/lol').glob('champion*.png')))
 ARCHIVOS.extend(['apagado.py','discord_control.py'])

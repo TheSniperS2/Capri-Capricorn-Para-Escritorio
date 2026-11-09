@@ -128,6 +128,9 @@ class Capri:
         self.skins_runtime=hotkeys;self.skins=MonitorSkins(self.eventos.put)
         self.skins.configurar(self.cfg.get('reacciones_skins',{}),iniciar=hotkeys)
         self.skin_pendiente=None;self.skin_narracion=None
+        from fortnite_avisos import MonitorFortnite
+        self.fortnite_avisos=MonitorFortnite(BASE)
+        self.fortnite_avisos.configurar(self.cfg.get('fortnite_avisos',{}),iniciar=hotkeys)
         self.entrada_personaje=False;self.ventana_entrada=None;self.entrada_lateral=None;self.transito=None
         self.cfg.setdefault('llamadas_capri',True);self.cfg.setdefault('asomos_automaticos',False);self.cfg.setdefault('bromas_ventanas',False)
         self.cfg.setdefault('intervalo_interacciones',15)
@@ -523,6 +526,11 @@ class Capri:
                 self.avatar.sonreir();self.decir_juego(plan.texto)
                 if self.voz_ticket is not None:self.skin_narracion=(version,plan.lectura.firma,self.voz.generacion,self.peticion)
                 return
+        if not self.skins_runtime:return
+        p=self.fortnite_avisos.siguiente()
+        if p and self.fortnite_avisos.confirmar(p):
+            from fortnite_avisos import mensaje
+            self.ejemplo_skin(mensaje(p,codigo_idioma(self.cfg.get('idioma'))))
 
     def cambiar_skin_observada(self,version,firma):
         anterior=self.skin_narracion
@@ -1803,12 +1811,15 @@ class Capri:
         escritorio=ui.seccion('Escritorio','Forma, tamaño, movimiento y efectos de Capri.')
         multimedia=ui.seccion('Multimedia','Música y vídeos junto a Capri.')
         reacciones=ui.seccion('Reacciones','Gustos y comentarios de Capri sobre las skins.')
+        avisos_fortnite=ui.seccion('Avisos de Fortnite','Tienda y misiones con pavos para fundadores.')
         micro=ui.seccion('Micrófono','Elige tu entrada y ajusta la sensibilidad y el reconocimiento local.')
         voz=ui.seccion('Voz','Elige el idioma, el perfil y la velocidad de la voz de Capri.')
         ia=ui.seccion('IA y servicios','Modelo local, navegador y música.')
         permisos=ui.seccion('Permisos','Decide qué puede hacer Capri en tu computador.')
         from skins_ui import AjustesSkins
         self.ajustes_skins=AjustesSkins(reacciones,self.cfg.get('reacciones_skins',{}),self.guardar,self.enviar,self.ejemplo_skin,self.skins)
+        from fortnite_avisos_ui import AjustesAvisosFortnite
+        self.ajustes_avisos_fortnite=AjustesAvisosFortnite(avisos_fortnite,self.cfg.get('fortnite_avisos',{}),self.guardar,self.fortnite_avisos)
         tk.Label(multimedia,text='Panel multimedia',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w')
         mostrar_media=tk.BooleanVar(value=bool(self.cfg.get('panel_multimedia',False)))
         InterruptorCyber(multimedia,text='Mostrar panel multimedia',variable=mostrar_media,
@@ -2105,6 +2116,9 @@ class Capri:
         self.roblox_panel=PanelRoblox(self.root,self.cfg['roblox'],self.guardar,self.enviar,self.roblox,ocultar=self.minimizar_capri)
 
     def guardar(self,k,v):
+        if k=='fortnite_avisos':
+            from fortnite_avisos import normalizar
+            v=normalizar(v);self.fortnite_avisos.configurar(v,iniciar=self.skins_runtime)
         if k=='recordatorios':
             from recordatorios import normalizar
             v=normalizar(v)
@@ -2358,6 +2372,7 @@ class Capri:
         if getattr(self,'roblox_panel',None) and not self.roblox_panel.cerrado:self.roblox_panel.cerrar()
         if getattr(self,'roblox',None):self.roblox.cerrar()
         if getattr(self,'skins',None):self.skins.cerrar()
+        if getattr(self,'fortnite_avisos',None):self.fortnite_avisos.cerrar()
         if getattr(self,'monitor_pc',None):self.monitor_pc.cerrar()
         if getattr(self,'panel_multimedia',None):self.panel_multimedia.cerrar()
         if self.visibilidad.oculta:
@@ -2475,6 +2490,7 @@ class Capri:
         self.root.after(16,self.pintar_despedida)
 
     def cerrar_inmediato(self):
+        if getattr(self,'fortnite_avisos',None):self.fortnite_avisos.cerrar()
         if getattr(self,'recordatorios_panel',None) and not self.recordatorios_panel.cerrado:self.recordatorios_panel.cerrar()
         if getattr(self,'roblox_panel',None) and not self.roblox_panel.cerrado:self.roblox_panel.cerrar()
         if getattr(self,'roblox',None):self.roblox.cerrar()

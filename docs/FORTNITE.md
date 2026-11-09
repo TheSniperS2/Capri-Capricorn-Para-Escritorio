@@ -55,7 +55,39 @@ ninguna partida durante el desarrollo.
 También se comprobó en el cliente real la recuperación desde minimizado y la
 confirmación de preferencias, sin entrar en cola.
 
-Referencias oficiales:
+## Avisos de tienda y de misiones con pavos
+
+En **Ajustes → Avisos de Fortnite** puedes activar por separado el aviso de nueva
+tienda y las alertas de misiones de **Salvar el Mundo**. Para estas últimas marca
+también **Tengo una cuenta de fundador de STW**. Es una declaración local: Capri no
+inicia sesión en Epic ni comprueba tu cuenta. Los pavos de estas misiones requieren
+ser fundador y tener acceso a la misión; las otras cuentas reciben rayos X.
+[Requisitos de Epic](https://www.epicgames.com/help/c-39719500/c-36066936/a13457604).
+
+El panel muestra la rotación, las misiones con zona, nivel y recompensa y su
+caducidad en la hora local del equipo. **Comprobar ahora** consulta los datos sin
+entrar al juego ni activar los avisos. Todas las opciones empiezan desactivadas.
+Con Capri abierta, las opciones activas se comprueban cada cinco minutos; si hay
+un fallo se reintenta después de un minuto. Las consultas manuales tienen un
+intervalo mínimo de treinta segundos.
+
+La primera consulta de la tienda establece una referencia y no anuncia un cambio
+que no haya observado. La siguiente rotación se anuncia una vez, también si Capri
+estaba cerrada al cambiar. Las misiones con pavos vigentes pueden anunciarse al
+activar la opción. Se conserva qué avisos se han entregado para no repetirlos al
+reiniciar. Esperan mientras conversas y caducan al acabar la rotación; no recuperan
+el foco del juego.
+
+La tienda procede de [Fortnite-API](https://fortnite-api.com/) y las misiones de
+[V-Bucks Daily](https://vbucksdaily.com/) (su fuente indicada es Free the V-Bucks).
+Son fuentes comunitarias. Capri exige datos completos de la rotación UTC actual:
+un fallo, datos antiguos o incompletos no se interpretan como ausencia de misiones.
+El reinicio previsto del panel es orientativo; el aviso espera confirmación del
+proveedor. No se necesitan claves, credenciales, extensiones ni instalaciones
+adicionales. El estado de entrega vive en `cache/fortnite/avisos.json` local y no
+se distribuye.
+
+## Referencias oficiales
 
 - [Opciones de clasificatoria, rellenar equipo y tamaño del equipo](https://www.epicgames.com/help/c-34254770/c-33726977/a19286399)
 - [Fortnite Data API: métricas de experiencias](https://dev.epicgames.com/documentation/fortnite/using-fortnite-data-api-in-fortnite?lang=en-US)
