@@ -4198,5 +4198,215 @@
     "Capri uses the first item as a reference. Select another skin and she confirms its name before commenting, without repeating it.",
     "Capri usa a primeira ficha como referência. Ao selecionar outra skin, confirma o nome e comenta sem repetir.",
     "最初のスキンを基準にします。別のスキンを選ぶと名前を確認してコメントし、繰り返しません。"
+  ],
+  "Counter-Strike": [
+    "Counter-Strike",
+    "Counter-Strike",
+    "カウンターストライク"
+  ],
+  "Counter-Strike 2": [
+    "Counter-Strike 2",
+    "Counter-Strike 2",
+    "カウンターストライク 2"
+  ],
+  "Configurar Counter-Strike": [
+    "Configure Counter-Strike",
+    "Configurar Counter-Strike",
+    "Counter-Strike を設定"
+  ],
+  "Tus mapas. Tu próxima partida.": [
+    "Your maps. Your next match.",
+    "Seus mapas. Sua próxima partida.",
+    "好きなマップで、次の試合へ。"
+  ],
+  "COMPETITIVO · COUNTER-STRIKE 2": [
+    "COMPETITIVE · COUNTER-STRIKE 2",
+    "COMPETITIVO · COUNTER-STRIKE 2",
+    "対戦 · COUNTER-STRIKE 2"
+  ],
+  "Selecciona los mapas que quieras. Capri los comprueba en el juego antes de buscar.": [
+    "Choose your maps. Capri verifies them in the game before searching.",
+    "Escolha seus mapas. Capri os confere no jogo antes de buscar.",
+    "マップを選んでください。検索前に Capri がゲーム内の選択を確認します。"
+  ],
+  "Filtrar mapas": [
+    "Filter maps",
+    "Filtrar mapas",
+    "マップを絞り込む"
+  ],
+  "Escribe el nombre de un mapa…": [
+    "Type a map name…",
+    "Digite o nome de um mapa…",
+    "マップ名を入力…"
+  ],
+  "Leer mapas del juego": [
+    "Read maps from the game",
+    "Ler mapas do jogo",
+    "ゲームからマップを読み取る"
+  ],
+  "Aplicar mapas sin buscar": [
+    "Apply maps without searching",
+    "Aplicar mapas sem buscar",
+    "検索せずにマップを適用"
+  ],
+  "Elige al menos un mapa para buscar.": [
+    "Choose at least one map to search.",
+    "Escolha pelo menos um mapa para buscar.",
+    "検索するマップを一つ以上選んでください。"
+  ],
+  "{0} mapas seleccionados": [
+    "{0} maps selected",
+    "{0} mapas selecionados",
+    "選択中のマップ: {0}"
+  ],
+  "No hay mapas con ese nombre.": [
+    "No maps match that name.",
+    "Nenhum mapa com esse nome.",
+    "その名前のマップはありません。"
+  ],
+  "Tus mapas se guardan al instante en este equipo.": [
+    "Your maps are saved instantly on this computer.",
+    "Seus mapas são salvos na hora neste computador.",
+    "選んだマップはこの PC にすぐ保存されます。"
+  ],
+  "Las acciones recuperan el juego si está minimizado. La aceptación de partida queda a tu cargo.": [
+    "Actions restore the game if minimized. You accept the match yourself.",
+    "As ações restauram o jogo se estiver minimizado. Você aceita a partida.",
+    "操作時は最小化中のゲームを復元します。試合の承諾は自分で行ってください。"
+  ],
+  "La lista del juego puede cambiar. Leer mapas del juego actualiza los disponibles; conserva los mapas guardados que ya no estén.": [
+    "The game list may change. Reading maps updates available ones and keeps saved maps that are no longer listed.",
+    "A lista do jogo pode mudar. Ler mapas atualiza os disponíveis e mantém os mapas salvos que saíram da lista.",
+    "ゲームの一覧は変更されることがあります。読み取りで利用可能なマップを更新し、一覧から外れた保存済みマップも保持します。"
+  ],
+  "Counter-Strike 2 se comprueba al pulsar una acción.": [
+    "Counter-Strike 2 is checked when you request an action.",
+    "Counter-Strike 2 é verificado quando você pede uma ação.",
+    "操作を頼んだときに Counter-Strike 2 を確認します。"
+  ],
+  "Tus mapas cambiaron durante la operación. Vuelve a pedirla con las preferencias actuales.": [
+    "Your maps changed during the operation. Request it again with your current preferences.",
+    "Seus mapas mudaram durante a operação. Peça novamente com as preferências atuais.",
+    "操作中にマップ設定が変わりました。現在の設定でもう一度頼んでください。"
+  ],
+  "Counter-Strike 2 tardó demasiado. Deja preparado el menú Jugar y vuelve a pedirlo.": [
+    "Counter-Strike 2 took too long. Prepare the Play menu and ask again.",
+    "Counter-Strike 2 demorou demais. Prepare o menu Jogar e peça novamente.",
+    "Counter-Strike 2 の応答が遅れています。プレイメニューを開いて、もう一度頼んでください。"
+  ],
+  "Counter-Strike muestra una partida, una confirmación o una restricción. Revisa el juego antes de pedir otra acción.": [
+    "Counter-Strike shows a match, a confirmation or a restriction. Check the game before requesting another action.",
+    "Counter-Strike mostra uma partida, confirmação ou restrição. Confira o jogo antes de pedir outra ação.",
+    "Counter-Strike に試合、確認画面、制限のいずれかが表示されています。次の操作を頼む前にゲームを確認してください。"
+  ],
+  "No pude identificar ese control de Counter-Strike. Deja el menú visible y vuelve a intentarlo.": [
+    "I could not identify that Counter-Strike control. Leave the menu visible and try again.",
+    "Não identifiquei esse controle do Counter-Strike. Deixe o menu visível e tente novamente.",
+    "Counter-Strike のボタンを確認できませんでした。メニューを表示してもう一度試してください。"
+  ],
+  "Deja abierto Jugar, Emparejamiento en Counter-Strike 2. No inicié ninguna partida.": [
+    "Leave Play, Matchmaking open in Counter-Strike 2. I did not start a match.",
+    "Deixe Jogar, Pareamento aberto no Counter-Strike 2. Não iniciei uma partida.",
+    "Counter-Strike 2 のプレイからマッチメイキングを開いてください。試合は開始していません。"
+  ],
+  "No pude confirmar el menú Competitivo con sus mapas. Deja ese menú visible en el juego.": [
+    "I could not confirm the Competitive menu and its maps. Leave it visible in the game.",
+    "Não confirmei o menu Competitivo com seus mapas. Deixe esse menu visível no jogo.",
+    "対戦メニューとマップを確認できませんでした。ゲームでその画面を表示してください。"
+  ],
+  "No pude leer todas las casillas de mapas. Deja completa la selección de Competitivo visible; no inicié la búsqueda.": [
+    "I could not read every map checkbox. Show the full Competitive selection; I did not start searching.",
+    "Não consegui ler todas as caixas dos mapas. Mostre a seleção completa de Competitivo; não iniciei a busca.",
+    "マップのチェック欄をすべて読み取れませんでした。対戦の選択画面全体を表示してください。検索は開始していません。"
+  ],
+  "Hay mapas guardados que no aparecen en este menú. Usa Leer mapas del juego y revisa tu selección antes de buscar.": [
+    "Some saved maps are missing from this menu. Use Read maps from the game and review your selection before searching.",
+    "Alguns mapas salvos não aparecem neste menu. Use Ler mapas do jogo e revise sua seleção antes de buscar.",
+    "保存済みの一部のマップがこの画面にありません。ゲームから読み取り、選択を確認してから検索してください。"
+  ],
+  "Ya estoy comprobando una acción de Counter-Strike.": [
+    "I am already checking a Counter-Strike action.",
+    "Já estou verificando uma ação do Counter-Strike.",
+    "Counter-Strike の操作を確認中です。"
+  ],
+  "Elige al menos un mapa en el panel de Counter-Strike antes de buscar.": [
+    "Select at least one map in the Counter-Strike panel before searching.",
+    "Escolha pelo menos um mapa no painel de Counter-Strike antes de buscar.",
+    "検索前に Counter-Strike パネルでマップを一つ以上選んでください。"
+  ],
+  "Comprobando Counter-Strike 2…": [
+    "Checking Counter-Strike 2…",
+    "Verificando Counter-Strike 2…",
+    "Counter-Strike 2 を確認中…"
+  ],
+  "No pude confirmar una búsqueda activa de Counter-Strike.": [
+    "I could not confirm an active Counter-Strike search.",
+    "Não confirmei uma busca ativa de Counter-Strike.",
+    "Counter-Strike で検索中か確認できませんでした。"
+  ],
+  "Counter-Strike confirmó la cancelación. Esperaré una nueva orden para buscar.": [
+    "Counter-Strike confirmed cancellation. I will wait for a new search request.",
+    "Counter-Strike confirmou o cancelamento. Vou esperar um novo pedido de busca.",
+    "Counter-Strike のキャンセルを確認しました。次に検索を頼まれるまで待ちます。"
+  ],
+  "Pedí cancelar en Counter-Strike. Comprueba el resultado en el juego.": [
+    "I requested cancellation in Counter-Strike. Check the result in the game.",
+    "Pedi o cancelamento no Counter-Strike. Confira o resultado no jogo.",
+    "Counter-Strike にキャンセルを要求しました。ゲームで結果を確認してください。"
+  ],
+  "Counter-Strike ya está buscando partida.": [
+    "Counter-Strike is already searching for a match.",
+    "Counter-Strike já está buscando partida.",
+    "Counter-Strike はすでに試合を検索中です。"
+  ],
+  "Mapas visibles de Counter-Strike leídos. Elige tus preferencias en el panel.": [
+    "Visible Counter-Strike maps read. Choose your preferences in the panel.",
+    "Mapas visíveis do Counter-Strike lidos. Escolha suas preferências no painel.",
+    "表示中の Counter-Strike マップを読み取りました。パネルで好みのマップを選んでください。"
+  ],
+  "La lista de mapas cambió durante la operación. Revisa Counter-Strike antes de buscar.": [
+    "The map list changed during the operation. Check Counter-Strike before searching.",
+    "A lista de mapas mudou durante a operação. Confira Counter-Strike antes de buscar.",
+    "操作中にマップ一覧が変わりました。検索前に Counter-Strike を確認してください。"
+  ],
+  "La selección cambió mientras la comprobaba. No inicié la búsqueda.": [
+    "The selection changed while I checked it. I did not start searching.",
+    "A seleção mudou durante a verificação. Não iniciei a busca.",
+    "確認中に選択が変わりました。検索は開始していません。"
+  ],
+  "No pude confirmar el cambio de mapa. No repetiré el clic ni iniciaré la búsqueda.": [
+    "I could not confirm the map change. I will not repeat the click or start searching.",
+    "Não confirmei a mudança de mapa. Não vou repetir o clique nem iniciar a busca.",
+    "マップの変更を確認できませんでした。クリックを繰り返したり検索を開始したりしません。"
+  ],
+  "Los mapas visibles no coinciden con tus preferencias. No inicié la búsqueda.": [
+    "The visible maps do not match your preferences. I did not start searching.",
+    "Os mapas visíveis não correspondem às suas preferências. Não iniciei a busca.",
+    "表示中のマップが設定と一致しません。検索は開始していません。"
+  ],
+  "Mapas confirmados en Counter-Strike. La búsqueda espera tu orden.": [
+    "Maps confirmed in Counter-Strike. Searching waits for your request.",
+    "Mapas confirmados no Counter-Strike. A busca espera seu pedido.",
+    "Counter-Strike のマップを確認しました。検索の指示を待っています。"
+  ],
+  "Counter-Strike confirmó que está buscando partida.": [
+    "Counter-Strike confirmed it is searching for a match.",
+    "Counter-Strike confirmou que está buscando partida.",
+    "Counter-Strike が試合を検索中であることを確認しました。"
+  ],
+  "Pulsé Buscar en Counter-Strike; todavía no pude confirmar la cola. Revisa el juego antes de pedir otra búsqueda.": [
+    "I clicked Search in Counter-Strike but could not confirm the queue yet. Check the game before requesting another search.",
+    "Cliquei em Buscar no Counter-Strike, mas ainda não confirmei a fila. Confira o jogo antes de pedir outra busca.",
+    "Counter-Strike で検索を押しましたが、キューはまだ確認できません。次に検索を頼む前にゲームを確認してください。"
+  ],
+  "Ese control ya no pertenece a la lectura de Counter-Strike.": [
+    "That control no longer belongs to the Counter-Strike reading.",
+    "Esse controle não pertence mais à leitura de Counter-Strike.",
+    "そのボタンは現在の Counter-Strike の読み取りに含まれていません。"
+  ],
+  "La aceptación de partida en Counter-Strike es manual. Confírmala desde el juego.": [
+    "Match acceptance in Counter-Strike is manual. Confirm it in the game.",
+    "A aceitação da partida em Counter-Strike é manual. Confirme no jogo.",
+    "Counter-Strike の試合承諾は手動です。ゲームで確認してください。"
   ]
 }

@@ -2,6 +2,10 @@
 
 ## En desarrollo
 
+### Counter-Strike 2
+
+- Panel de mapas en Más y Ajustes, preferencias locales vacías por defecto, filtro y lectura de la lista visible del juego. Aplicar sin buscar, buscar una vez y cancelar sin reencolar, por voz o texto y con selección de juego independiente de LoL/Valorant. Recuperación desde minimizado, validación de pestañas/casillas, confirmación de cada cambio y detención si faltan mapas o cambia el foco. Aceptación manual; sin instalaciones adicionales ni cambios en los archivos del juego. Pendiente comprobar con el cliente actual del usuario.
+
 ### Skins y avisos de Fortnite
 
 - OCR local reutilizable y caché visual para fichas de skins; ampliaciones agrupadas que conservan el contexto y admiten pantallas 4K. Valorant lee la ficha visible antes de consultar el equipamiento. Dos confirmaciones de una selección nueva, primera ficha como referencia y descarte de comentarios pendientes de selecciones anteriores; gustos conservados.

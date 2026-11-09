@@ -46,6 +46,7 @@ ARCHIVOS.extend(['fortnite.py','fortnite_vision.py','fortnite_ui.py','FORTNITE.m
 ARCHIVOS.extend(['roblox.py','roblox_cache.py','roblox_ui.py','roblox_dialogos.py','roblox_vision.py','roblox_info.py','desplazamiento_ui.py','recordatorios.py','recordatorios_ui.py','ROBLOX.md'])
 ARCHIVOS.extend(['reacciones_skins.py','skins_fuentes.py','skins_dialogos.py','skins_ui.py','skins_vision.py','assets/skins/catalogo.json','REACCIONES_SKINS.md'])
 ARCHIVOS.extend(['ocr_skins.py','fortnite_avisos.py','fortnite_avisos_ui.py'])
+ARCHIVOS.extend(['counter_strike.py','counter_strike_vision.py','counter_strike_ui.py','COUNTER_STRIKE.md'])
 ARCHIVOS.append('LEAGUE_OF_LEGENDS.md')
 ARCHIVOS.extend('assets/lol/'+p.name for p in sorted((BASE/'assets/lol').glob('champion*.png')))
 ARCHIVOS.extend(['apagado.py','discord_control.py'])
@@ -63,6 +64,7 @@ ARCHIVOS.append('escucha_activa.py')
 ARCHIVOS.extend(['despedida.py','assets/capri-base-hd-v1.png','PROMPT_HD.md'])
 
 def origen(nombre):
+    if nombre=='COUNTER_STRIKE.md':return BASE/'docs'/nombre
     if nombre=='REACCIONES_SKINS.md':return BASE/'docs'/nombre
     if nombre=='FORTNITE.md':return BASE/'docs'/nombre
     if nombre=='ROBLOX.md':return BASE/'docs'/nombre

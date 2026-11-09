@@ -16,6 +16,7 @@ Capri separa la interfaz Tk, el trabajo de audio y las integraciones. El código
 | League of Legends | `league.py` | Conexión local limitada a sala, búsqueda y ready-check; aceptación opcional cancelable. |
 | Skins | `reacciones_skins.py`, `skins_fuentes.py`, `skins_vision.py`, `ocr_skins.py`, `skins_ui.py` | Comparación de selecciones, gustos estables y OCR local reutilizable. |
 | Avisos de Fortnite | `fortnite_avisos.py`, `fortnite_avisos_ui.py` | Rotaciones públicas verificadas, preferencias opcionales y entrega persistente sin acceso a cuentas Epic. |
+| Counter-Strike 2 | `counter_strike.py`, `counter_strike_vision.py`, `counter_strike_ui.py` | Preferencias de mapas, reconocimiento de casillas y acciones verificadas del menú Competitivo. |
 | Roblox | `roblox.py`, `roblox_cache.py`, `roblox_ui.py`, `roblox_info.py`, `roblox_dialogos.py`, `roblox_vision.py` | Favoritos, caché pública local de datos/iconos, perfiles inferidos, avatar por piezas y acompañamiento opcional con preguntas ante finales ambiguos. |
 | Instancia y visibilidad | `instancia.py`, `visibilidad.py` | Mutex y evento local de Windows para mostrar la Capri existente al abrir otra vez el acceso, sin otra interfaz ni invertir su visibilidad. |
 | Recordatorios | `recordatorios.py`, `recordatorios_ui.py` | Avisos generales persistentes, migración desde Roblox y cancelación individual; `desplazamiento_ui.py` aporta la rueda local y barras discretas a las listas. |

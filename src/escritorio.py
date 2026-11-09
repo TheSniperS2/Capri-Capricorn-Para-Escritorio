@@ -85,6 +85,10 @@ def fortnite_en_primer_plano():
     return juego_en_primer_plano(('fortniteclient-win64-shipping.exe',))
 
 
+def cs2_en_primer_plano():
+    return juego_en_primer_plano(('cs2.exe',))
+
+
 def carpeta_usuario(nombre):
     permitidas={'Downloads','Documents','Desktop','Pictures','Music','Videos'}
     if nombre not in permitidas:raise ValueError('Carpeta no reconocida.')

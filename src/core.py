@@ -239,6 +239,9 @@ def interpretar(texto):
     from fortnite import interpretar_fortnite
     fortnite=interpretar_fortnite(texto)
     if fortnite:return Orden(*fortnite)
+    from counter_strike import interpretar_cs2
+    cs2=interpretar_cs2(texto)
+    if cs2:return Orden(*cs2)
     n=nombre_navegador(texto).strip(' .!')
     from volumen_apps import interpretar_volumen
     volumen=interpretar_volumen(texto)
