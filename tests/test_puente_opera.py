@@ -31,6 +31,43 @@ class PuenteOpera(unittest.TestCase):
             r=c.getresponse();return r.status,json.loads(r.read() or '{}')
         finally:c.close()
 
+    def ejecutar_http_js(self,codigo,carpeta,accion,datos,demora=0):
+        # Primero arrancan Node y su fetch real. Solo entonces se crea la orden:
+        # su plazo de producción de cuatro segundos no incluye el arranque del
+        # entorno de pruebas. La señal por stdin se envía con la tarea en cola.
+        comando=['node','-e',codigo,str(carpeta),'http://127.0.0.1:'+str(self.puerto),
+                 bridge.EXTENSION_ID,str(RAIZ/'tests/fixtures/reproductor_youtube.js'),
+                 str(RAIZ/'tests/fixtures/arranque_puente.js'),str(demora)]
+        proceso=subprocess.Popen(comando,text=True,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        listo=threading.Event();linea=[];salida=[];t=None
+        def leer_inicio():
+            linea.append(proceso.stdout.readline());listo.set()
+        lector=threading.Thread(target=leer_inicio,daemon=True);lector.start()
+        try:
+            self.assertTrue(listo.wait(30),'Node no completó la preparación HTTP en 30 s.')
+            lector.join(1)
+            if linea!=['CAPRI_LISTO\n']:
+                _,error=proceso.communicate(timeout=3)
+                self.fail('Node no anunció la preparación: '+error)
+            self.assertTrue(self.p.conectado())
+            t=threading.Thread(target=lambda:salida.append(self.p.ejecutar(accion,datos)))
+            t.start();limite=time.monotonic()+3;pendiente=False
+            while time.monotonic()<limite:
+                with self.p.lock:pendiente=bool(self.p.pendientes)
+                if pendiente:break
+                time.sleep(.005)
+            self.assertTrue(pendiente,'La orden no llegó a la cola del puente.')
+            _,error=proceso.communicate(input='CONTINUAR\n',timeout=10)
+            self.assertEqual(proceso.returncode,0,error)
+            t.join(2);self.assertFalse(t.is_alive(),'El puente no recibió el resultado.')
+            self.assertEqual(len(salida),1)
+            return salida[0]
+        finally:
+            if proceso.poll() is None:proceso.kill()
+            lector.join(2)
+            proceso.communicate(timeout=3)
+            if t and t.is_alive():self.p.cerrar();t.join(2)
+
     def test_servidor_rechaza_origen_host_y_ruta_de_ordenes_externas(self):
         self.assertEqual(self.peticion('GET','/siguiente',origen='https://evil.test')[0],403)
         self.assertEqual(self.peticion('GET','/siguiente',host='evil.test')[0],403)
@@ -90,17 +127,13 @@ class PuenteOpera(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which('node'),'Prueba JavaScript requiere Node de desarrollo')
     def test_flujo_http_real_y_control_video_en_javascript(self):
-        self.peticion('GET','/siguiente');salida=[]
-        # La tarea debe sobrevivir al arranque en frio de Node (proceso limitado a 10 s).
-        # Este caso comprueba HTTP/JavaScript, no el plazo de produccion de 4 s.
-        t=threading.Thread(target=lambda:salida.append(self.p.ejecutar('volumen',{'operacion':'fijar:50','restaurar':40},espera=15)))
-        t.start()
         codigo=r'''
 const assert=require('node:assert/strict');
 const api=require(process.argv[1]);
 const base=process.argv[2],id=process.argv[3];
 const headers={'X-Capri-Puente':id,'Origin':'chrome-extension://'+id};
 (async()=>{
+ await require(process.argv[5]).preparar(base,id);
  let tarea;for(let i=0;i<20;i++){tarea=(await (await fetch(base+'/siguiente',{headers})).json()).tarea;if(tarea)break;await new Promise(r=>setTimeout(r,20));}
  assert(tarea);
  const {video,doc}=require(process.argv[4]).crear({volumen:.4});
@@ -115,33 +148,45 @@ const headers={'X-Capri-Puente':id,'Origin':'chrome-extension://'+id};
  await api.ejecutar(doc,'https://www.youtube.com/',{accion:'volumen',datos:{operacion:'activar',restaurar:40}});assert.equal(video.muted,false);
 })().catch(e=>{console.error(e);process.exitCode=1});
 '''
-        r=subprocess.run(['node','-e',codigo,str(RAIZ/'integraciones/opera-capri/control.js'),'http://127.0.0.1:'+str(self.puerto),bridge.EXTENSION_ID,str(RAIZ/'tests/fixtures/reproductor_youtube.js')],text=True,capture_output=True,timeout=10)
-        t.join(2);self.assertEqual(r.returncode,0,r.stderr)
-        self.assertEqual(salida[0]['volumen'],50);self.assertTrue(salida[0]['ok'])
+        resultado=self.ejecutar_http_js(codigo,RAIZ/'integraciones/opera-capri/control.js',
+                                      'volumen',{'operacion':'fijar:50','restaurar':40})
+        self.assertEqual(resultado['volumen'],50);self.assertTrue(resultado['ok'])
 
     @unittest.skipUnless(shutil.which('node'),'Prueba JavaScript requiere Node de desarrollo')
     def test_worker_real_entrega_al_video_aunque_otra_pagina_tenga_foco(self):
-        self.peticion('GET','/siguiente');salida=[]
-        # Mismo margen para el arranque de Node; el proceso sigue limitado a 10 s.
-        t=threading.Thread(target=lambda:salida.append(self.p.ejecutar('volumen',{'operacion':'fijar:25','restaurar':40},espera=15)))
-        t.start()
+        self.comprobar_worker()
+
+    @unittest.skipUnless(shutil.which('node'),'Prueba JavaScript requiere Node de desarrollo')
+    def test_arranque_lento_de_fetch_no_gasta_el_plazo_de_la_orden(self):
+        # Mayor que el AbortSignal de 1,2 s del worker. El primer fetch pertenece
+        # a la preparación; una vez listo, la orden conserva ese límite real.
+        self.comprobar_worker(demora=1600)
+
+    def comprobar_worker(self,demora=0):
         codigo=r'''
 const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
 const api=require(process.argv[1]+'/control.js');
 const base=process.argv[2],id=process.argv[3];let listener,llamadas=0,entregas=0;
+let primerFetch=true;const fetchPrueba=async(url,op)=>{
+ if(primerFetch){primerFetch=false;await new Promise(r=>setTimeout(r,Number(process.argv[6])));}
+ return fetch(url,op);
+};
 const {video,doc}=require(process.argv[4]).crear({volumen:.8});
 const chrome={runtime:{id,onMessage:{addListener:l=>listener=l}},tabs:{
  query:async q=>q.active ? [{id:9,url:'https://example.org/'}] : [{id:1,url:'https://www.youtube.com/watch?v=prueba'}],
  sendMessage:async(tab,m)=>{assert.equal(tab,1);if(m.tipo==='capri_estado')return {video:true,reproduciendo:true};entregas++;return api.ejecutar(doc,'https://www.youtube.com/watch?v=prueba',m.tarea)}
 }};
-vm.runInNewContext(fs.readFileSync(process.argv[1]+'/worker.js','utf8'),{chrome,URL,AbortSignal,fetch:(url,op)=>{llamadas++;return fetch(url.replace('http://127.0.0.1:18741',base),op)}});
 function consultar(tab){return new Promise(resolve=>listener({tipo:'capri_consultar'},{id,tab:{id:tab},url:'https://www.youtube.com/watch?v=prueba'},resolve))}
 (async()=>{
+ await require(process.argv[5]).preparar(base,id,fetchPrueba);
+ vm.runInNewContext(fs.readFileSync(process.argv[1]+'/worker.js','utf8'),{chrome,URL,AbortSignal,fetch:(url,op)=>{llamadas++;return fetchPrueba(url.replace('http://127.0.0.1:18741',base),op)}});
  const r=await consultar(2);assert.equal(r.ok,true);assert.equal(entregas,1);assert.equal(video.volume,.25);
+ assert.equal(llamadas,2);
 })().catch(e=>{console.error(e);process.exitCode=1});
 '''
-        r=subprocess.run(['node','-e',codigo,str(RAIZ/'integraciones/opera-capri'),'http://127.0.0.1:'+str(self.puerto),bridge.EXTENSION_ID,str(RAIZ/'tests/fixtures/reproductor_youtube.js')],text=True,capture_output=True,timeout=10)
-        t.join(2);self.assertEqual(r.returncode,0,r.stderr);self.assertTrue(salida[0]['ok']);self.assertEqual(salida[0]['volumen'],25)
+        resultado=self.ejecutar_http_js(codigo,RAIZ/'integraciones/opera-capri',
+                                      'volumen',{'operacion':'fijar:25','restaurar':40},demora)
+        self.assertTrue(resultado['ok']);self.assertEqual(resultado['volumen'],25)
 
     @unittest.skipUnless(shutil.which('node'),'Prueba JavaScript requiere Node de desarrollo')
     def test_nivel_positivo_desmutea_audio_modelo_e_icono_y_cero_silencia(self):

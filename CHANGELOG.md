@@ -2,6 +2,10 @@
 
 ## En desarrollo
 
+### Pruebas de la conexión con YouTube
+
+- Preparación explícita de Node y su conexión HTTP antes de crear la orden de prueba, evitando que el arranque del entorno consuma su plazo. Añadida una regresión de arranque lento; se conservan los límites del puente y la extensión, el envío único y las comprobaciones de seguridad.
+
 ### Biblioteca de playlists de Spotify
 
 - Nueva interfaz con formulario de nombre fácil, enlace completo, botón de pegado y ejemplo de cómo pedirla a Capri. La explicación se centra en playlists cuyo nombre Capri no entiende bien.
