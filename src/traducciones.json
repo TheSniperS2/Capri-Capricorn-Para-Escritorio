@@ -875,9 +875,9 @@
     "Capri · 接続"
   ],
   "Captura cancelada.": [
-    "Recording cancelled.",
-    "Gravação cancelada.",
-    "録音をキャンセルしたよ。"
+    "Capture cancelled.",
+    "Captura cancelada.",
+    "キャプチャをキャンセルしました。"
   ],
   "Cerrar": [
     "Close",
@@ -4002,7 +4002,7 @@
   "No hay coincidencias.": [
     "No matches.",
     "Nenhum resultado.",
-    "一致するものがないよ。"
+    "該当するリストはありません。"
   ],
   "Que Capri te avise.": [
     "Let Capri remind you.",
@@ -5058,5 +5058,750 @@
     "Ctrl + Enter to create",
     "Ctrl + Enter para criar",
     "Ctrl + Enterで作成"
+  ],
+  "01 / TU EQUIPO": [
+    "01 / YOUR HARDWARE",
+    "01 / SEU COMPUTADOR",
+    "01 / ハードウェア"
+  ],
+  "02 / QUÉ CAMBIA PARA TI": [
+    "02 / WHAT CHANGES FOR YOU",
+    "02 / O QUE MUDA PARA VOCÊ",
+    "02 / 変わること"
+  ],
+  "AHORA": [
+    "CURRENT",
+    "ATUAL",
+    "現在"
+  ],
+  "PROPUESTA": [
+    "PROPOSED",
+    "PROPOSTA",
+    "変更後"
+  ],
+  "PROCESADOR": [
+    "PROCESSOR",
+    "PROCESSADOR",
+    "プロセッサー"
+  ],
+  "GRÁFICA": [
+    "GRAPHICS",
+    "PLACA GRÁFICA",
+    "グラフィックス"
+  ],
+  "MEMORIA RAM": [
+    "SYSTEM MEMORY",
+    "MEMÓRIA RAM",
+    "メインメモリ"
+  ],
+  "Aplicar cambio": [
+    "Apply change",
+    "Aplicar alteração",
+    "変更を適用"
+  ],
+  "CAPRI / SYSTEM": [
+    "CAPRI / SYSTEM",
+    "CAPRI / SYSTEM",
+    "CAPRI / システム"
+  ],
+  "Un cambio. Una decisión informada.": [
+    "One change. An informed decision.",
+    "Uma mudança. Uma decisão informada.",
+    "変更の前に、納得できる判断を。"
+  ],
+  "La configuración se conserva hasta que confirmes.": [
+    "Your settings stay as they are until you confirm.",
+    "Suas configurações são mantidas até você confirmar.",
+    "確認するまで設定は変わりません。"
+  ],
+  "LEYENDO TU EQUIPO": [
+    "READING YOUR HARDWARE",
+    "LENDO SEU COMPUTADOR",
+    "ハードウェアを確認中"
+  ],
+  "Preparando tu recomendación…": [
+    "Preparing your recommendation…",
+    "Preparando sua recomendação…",
+    "推奨内容を準備中…"
+  ],
+  "CPU, memoria y gráfica. Sin cambiar tus ajustes.": [
+    "CPU, memory and graphics. Your settings remain unchanged.",
+    "CPU, memória e placa gráfica. Sem alterar suas configurações.",
+    "CPU、メモリ、GPUを確認します。設定は変更しません。"
+  ],
+  "Leyendo…": [
+    "Reading…",
+    "Lendo…",
+    "確認中…"
+  ],
+  "Sin datos": [
+    "Unavailable",
+    "Sem dados",
+    "情報なし"
+  ],
+  "Sin activar": [
+    "Not enabled",
+    "Não ativado",
+    "未有効"
+  ],
+  "Sin preparar": [
+    "Not set up",
+    "Não preparado",
+    "未準備"
+  ],
+  "IA local": [
+    "Local AI",
+    "IA local",
+    "ローカルAI"
+  ],
+  "RECOMENDADO POR MARGEN": [
+    "RESOURCE HEADROOM AVAILABLE",
+    "HÁ MARGEM DE RECURSOS",
+    "リソースに余裕あり"
+  ],
+  "VALORA EL CAMBIO": [
+    "WEIGH THE CHANGE",
+    "AVALIE A MUDANÇA",
+    "利点と負荷を比較"
+  ],
+  "RECURSOS AJUSTADOS": [
+    "LIMITED RESOURCES",
+    "RECURSOS LIMITADOS",
+    "リソースが少なめ"
+  ],
+  "DATOS INCOMPLETOS": [
+    "INCOMPLETE DATA",
+    "DADOS INCOMPLETOS",
+    "情報が不十分"
+  ],
+  "LO QUE GANAS": [
+    "WHAT YOU GAIN",
+    "O QUE VOCÊ GANHA",
+    "期待できる利点"
+  ],
+  "LO QUE DEBES CONSIDERAR": [
+    "WHAT TO CONSIDER",
+    "O QUE CONSIDERAR",
+    "考慮すること"
+  ],
+  "Revisa las diferencias antes de confirmar": [
+    "Review the differences before confirming",
+    "Confira as diferenças antes de confirmar",
+    "違いを確認してから適用してください"
+  ],
+  "No pude completar la evaluación del equipo. Puedes conservar tu configuración o decidir con la información disponible.": [
+    "I could not complete the hardware assessment. Keep your current settings or decide using the available information.",
+    "Não consegui concluir a avaliação do computador. Mantenha suas configurações ou decida com as informações disponíveis.",
+    "ハードウェア評価を完了できませんでした。現在の設定を維持するか、分かっている情報を参考に判断してください。"
+  ],
+  "Capacidad no disponible": [
+    "Capacity unavailable",
+    "Capacidade indisponível",
+    "性能情報なし"
+  ],
+  "Disponibilidad no leída": [
+    "Available memory unread",
+    "Memória disponível não lida",
+    "空きメモリ不明"
+  ],
+  "Aceleración no confirmada": [
+    "Acceleration unconfirmed",
+    "Aceleração não confirmada",
+    "アクセラレーション未確認"
+  ],
+  "{0} hilos lógicos": [
+    "{0} logical threads",
+    "{0} threads lógicas",
+    "論理スレッド数: {0}"
+  ],
+  "{0} disponibles ahora": [
+    "{0} available now",
+    "{0} disponíveis agora",
+    "現在の空き: {0}"
+  ],
+  "{0} de VRAM dedicada": [
+    "{0} dedicated VRAM",
+    "{0} de VRAM dedicada",
+    "専用VRAM: {0}"
+  ],
+  "Faltan datos para recomendarlo": [
+    "Not enough data to recommend it",
+    "Faltam dados para recomendar",
+    "推奨を判断する情報が不足しています"
+  ],
+  "Puedes decidir por sus ventajas y límites; Capri no inventará la capacidad que no pudo leer.": [
+    "Decide based on its benefits and limits; Capri will not guess hardware it could not read.",
+    "Decida pelas vantagens e limitações; Capri não vai inventar a capacidade que não conseguiu ler.",
+    "利点と制約を参考に判断できます。読み取れなかったハードウェア性能は推測しません。"
+  ],
+  "Mejor una opción más ligera": [
+    "A lighter option is preferable",
+    "Prefira uma opção mais leve",
+    "より軽い選択肢がおすすめです"
+  ],
+  "La RAM total deja poco margen para este cambio y tus otras aplicaciones. Recomiendo una opción más ligera, especialmente mientras juegas.": [
+    "Your total RAM leaves little room for this change alongside other apps. I recommend a lighter option, especially while gaming.",
+    "A RAM total deixa pouca margem para esta mudança junto com outros aplicativos. Recomendo uma opção mais leve, principalmente ao jogar.",
+    "搭載RAMでは、この変更と他のアプリを併用する余裕が少なめです。特にゲーム中は、より軽い選択肢をおすすめします。"
+  ],
+  "Poco margen libre ahora": [
+    "Little free memory right now",
+    "Pouca memória livre agora",
+    "現在の空きメモリが少なめです"
+  ],
+  "Tu equipo tiene capacidad, pero ahora hay poca RAM disponible. Cierra aplicaciones o conserva la opción actual si estás jugando; volver a evaluar puede cambiar este consejo.": [
+    "Your hardware has capacity, but little RAM is free right now. Close apps or keep the current option while gaming; a fresh assessment may change this advice.",
+    "Seu computador tem capacidade, mas há pouca RAM disponível agora. Feche aplicativos ou mantenha a opção atual ao jogar; uma nova avaliação pode mudar esta orientação.",
+    "ハードウェアには容量がありますが、現在の空きRAMが少なめです。アプリを閉じるか、ゲーム中は今の設定を維持してください。再評価で推奨が変わる場合があります。"
+  ],
+  "Viable, con margen ajustado": [
+    "Viable, with limited headroom",
+    "Viável, com margem apertada",
+    "利用できますが、余裕は少なめです"
+  ],
+  "Puedes probarlo, aunque otras aplicaciones pueden competir por la memoria. Para priorizar fluidez mientras juegas, conserva una opción ligera.": [
+    "You can try it, but other apps may compete for memory. Keep a lighter option if smooth gaming is your priority.",
+    "Você pode testar, mas outros aplicativos podem disputar memória. Mantenha uma opção leve se priorizar a fluidez ao jogar.",
+    "試すことはできますが、他のアプリとメモリを取り合う可能性があります。ゲームの快適さを優先するなら、軽い設定を維持してください。"
+  ],
+  "Buen margen para este cambio": [
+    "Good headroom for this change",
+    "Boa margem para esta mudança",
+    "この変更に必要な余裕があります"
+  ],
+  "La RAM disponible deja margen para esta opción y otras aplicaciones. Recomiendo probarla si su ventaja coincide con lo que buscas.": [
+    "Available RAM leaves room for this option and other apps. I recommend trying it if its benefit matches your priorities.",
+    "A RAM disponível deixa margem para esta opção e outros aplicativos. Recomendo testar se a vantagem combinar com o que você busca.",
+    "現在の空きRAMには、この設定と他のアプリを併用する余裕があります。利点が目的に合うなら、試すことをおすすめします。"
+  ],
+  "Más parámetros pueden ayudar con preguntas complejas y respuestas detalladas. El entrenamiento y la familia también importan; no garantizan mayor calidad.": [
+    "More parameters may help with complex questions and detailed answers. Training and model family also matter; more parameters do not guarantee better quality.",
+    "Mais parâmetros podem ajudar com perguntas complexas e respostas detalhadas. O treinamento e a família também importam; mais parâmetros não garantem qualidade maior.",
+    "パラメータが多いモデルは、複雑な質問や詳しい回答に役立つ場合があります。学習方法やモデルの系統も重要で、品質向上を保証するものではありません。"
+  ],
+  "Puede necesitar más memoria y tardar más en generar cada respuesta. Conviene si prefieres profundidad antes que rapidez.": [
+    "It may need more memory and take longer to generate each answer. Consider it if depth matters more than speed.",
+    "Pode precisar de mais memória e demorar mais para gerar cada resposta. Vale considerar se você prefere profundidade à rapidez.",
+    "メモリ消費が増え、回答の生成に時間がかかる場合があります。速さより内容の深さを優先する場合に向いています。"
+  ],
+  "Un modelo más pequeño puede responder antes y dejar más recursos para tus juegos. Es una buena dirección si priorizas agilidad.": [
+    "A smaller model may answer sooner and leave more resources for games. It is a good direction if responsiveness is your priority.",
+    "Um modelo menor pode responder antes e deixar mais recursos para seus jogos. É uma boa direção se você prioriza agilidade.",
+    "小さいモデルは回答が速くなり、ゲームに使えるリソースを増やせる場合があります。応答の軽快さを重視する方に向いています。"
+  ],
+  "Puede perder detalle o capacidad en preguntas difíciles. Compara sus respuestas antes de elegirlo como modelo habitual de la conversación.": [
+    "It may lose detail or capability on difficult questions. Compare its answers before making it your everyday conversation model.",
+    "Pode perder detalhes ou capacidade em perguntas difíceis. Compare as respostas antes de usá-lo como modelo habitual de conversa.",
+    "難しい質問では、詳しさや対応力が下がる場合があります。普段使う会話モデルにする前に、回答を比較してください。"
+  ],
+  "Otra familia puede seguir mejor tus instrucciones o encajar mejor con tu forma de conversar. Prueba respuestas conocidas para compararlas.": [
+    "Another model family may follow your instructions better or suit your conversation style. Compare answers to familiar questions.",
+    "Outra família pode seguir melhor suas instruções ou combinar com seu jeito de conversar. Compare respostas a perguntas conhecidas.",
+    "別系統のモデルが指示や会話の好みに合う場合があります。よく使う質問への回答で比較してください。"
+  ],
+  "Cambiar de familia no garantiza más calidad ni rapidez. La primera respuesta puede tardar mientras se carga el modelo.": [
+    "Changing model family does not guarantee better quality or speed. The first answer may be slower while the model loads.",
+    "Mudar de família não garante mais qualidade nem rapidez. A primeira resposta pode demorar enquanto o modelo carrega.",
+    "モデルの系統を変えても、品質や速さの向上は保証されません。初回はモデルの読み込みに時間がかかる場合があります。"
+  ],
+  "La recomendación es orientativa: contexto, cuantización y aplicaciones abiertas cambian el consumo. La GPU detectada no confirma que Ollama la use; su VRAM no se suma a la RAM.": [
+    "This is guidance: context, quantization and open apps affect memory use. A detected GPU does not confirm Ollama uses it; its VRAM is not added to system RAM.",
+    "A recomendação é orientativa: contexto, quantização e aplicativos abertos afetam o consumo. Detectar a GPU não confirma que o Ollama a use; sua VRAM não é somada à RAM.",
+    "目安としての推奨です。コンテキスト、量子化、起動中のアプリで消費量は変わります。GPUの検出はOllamaによる使用を保証せず、VRAMとRAMは合算しません。"
+  ],
+  "Archivo del modelo: {0}. Margen de RAM orientativo para ejecución en CPU: {1}–{2}.": [
+    "Model file: {0}. Estimated RAM budget for CPU execution: {1}–{2}.",
+    "Arquivo do modelo: {0}. Margem estimada de RAM para execução na CPU: {1}–{2}.",
+    "モデルファイル: {0}。CPUでの実行に見込むRAMの目安: {1}～{2}。"
+  ],
+  "No hay tamaño local fiable para este modelo. El nombre o la cantidad de parámetros no bastan para calcular su memoria.": [
+    "There is no reliable local size for this model. Its name or parameter count alone cannot establish its memory use.",
+    "Não há um tamanho local confiável para este modelo. O nome ou o número de parâmetros não bastam para calcular o consumo de memória.",
+    "このモデルの信頼できるローカルサイズ情報がありません。名前やパラメータ数だけでは、必要メモリを算出できません。"
+  ],
+  "Tu CPU tiene hasta 4 hilos lógicos. Si la IA trabaja en CPU, un modelo grande puede añadir espera; no es una medida de su velocidad real.": [
+    "Your CPU has up to 4 logical threads. A large model may add delay when running on CPU; thread count is not a benchmark of actual speed.",
+    "Sua CPU tem até 4 threads lógicas. Um modelo grande pode aumentar a espera se a IA rodar na CPU; o número de threads não mede a velocidade real.",
+    "CPUの論理スレッド数は4以下です。CPUで大きなモデルを動かすと待ち時間が増える場合があります。スレッド数は実測速度ではありません。"
+  ],
+  "La memoria alcanza; vigila la espera": [
+    "Enough memory; watch the delay",
+    "Há memória; observe a demora",
+    "メモリは足りますが、待ち時間に注意"
+  ],
+  "Vosk prioriza respuestas rápidas y deja más recursos para jugar. Es la opción más ligera para órdenes frecuentes en español.": [
+    "Vosk prioritizes quick recognition and leaves more resources for gaming. It is the lightest option for frequent commands in Spanish.",
+    "O Vosk prioriza reconhecimento rápido e deixa mais recursos para jogar. É a opção mais leve para comandos frequentes em espanhol.",
+    "Voskは素早い認識を優先し、ゲームにリソースを残せます。スペイン語のよく使うコマンドには最も軽い選択肢です。"
+  ],
+  "Puede fallar más con nombres en inglés, frases largas o ruido. El menor consumo no significa que entienda mejor.": [
+    "It may struggle more with English names, long phrases or noise. Lower resource use does not mean better recognition.",
+    "Pode falhar mais com nomes em inglês, frases longas ou ruído. Consumir menos não significa reconhecer melhor.",
+    "英語の名前、長い文章、雑音のある音声では誤認識が増える場合があります。低負荷が高精度を意味するわけではありません。"
+  ],
+  "Whisper Small puede entender mejor nombres difíciles, acentos y frases complejas. Conviene si la precisión te importa más que una respuesta inmediata.": [
+    "Whisper Small may better recognize difficult names, accents and complex phrases. Consider it if accuracy matters more than immediate responses.",
+    "O Whisper Small pode reconhecer melhor nomes difíceis, sotaques e frases complexas. Considere se a precisão importar mais que respostas imediatas.",
+    "Whisper Smallは難しい名前、アクセント、複雑な文章をより正確に認識できる場合があります。即応性より精度を重視する方に向いています。"
+  ],
+  "Usa más RAM y trabajo de CPU que Base. Puedes notar más espera al terminar de hablar, sobre todo mientras juegas.": [
+    "It uses more RAM and CPU work than Base. You may notice a longer wait after speaking, especially while gaming.",
+    "Usa mais RAM e processamento de CPU que o Base. Você pode notar mais espera após falar, principalmente enquanto joga.",
+    "BaseよりRAMとCPUの負荷が増えます。特にゲーム中は、話し終えてからの待ち時間が長くなる場合があります。"
+  ],
+  "Whisper Base equilibra precisión y rapidez. Frente a Small deja más recursos libres; frente a Vosk puede entender mejor frases y nombres difíciles.": [
+    "Whisper Base balances accuracy and speed. It leaves more resources than Small and may recognize difficult phrases and names better than Vosk.",
+    "O Whisper Base equilibra precisão e rapidez. Deixa mais recursos livres que o Small e pode entender frases e nomes difíceis melhor que o Vosk.",
+    "Whisper Baseは精度と速さのバランスを重視します。Smallより軽く、Voskより難しい名前や文章を正確に認識できる場合があります。"
+  ],
+  "Puede perder precisión frente a Small en audio difícil y tardar más que Vosk. El resultado depende de tu micrófono y del ruido.": [
+    "It may be less accurate than Small on difficult audio and slower than Vosk. Results depend on your microphone and background noise.",
+    "Pode ser menos preciso que o Small em áudio difícil e mais lento que o Vosk. O resultado depende do microfone e do ruído.",
+    "難しい音声ではSmallより精度が下がり、Voskより遅くなる場合があります。結果はマイクや周囲の雑音にも左右されます。"
+  ],
+  "Este reconocimiento usa tu procesador. La GPU no lo acelera en la configuración actual de Capri.": [
+    "This recognition runs on your processor. The GPU does not accelerate it in Capri’s current configuration.",
+    "Este reconhecimento usa seu processador. A GPU não o acelera na configuração atual da Capri.",
+    "この音声認識はCPUで処理します。現在のCapriの構成では、GPUによる高速化は行いません。"
+  ],
+  "El criterio considera RAM disponible y hilos lógicos; no sustituye una prueba con tu voz. Cambia cómo Capri te entiende, no la voz con la que responde.": [
+    "This guidance considers available RAM and logical threads; it cannot replace a test with your voice. It changes recognition, not Capri’s speaking voice.",
+    "A orientação considera RAM disponível e threads lógicas; não substitui um teste com sua voz. Muda o reconhecimento, não a voz com que Capri responde.",
+    "空きRAMと論理スレッド数を参考にしていますが、実際の音声での試用に代わるものではありません。変わるのは音声認識で、Capriが話す声ではありません。"
+  ],
+  "Con pocos hilos de CPU, recomiendo Base para equilibrar precisión y rapidez, o Vosk para priorizar agilidad. Small es una prueba de precisión, no una mejora de velocidad.": [
+    "With few CPU threads, I recommend Base for balance or Vosk for responsiveness. Try Small for accuracy rather than speed.",
+    "Com poucas threads de CPU, recomendo Base para equilibrar precisão e rapidez ou Vosk para priorizar agilidade. Teste Small pela precisão, não pela velocidade.",
+    "CPUのスレッド数が少ない場合、バランス重視ならBase、応答性重視ならVoskがおすすめです。Smallは速さではなく精度を試すための選択肢です。"
+  ],
+  "La opción más ligera para tu equipo": [
+    "The lightest option for your hardware",
+    "A opção mais leve para seu computador",
+    "このPCで使える最も軽い選択肢です"
+  ],
+  "Vosk es la opción más ligera disponible. Frente a Whisper deja más margen, aunque la poca RAM de tu equipo puede seguir limitando otras aplicaciones.": [
+    "Vosk is the lightest available option. It leaves more room than Whisper, although limited system RAM may still affect other apps.",
+    "Vosk é a opção mais leve disponível. Deixa mais margem que Whisper, embora a pouca RAM ainda possa limitar outros aplicativos.",
+    "Voskは利用できる中で最も軽い選択肢です。Whisperより余裕を残せますが、少ないRAMが他のアプリに影響する可能性はあります。"
+  ],
+  "No pude leer la capacidad de tu CPU. La memoria por sí sola no permite recomendar la velocidad de este reconocimiento.": [
+    "I could not read your CPU capacity. Memory alone cannot establish how fast this recognition will run.",
+    "Não consegui ler a capacidade da CPU. Só a memória não permite recomendar a velocidade deste reconhecimento.",
+    "CPUの性能情報を読み取れませんでした。メモリの情報だけでは、この音声認識の速さを判断できません。"
+  ],
+  "La IA local permite conversar libremente y hacer preguntas usando tu computador. Después de preparar el modelo, la conversación puede funcionar sin internet.": [
+    "Local AI lets you chat and ask questions using your computer. Once the model is set up, conversation can work offline.",
+    "A IA local permite conversar e fazer perguntas usando seu computador. Após preparar o modelo, a conversa pode funcionar sem internet.",
+    "ローカルAIでは、PC上で自由に会話したり質問したりできます。モデルの準備後は、会話をオフラインで利用できます。"
+  ],
+  "La preparación puede descargar Ollama y un modelo de unos 2 GB. Al conversar compartirá recursos con tus juegos y otras aplicaciones.": [
+    "Setup may download Ollama and a model of about 2 GB. Conversations will share resources with games and other apps.",
+    "A preparação pode baixar o Ollama e um modelo de cerca de 2 GB. As conversas compartilharão recursos com jogos e outros aplicativos.",
+    "準備時にOllamaと約2GBのモデルをダウンロードする場合があります。会話中はゲームや他のアプリとリソースを共有します。"
+  ],
+  "Empieza con el modelo ligero incluido. Después podrás comparar otros modelos con su tamaño local conocido.": [
+    "Start with the included lightweight model. Later, compare other models using their known local sizes.",
+    "Comece com o modelo leve incluído. Depois, compare outros modelos usando os tamanhos locais conhecidos.",
+    "まずは付属の軽量モデルから始めてください。その後、ローカルサイズが確認できる他のモデルと比較できます。"
+  ],
+  "La evaluación inicial es general: todavía no conocemos el consumo del modelo instalado. No es una garantía de rapidez.": [
+    "This initial assessment is general: the installed model’s resource use is not yet known. It does not guarantee speed.",
+    "A avaliação inicial é geral: o consumo do modelo instalado ainda não é conhecido. Não é garantia de rapidez.",
+    "初期評価は一般的な目安です。インストールされるモデルの消費量はまだ不明で、速さを保証するものではありません。"
+  ],
+  "Archivo actual: {0}.": [
+    "Current file: {0}.",
+    "Arquivo atual: {0}.",
+    "現在のファイル: {0}。"
+  ],
+  "La RAM libre es una instantánea: al sustituir el modelo, el anterior puede liberar memoria.": [
+    "Free RAM is a snapshot: replacing the current model may release some of its memory.",
+    "A RAM livre é uma leitura momentânea: substituir o modelo atual pode liberar parte da memória.",
+    "空きRAMは現在の値です。モデルを入れ替えると、前のモデルが使っていたメモリが解放される場合があります。"
+  ],
+  "Volver a evaluar": [
+    "Reassess hardware",
+    "Reavaliar computador",
+    "再評価"
+  ],
+  "Comprueba el uso de tu GPU": [
+    "Check GPU use",
+    "Verifique o uso da GPU",
+    "GPUの使用状況を確認してください"
+  ],
+  "La RAM es ajustada, pero una gráfica tiene {0} de memoria dedicada. Si Ollama puede usarla, podría descargar parte del trabajo. No confirmé compatibilidad ni VRAM libre: es una posibilidad que debes verificar, no una garantía.": [
+    "RAM is limited, but one GPU has {0} of dedicated memory. If Ollama can use it, it may offload some work. Compatibility and free VRAM are unconfirmed: verify this possibility rather than treating it as a guarantee.",
+    "A RAM é limitada, mas uma placa tem {0} de memória dedicada. Se o Ollama puder usá-la, poderá aliviar parte do trabalho. Compatibilidade e VRAM livre não foram confirmadas: verifique essa possibilidade, pois não é uma garantia.",
+    "RAMは少なめですが、専用メモリ{0}のGPUがあります。Ollamaが利用できれば、処理の一部を任せられる可能性があります。互換性と空きVRAMは未確認です。保証ではなく、確認が必要な可能性として判断してください。"
+  ],
+  "AL CAMBIAR": [
+    "WHEN YOU SWITCH",
+    "AO MUDAR",
+    "変更すると"
+  ],
+  "PARA TU PC": [
+    "FOR YOUR PC",
+    "PARA SEU PC",
+    "このPCでは"
+  ],
+  "Comprobando tu equipo…": [
+    "Checking your PC…",
+    "Verificando seu PC…",
+    "PCを確認中…"
+  ],
+  "Tu PC tiene recursos suficientes. Puedes cambiar.": [
+    "Your PC has enough resources. You can switch.",
+    "Seu PC tem recursos suficientes. Você pode mudar.",
+    "このPCには十分な余裕があります。変更できます。"
+  ],
+  "No lo recomiendo en tu PC: puede ralentizarlo.": [
+    "I do not recommend it for your PC: it may slow it down.",
+    "Não recomendo para seu PC: pode deixá-lo mais lento.",
+    "このPCにはおすすめしません。動作が遅くなる可能性があります。"
+  ],
+  "No pude comprobar si conviene en tu PC.": [
+    "I could not check whether it suits your PC.",
+    "Não consegui verificar se vale a pena no seu PC.",
+    "このPCに適しているか確認できませんでした。"
+  ],
+  "Podría funcionar con tu gráfica, pero no pude confirmarlo.": [
+    "It may work with your GPU, but I could not confirm it.",
+    "Pode funcionar com sua placa gráfica, mas não consegui confirmar.",
+    "GPUで動く可能性はありますが、確認できていません。"
+  ],
+  "Es la opción más ligera para tu PC.": [
+    "It is the lightest option for your PC.",
+    "É a opção mais leve para seu PC.",
+    "このPCで使える最も軽い選択肢です。"
+  ],
+  "Puedes usarlo, pero tu procesador puede tardar más.": [
+    "You can use it, but your processor may take longer.",
+    "Você pode usar, mas seu processador pode demorar mais.",
+    "利用できますが、CPUの処理に時間がかかる場合があります。"
+  ],
+  "No pude comprobar la velocidad en tu PC.": [
+    "I could not check its speed on your PC.",
+    "Não consegui verificar a velocidade no seu PC.",
+    "このPCでの速さは確認できませんでした。"
+  ],
+  "Ahora falta memoria libre. Cierra otras aplicaciones.": [
+    "Free memory is low right now. Close other apps.",
+    "Há pouca memória livre agora. Feche outros aplicativos.",
+    "現在の空きメモリが少ないため、他のアプリを閉じてください。"
+  ],
+  "Puedes cambiar, pero podría restar fluidez a tus juegos.": [
+    "You can switch, but games may run less smoothly.",
+    "Você pode mudar, mas seus jogos podem perder fluidez.",
+    "変更できますが、ゲームの動作が重くなる場合があります。"
+  ],
+  "Puede dar respuestas más completas, con más espera y consumo.": [
+    "It may give fuller answers, with longer waits and higher resource use.",
+    "Pode dar respostas mais completas, com mais espera e consumo.",
+    "より詳しく答えられる場合がありますが、待ち時間と負荷が増えます。"
+  ],
+  "Puede responder más rápido y consumir menos, pero con menos detalle.": [
+    "It may answer faster and use fewer resources, but with less detail.",
+    "Pode responder mais rápido e consumir menos, mas com menos detalhes.",
+    "応答が速く軽くなる場合がありますが、詳しさは下がる可能性があります。"
+  ],
+  "Cambiará su forma de responder; no hay una mejora clara de calidad o rapidez.": [
+    "Its response style will change; better quality or speed is unclear.",
+    "O jeito de responder mudará; não há melhora clara de qualidade ou rapidez.",
+    "回答の傾向が変わります。品質や速さが良くなるかは不明です。"
+  ],
+  "Te entiende más rápido y usa menos recursos, pero puede cometer más errores.": [
+    "It recognizes you faster and uses fewer resources, but may make more mistakes.",
+    "Reconhece sua fala mais rápido e usa menos recursos, mas pode errar mais.",
+    "音声認識が速く軽くなりますが、間違いが増える場合があります。"
+  ],
+  "Suele entenderte mejor, pero tarda más y usa más recursos.": [
+    "It usually understands you better, but takes longer and uses more resources.",
+    "Costuma entender você melhor, mas demora mais e usa mais recursos.",
+    "より正確に聞き取れますが、時間とリソースが多く必要になります。"
+  ],
+  "Te entiende más rápido y usa menos recursos, con algo menos de precisión.": [
+    "It recognizes you faster and uses fewer resources, with slightly lower accuracy.",
+    "Reconhece sua fala mais rápido e usa menos recursos, com um pouco menos de precisão.",
+    "音声認識が速く軽くなりますが、精度は少し下がります。"
+  ],
+  "Suele entenderte mejor que Vosk, pero tarda más y consume más.": [
+    "It usually understands you better than Vosk, but takes longer and uses more resources.",
+    "Costuma entender você melhor que o Vosk, mas demora mais e consome mais.",
+    "Voskより正確に聞き取れますが、時間と負荷が増えます。"
+  ],
+  "Podrás conversar libremente con Capri, pero usará recursos de tu PC.": [
+    "You can chat freely with Capri, but it will use your PC’s resources.",
+    "Você poderá conversar livremente com Capri, mas isso usará recursos do seu PC.",
+    "Capriと自由に会話できますが、PCのリソースを使います。"
+  ],
+  "No pude comparar estas opciones.": [
+    "I could not compare these options.",
+    "Não consegui comparar estas opções.",
+    "これらの選択肢を比較できませんでした。"
+  ],
+  "¿Capri no entiende el nombre de tu playlist? Guárdala con un nombre fácil y pídela así.": [
+    "Does Capri miss your playlist’s name? Save it with an easy name and ask for it that way.",
+    "Capri não entende o nome da sua playlist? Salve com um nome fácil e peça assim.",
+    "プレイリスト名が伝わりませんか？呼びやすい名前で登録して、Capriに頼めます。"
+  ],
+  "Si Capri no entiende el nombre de una playlist, guárdala aquí con uno fácil de decir. Tus playlists guardadas seguirán disponibles al volver a abrir Capri.": [
+    "If Capri does not understand a playlist name, save an easy name here. Your saved playlists remain available when you reopen Capri.",
+    "Se Capri não entender o nome de uma playlist, salve aqui um nome fácil de dizer. As playlists salvas continuam disponíveis ao reabrir Capri.",
+    "プレイリスト名が伝わらない場合は、呼びやすい名前を登録してください。保存したリストはCapriを開き直しても残ります。"
+  ],
+  "Nombre fácil para Capri": [
+    "Easy name for Capri",
+    "Nome fácil para Capri",
+    "Capriに伝える名前"
+  ],
+  "Ej.: Para jugar": [
+    "E.g. Gaming music",
+    "Ex.: Para jogar",
+    "例：ゲーム用"
+  ],
+  "Para jugar": [
+    "Gaming music",
+    "Para jogar",
+    "ゲーム用"
+  ],
+  "Enlace de Spotify": [
+    "Spotify link",
+    "Link do Spotify",
+    "Spotifyのリンク"
+  ],
+  "ASÍ SE LA PIDES": [
+    "ASK FOR IT LIKE THIS",
+    "PEÇA ASSIM",
+    "このように頼めます"
+  ],
+  "Guardar playlist": [
+    "Save playlist",
+    "Salvar playlist",
+    "プレイリストを保存"
+  ],
+  "Guardar cambios": [
+    "Save changes",
+    "Salvar alterações",
+    "変更を保存"
+  ],
+  "Nueva": [
+    "New",
+    "Nova",
+    "新規"
+  ],
+  "GUARDADAS": [
+    "SAVED",
+    "SALVAS",
+    "保存済み"
+  ],
+  "Se conservan aunque cierres Capri.": [
+    "They stay saved when you close Capri.",
+    "Continuam salvas mesmo ao fechar Capri.",
+    "Capriを閉じても保存されています。"
+  ],
+  "Buscar guardadas…": [
+    "Search saved playlists…",
+    "Buscar playlists salvas…",
+    "保存済みを検索…"
+  ],
+  "Todavía no guardaste ninguna.": [
+    "No saved playlists yet.",
+    "Você ainda não salvou nenhuma.",
+    "保存したプレイリストはまだありません。"
+  ],
+  "Añade un nombre y su enlace a la izquierda.": [
+    "Add a name and its link on the left.",
+    "Adicione um nome e o link à esquerda.",
+    "左側で名前とリンクを登録してください。"
+  ],
+  "GUARDADA": [
+    "SAVED",
+    "SALVA",
+    "保存済み"
+  ],
+  "Editar": [
+    "Edit",
+    "Editar",
+    "編集"
+  ],
+  "Copiar enlace": [
+    "Copy link",
+    "Copiar link",
+    "リンクをコピー"
+  ],
+  "Spotify ↗": [
+    "Spotify ↗",
+    "Spotify ↗",
+    "Spotifyで開く ↗"
+  ],
+  "Quitar vínculo": [
+    "Remove link",
+    "Remover vínculo",
+    "登録を解除"
+  ],
+  "¿Quitar este nombre de Capri?": [
+    "Remove this name from Capri?",
+    "Remover este nome da Capri?",
+    "この名前の登録を解除しますか？"
+  ],
+  "Guardada como «{0}».": [
+    "Saved as “{0}”.",
+    "Salva como “{0}”.",
+    "「{0}」として保存しました。"
+  ],
+  "Editando «{0}».": [
+    "Editing “{0}”.",
+    "Editando “{0}”.",
+    "「{0}」を編集中。"
+  ],
+  "Enlace copiado.": [
+    "Link copied.",
+    "Link copiado.",
+    "リンクをコピーしました。"
+  ],
+  "Vínculo quitado.": [
+    "Link removed.",
+    "Vínculo removido.",
+    "登録を解除しました。"
+  ],
+  "Ese nombre ya está guardado. Elige otro o edita la playlist.": [
+    "That name is already saved. Choose another or edit the playlist.",
+    "Esse nome já está salvo. Escolha outro ou edite a playlist.",
+    "その名前は登録済みです。別の名前にするか、保存済みのリストを編集してください。"
+  ],
+  "Usa un nombre de hasta 200 caracteres.": [
+    "Use a name up to 200 characters long.",
+    "Use um nome de até 200 caracteres.",
+    "名前は200文字以内にしてください。"
+  ],
+  "No pude leer tus playlists guardadas. No se han reemplazado.": [
+    "I could not read your saved playlists. They have not been overwritten.",
+    "Não consegui ler suas playlists salvas. Elas não foram substituídas.",
+    "保存済みのリストを読み込めませんでした。元のデータは上書きしていません。"
+  ],
+  "No pude quitar el vínculo. Inténtalo de nuevo.": [
+    "Could not remove the link. Try again.",
+    "Não consegui remover o vínculo. Tente novamente.",
+    "登録を解除できませんでした。もう一度お試しください。"
+  ],
+  "Guardada el {0}": [
+    "Saved on {0}",
+    "Salva em {0}",
+    "保存日時：{0}"
+  ],
+  "Pídela como": [
+    "Ask for it as",
+    "Peça como",
+    "この名前で頼めます"
+  ],
+  "SPOTIFY / PLAYLISTS": [
+    "SPOTIFY / PLAYLISTS",
+    "SPOTIFY / PLAYLISTS",
+    "SPOTIFY / プレイリスト"
+  ],
+  "Tu música, con tu voz.": [
+    "Your music. Your voice.",
+    "Sua música, sua voz.",
+    "あなたの音楽を、あなたの声で。"
+  ],
+  "Nuevo vínculo": [
+    "New playlist link",
+    "Novo vínculo",
+    "プレイリストを登録"
+  ],
+  "Nombre para Capri": [
+    "Name for Capri",
+    "Nome para Capri",
+    "Capriに伝える名前"
+  ],
+  "Por ejemplo: Música para jugar": [
+    "For example: Gaming music",
+    "Por exemplo: Música para jogar",
+    "例：ゲーム用の音楽"
+  ],
+  "Puedes pegarlo con Ctrl + V.": [
+    "You can paste with Ctrl + V.",
+    "Você pode colar com Ctrl + V.",
+    "Ctrl + V で貼り付けられます。"
+  ],
+  "Tu biblioteca": [
+    "Your library",
+    "Sua biblioteca",
+    "あなたのライブラリ"
+  ],
+  "Buscar guardadas": [
+    "Search saved playlists",
+    "Buscar playlists salvas",
+    "保存済みを検索"
+  ],
+  "Portada": [
+    "Cover",
+    "Capa",
+    "カバー画像"
+  ],
+  "No pude guardar la portada.": [
+    "Could not save the cover.",
+    "Não consegui salvar a capa.",
+    "カバー画像を保存できませんでした。"
+  ],
+  "Portada guardada.": [
+    "Cover saved.",
+    "Capa salva.",
+    "カバー画像を保存しました。"
+  ],
+  "Portada de Spotify": [
+    "Spotify cover",
+    "Capa do Spotify",
+    "Spotifyのカバー画像"
+  ],
+  "También sirve para playlists privadas.": [
+    "Private playlists work here too.",
+    "Também funciona com playlists privadas.",
+    "非公開プレイリストにも使えます。"
+  ],
+  "Abre la playlist en Spotify. Cuando veas su portada, pulsa Capturar.": [
+    "Open the playlist in Spotify. When its cover is visible, press Capture.",
+    "Abra a playlist no Spotify. Quando a capa estiver visível, pressione Capturar.",
+    "Spotifyでプレイリストを開き、カバー画像が見えたら「キャプチャ」を押してください。"
+  ],
+  "Capturar": [
+    "Capture",
+    "Capturar",
+    "キャプチャ"
+  ],
+  "Selecciona la portada · Esc para cancelar": [
+    "Select the cover · Esc to cancel",
+    "Selecione a capa · Esc para cancelar",
+    "カバー画像を選択 · Escでキャンセル"
+  ],
+  "Tu primera playlist": [
+    "Your first playlist",
+    "Sua primeira playlist",
+    "最初のプレイリスト"
+  ],
+  "Guárdala con un nombre fácil para pedírsela a Capri.": [
+    "Save it with an easy name to ask Capri for it.",
+    "Salve com um nome fácil para pedir à Capri.",
+    "呼びやすい名前で保存して、Capriに頼めます。"
+  ],
+  "Añadir playlist": [
+    "Add playlist",
+    "Adicionar playlist",
+    "プレイリストを追加"
+  ],
+  "Prueba con otro nombre.": [
+    "Try another name.",
+    "Tente outro nome.",
+    "別の名前をお試しください。"
+  ],
+  "Limpiar búsqueda": [
+    "Clear search",
+    "Limpar busca",
+    "検索をクリア"
+  ],
+  "Si la playlist es privada, Spotify no comparte su portada. Pulsa «Portada» → «Capturar» para tomar un pantallazo y seleccionar la imagen.": [
+    "If the playlist is private, Spotify does not share its cover. Press “Cover” → “Capture” to take a screenshot and select the image.",
+    "Se a playlist for privada, o Spotify não compartilha a capa. Pressione “Capa” → “Capturar” para tirar uma captura de tela e selecionar a imagem.",
+    "非公開プレイリストのカバー画像はSpotifyから取得できません。「カバー画像」→「キャプチャ」で画面を撮影し、画像を選んでください。"
   ]
 }
