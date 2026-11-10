@@ -109,7 +109,7 @@ class TemaYDisenos(PruebasTk):
         with self.capri() as (c,_),patch('menu_radial.MenuRadial') as menu:
             c.abrir_menu_radial(Mock(x_root=400,y_root=300))
             mas=dict(menu.call_args.args[3])['Más']
-            self.assertEqual([n for n,_ in mas],['YouTube','Recordatorios','Minimizar Capri','Cerrar Capri'])
+            self.assertEqual([n for n,_ in mas],['Playlists de Spotify','YouTube','Recordatorios','Minimizar Capri','Cerrar Capri'])
         cerrar=Mock();m=MenuRadial.__new__(MenuRadial)
         m.centro=100;m.radio=90;m.pila=[[]];m.cerrado=False;m.cerrar=Mock()
         m.opciones=[('Llamada',Mock()),('Asomo',Mock()),('YouTube',Mock()),('LoL',Mock()),('Cerrar Capri',cerrar)]

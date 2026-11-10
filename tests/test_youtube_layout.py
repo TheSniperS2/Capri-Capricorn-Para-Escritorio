@@ -28,7 +28,7 @@ class YouTubeLayout(unittest.TestCase):
                         for child in w.winfo_children():yield child;yield from hijos(child)
                     widgets=list(hijos(ventana));botones=[w for w in widgets if w.__class__.__name__=='BotonCyber']
                     self.assertEqual(len(botones),3)
-                    cuerpo=ventana.winfo_children()[0].winfo_children()[0]
+                    cuerpo=next(w for w in ventana.winfo_children() if isinstance(w,tk.Frame))
                     instrucciones=next(w for w in widgets if w.winfo_name()=='instrucciones')
                     for ancho,alto in ((740,620),(640,430)):
                         ventana.geometry(f'{ancho}x{alto}');root.update();root.update_idletasks()

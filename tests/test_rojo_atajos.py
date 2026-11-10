@@ -32,7 +32,7 @@ class RojoYPreferencias(PruebasTk):
             self.assertEqual(json.loads((carpeta/'ajustes.json').read_text())['tecla_hablar'],'F10')
             self.assertEqual(tecla_virtual('F10'),0x79)
             self.assertEqual(tecla_virtual('desconocida'),0x77)
-            c.abrir_chat();c.panel.update_idletasks()
+            c.abrir_chat()
             self.assertTrue(c.panel.overrideredirect());self.assertTrue(c.marco_chat.canvas.find_withtag('chrome'))
 
     def test_menu_voz_no_incluye_interrumpir(self):

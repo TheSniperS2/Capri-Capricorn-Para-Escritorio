@@ -8,6 +8,8 @@ from ajustes_ui import VentanaCyber, BotonCyber
 class RedimensionAjustes(PruebasTk):
     def setUp(self):
         super().setUp()
+        area=patch('companera.area_trabajo',return_value=(0,0,1920,1080))
+        area.start();self.addCleanup(area.stop)
         self.root=tk.Tk();self.root.withdraw()
         self.p=tk.Toplevel(self.root);self.p.geometry('800x740+100+100');self.p.minsize(720,560)
         self.m=VentanaCyber(self.p,'PRUEBA')
@@ -160,6 +162,15 @@ class RedimensionAjustes(PruebasTk):
                     elif 'e' in lado:self.assertEqual(self.p.winfo_x(),100)
                     if 'n' in lado:self.assertEqual(self.p.winfo_y()+self.p.winfo_height(),840)
                     elif 's' in lado:self.assertEqual(self.p.winfo_y(),100)
+
+    def test_el_arrastre_se_limita_al_area_de_una_pantalla_pequena(self):
+        self.p.geometry('800x600+100+100');self.root.update()
+        with patch('companera.area_trabajo',return_value=(0,0,1024,748)):
+            inicio=self.iniciar()
+            self.m.mover(SimpleNamespace(x_root=inicio.x_root+2000,y_root=inicio.y_root+2000))
+            self.m.terminar_arrastre();self.root.update()
+        self.assertEqual((self.p.winfo_width(),self.p.winfo_height()),(924,648))
+        self.assertEqual((self.p.winfo_x()+self.p.winfo_width(),self.p.winfo_y()+self.p.winfo_height()),(1024,748))
 
     def test_redimensionar_reutiliza_textos_y_conserva_estados_y_traduccion(self):
         from idiomas import activar

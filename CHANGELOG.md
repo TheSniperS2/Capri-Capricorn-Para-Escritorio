@@ -14,6 +14,7 @@
 
 ### Ventanas y apertura de juegos
 
+- Conversación y conexión de YouTube preparan el marco completo antes de mostrarse, igual que Ajustes. Las pruebas de interfaz contemplan pantallas pequeñas y la estructura actual de los controles.
 - Apertura más rápida: construcción y repintados agrupados, sin redistribuir vistas intermedias ni ejecutar timers ajenos mientras se prepara la ventana. LoL y Valorant conservan su dibujo completo y la corrección del redimensionado; medidas de botones reutilizadas por fuente, idioma y escala.
 - Playlists y confirmaciones permiten interactuar con las otras ventanas y moverlas por separado; aplicar cambios sigue requiriendo confirmación explícita.
 - Las vistas de juego se construyen antes de sustituir Ajustes. Las tarjetas de LoL redibujan solo el contenido o tamaño que cambió, evitando repintar las seis por cada evento de una tarjeta.

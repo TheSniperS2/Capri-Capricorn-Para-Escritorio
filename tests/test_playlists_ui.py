@@ -70,6 +70,11 @@ class PlaylistsUI(PruebasTk):
     def test_campos_y_pegar_completos_en_compacto_y_una_lista_no_desplaza(self):
         with self.capri() as (c,base):
             vincular('Para jugar','spotify:playlist:1234567890123456789012',base)
+            # Este caso verifica una tarjeta que cabe; la ayuda de portada
+            # ausente puede necesitar scroll en pantallas más bajas.
+            portada=archivo_portada('spotify:playlist:1234567890123456789012',base)
+            portada.parent.mkdir(parents=True,exist_ok=True)
+            Image.new('RGB',(88,88),'#6a2354').save(portada)
             c.configurar();c.vincular_playlist();d=c.playlist_dialogo;d.ventana.geometry('820x680+40+40');c.root.update()
             self.assertEqual(d.lista.lienzo.yview(),(0.,1.));self.assertFalse(d.lista.barra.winfo_manager())
             self.assertGreater(d.entrada_enlace.winfo_width(),200)
@@ -91,6 +96,19 @@ class PlaylistsUI(PruebasTk):
             d.cerrar();c.vincular_playlist();d=c.playlist_dialogo;c.root.update()
             self.assertEqual(d.tarjetas['para jugar'].nombre.cget('text'),'Para jugar')
             self.assertEqual(d.tarjetas['para jugar'].titulo.cget('text'),'ＮＩＧＨＴ ２０７７ ✨')
+
+    def test_una_tarjeta_larga_permite_llegar_a_sus_acciones_en_pantalla_baja(self):
+        with self.capri() as (c,base),patch('ventanas.area_trabajo',return_value=(0,0,1024,720)):
+            nombre='Una playlist con un nombre muy largo para comprobar toda su información '*2
+            vincular(nombre,'spotify:playlist:1234567890123456789012',base)
+            c.vincular_playlist();d=c.playlist_dialogo;d.ventana.geometry('840x620+24+24');c.root.update()
+            self.assertGreater(d.lista.interior.winfo_reqheight(),d.lista.lienzo.winfo_height())
+            self.assertTrue(d.lista.barra.winfo_manager())
+            d.lista.lienzo.yview_moveto(1);c.root.update()
+            self.assertEqual(d.lista.lienzo.yview()[1],1.)
+            limite=d.lista.lienzo.winfo_rooty()+d.lista.lienzo.winfo_height()
+            for boton in next(iter(d.tarjetas.values())).botones.values():
+                self.assertLessEqual(boton.winfo_rooty()+boton.winfo_height(),limite)
 
     def test_clic_y_escritura_no_se_bloquean_al_refrescar_la_biblioteca(self):
         with self.capri() as (c,base):

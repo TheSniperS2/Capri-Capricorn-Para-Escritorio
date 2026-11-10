@@ -1120,8 +1120,8 @@ class Capri:
         if self.visibilidad.oculta:
             self.visibilidad.mostrar()
         if self.panel and self.panel.winfo_exists():
-            self.panel.deiconify(); self.panel.lift(); self.entrada.focus_set(); return
-        p = self.panel = tk.Toplevel(self.root)
+            self.marco_chat.mostrar_completa(); self.entrada.focus_set(); return
+        p = self.panel = tk.Toplevel(self.root);p.withdraw()
         p.title('Capri · Conversación')
         p.configure(bg=BG); p.geometry('470x620')
         p.minsize(420,490)
@@ -1184,6 +1184,7 @@ class Capri:
         pie = tk.Frame(contenido,bg=BG); pie.pack(fill='x',padx=18,pady=(0,16))
         tk.Label(pie,text='DI «CAPRI»  //  '+self.cfg.get('tecla_hablar','F8')+' PARA HABLAR',bg=BG,fg=GREEN,font=('Chakra Petch',9,'bold')).pack(side='left')
         localizar_widgets(self.root,True)
+        self.marco_chat.mostrar_completa()
 
     def poner_chat(self, autor, texto,mostrar=True):
         if autor=='Capri':texto=ui(texto,self.cfg.get('idioma'))
@@ -2554,7 +2555,7 @@ class Capri:
             self.root.after(700,actualizar)
         actualizar()
         from types import SimpleNamespace
-        distribuir(SimpleNamespace(width=w-60));ventana.update_idletasks();minimo();ventana.deiconify()
+        distribuir(SimpleNamespace(width=w-60));ventana.update_idletasks();minimo();marco.mostrar_completa()
 
     def cerrar(self):
         if getattr(self,'recordatorios_panel',None) and not self.recordatorios_panel.cerrado:self.recordatorios_panel.cerrar()
