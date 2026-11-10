@@ -31,6 +31,18 @@ class Sesiones(unittest.TestCase):
             self.assertEqual([im.getpixel(p)[3] for p in ((0,0),(w-1,0),(0,h-1),(w-1,h-1))],[0,0,0,0])
             self.assertEqual(im.getpixel((w//2,h//2))[3],255)
 
+    def test_marco_opaco_continuo_sin_huecos_por_el_remuestreo_en_las_esquinas(self):
+        from PIL import ImageDraw
+        from multimedia_diseno import dibujar_multimedia,preparar_tarjeta_ventana,MARCO_MULTIMEDIA,ANCHO,ALTO
+        from avatar import LienzoRaster
+        original=Image.new('RGBA',(ANCHO*2,ALTO*2));dibujar_multimedia(LienzoRaster(original,2),sesion())
+        for s in (.75,1,1.25,1.5):
+            tamano=(round(ANCHO*s),round(ALTO*s));im=preparar_tarjeta_ventana(original,tamano)
+            mascara=Image.new('L',tamano)
+            puntos=[(round(MARCO_MULTIMEDIA[i]*tamano[0]/ANCHO),round(MARCO_MULTIMEDIA[i+1]*tamano[1]/ALTO)) for i in range(0,len(MARCO_MULTIMEDIA),2)]
+            ImageDraw.Draw(mascara).polygon(puntos,fill=255)
+            self.assertEqual(im.getchannel('A').tobytes(),mascara.tobytes())
+
     def test_bucle_de_escucha_se_prepara_fuera_de_la_interfaz_y_se_reutiliza(self):
         from musica_visual import AnimacionEscucha,FOTOGRAMAS_ESCUCHA,FPS_ESCUCHA
         hilos=[];entrado=threading.Event();continuar=threading.Event()

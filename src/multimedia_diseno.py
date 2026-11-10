@@ -5,7 +5,7 @@ import math
 import time
 from functools import lru_cache
 from pathlib import Path
-from PIL import Image,ImageOps,ImageFont,ImageDraw,ImageChops
+from PIL import Image,ImageOps,ImageFont,ImageDraw
 from tema_ui import color
 from fuentes import FAMILIA
 from idiomas import ui,idioma_actual
@@ -18,13 +18,14 @@ MARCO_MULTIMEDIA=(2,13,13,2,425,2,438,15,438,185,427,196,13,196,2,185)
 
 def preparar_tarjeta_ventana(imagen,tamano):
     """Windows usa un color transparente: evitar halos de alfa parcial en el borde."""
-    salida=imagen.resize(tamano,Image.Resampling.LANCZOS)
+    fondo=Image.new('RGBA',imagen.size,color('#09131f'))
+    fondo.alpha_composite(imagen)
+    salida=fondo.resize(tamano,Image.Resampling.LANCZOS)
     mascara=Image.new('L',tamano,0)
     puntos=[(round(MARCO_MULTIMEDIA[i]*tamano[0]/ANCHO),
              round(MARCO_MULTIMEDIA[i+1]*tamano[1]/ALTO)) for i in range(0,len(MARCO_MULTIMEDIA),2)]
     ImageDraw.Draw(mascara).polygon(puntos,fill=255)
-    alfa=salida.getchannel('A').point(lambda a:255 if a>=128 else 0)
-    salida.putalpha(ImageChops.multiply(alfa,mascara))
+    salida.putalpha(mascara)
     return salida
 
 @lru_cache(maxsize=16)
@@ -86,7 +87,13 @@ def dibujar_multimedia(c,sesion=None,escala_fuente=1,ocupado=False,error='',cant
                      fill=color('#09131f'),outline=borde,width=1)
     c.create_line(14,5,92,5,fill=acento,width=2)
     c.create_line(435,21,435,61,fill=acento,width=2)
-    for y in range(10,194,4):c.create_line(5,y,434,y,fill=color('#101a29'))
+    vertices=list(zip(MARCO_MULTIMEDIA[::2],MARCO_MULTIMEDIA[1::2]))
+    for y in range(10,194,4):
+        cortes=[]
+        for (x1,y1),(x2,y2) in zip(vertices,vertices[1:]+vertices[:1]):
+            if min(y1,y2)<=y<max(y1,y2):cortes.append(x1+(x2-x1)*(y-y1)/(y2-y1))
+        if cortes:c.create_line(min(cortes)+2,y,max(cortes)-2,y,fill=color('#101a29'))
+    c.create_polygon(*MARCO_MULTIMEDIA,fill='',outline=borde,width=1)
     c.create_text(24,23,text='REPRODUCIENDO' if d.get('estado')=='Playing' else 'MÚSICA / CAPRI',anchor='w',fill=acento,font=fuente(7,'bold'))
     pos,dur=tiempos(d)
     c.create_text(24,43,text=(reloj(pos)+' / '+reloj(dur)) if dur else '--:-- / --:--',anchor='w',fill=suave,font=fuente(8))

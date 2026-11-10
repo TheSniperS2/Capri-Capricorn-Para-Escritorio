@@ -77,7 +77,9 @@ class Panel(PruebasTk):
 
     def test_ajustes_abiertos_no_pausan_escucha_con_valorant_en_primer_plano(self):
         import test_companera_control as fixtures
-        with fixtures.ModoPersonaje.capri(self) as (c,_):
+        with fixtures.ModoPersonaje.capri(self) as (c,_), \
+             patch('escritorio.fortnite_en_primer_plano',return_value=False), \
+             patch('escritorio.cs2_en_primer_plano',return_value=False):
             c.activacion_permitida=True;c.cfg['activacion_voz']=True;c.ajustes=tk.Toplevel(c.root)
             with patch('escritorio.valorant_en_primer_plano',return_value=False),patch('app.threading.Thread') as hilo:
                 c.mantener_activacion();hilo.assert_not_called()

@@ -4,6 +4,7 @@ from tema_ui import LienzoUI as CanvasUI
 from tkinter import ttk
 from PIL import Image,ImageTk,ImageDraw
 from fuentes import FAMILIA
+from contextlib import contextmanager
 
 FONDO='#10090d';TARJETA='#211018';TEXTO='#fff0f3';SUAVE='#bb929f';ACENTO='#ff4267';VERDE='#ffb1c2'
 
@@ -20,18 +21,31 @@ def separar_bordes(ventana,margen=32):
 class VentanaCyber:
     """Marco angular, arrastrable y sin la decoración estándar de Windows."""
     def __init__(self,ventana,titulo,cerrar=None,minimizar=None):
-        import os
         self.ventana=ventana;self.titulo=titulo;self.cerrar=cerrar or ventana.destroy;self.drag=None;self.resize=None
+        self.reloj=ventana._root()
+        ventana._capri_opaca=True
+        self._geometria_tarea=None;self._geometria_pendiente=None;self._cursor_actual='';self._captura=False
+        self._chrome={};self._tamano_marco=None;self._repintado=None;self._repintando=False;self._preparando=0
         self.minimizar=minimizar
-        ventana.overrideredirect(True);ventana.configure(bg='#010203');ventana.attributes('-topmost',True)
-        if os.name=='nt':ventana.attributes('-transparentcolor','#010203')
-        self.canvas=CanvasUI(ventana,bg='#010203',highlightthickness=0);self.canvas.pack(fill='both',expand=True)
-        self.cuerpo=tk.Frame(self.canvas,bg=FONDO)
-        self.item=self.canvas.create_window(14,50,window=self.cuerpo,anchor='nw')
+        ventana.overrideredirect(True);ventana.configure(bg=FONDO);ventana.attributes('-topmost',True)
+        self.canvas=CanvasUI(ventana,bg=FONDO,highlightthickness=0);self.canvas.pack(fill='both',expand=True)
+        # El contenido es hermano del lienzo decorativo: Tk adapta su área
+        # directamente, sin una ventana incrustada que siga el tamaño anterior.
+        self.cuerpo=tk.Frame(ventana,bg=FONDO,cursor='arrow')
+        self.cuerpo.place(x=14,y=50,relwidth=1,width=-28,relheight=1,height=-68)
+        self.cuerpo.lift()
         self.canvas.bind('<Configure>',self.dibujar)
-        self.canvas.bind('<ButtonPress-1>',self.iniciar);self.canvas.bind('<B1-Motion>',self.mover)
+        self.canvas.bind('<ButtonPress-1>',self.iniciar)
         self.canvas.bind('<Motion>',self.cursor_borde)
-        self.canvas.bind('<ButtonRelease-1>',self.terminar_arrastre)
+        self.canvas.bind('<Leave>',lambda e:self.fijar_cursor('') if not (self.drag or self.resize) else None)
+        ventana.bind('<B1-Motion>',self.mover,add='+')
+        ventana.bind('<ButtonRelease-1>',self.terminar_arrastre,add='+')
+        ventana.bind('<Motion>',self.cursor_contenido,add='+')
+        ventana.bind('<Enter>',self.cursor_contenido,add='+')
+        ventana.bind('<ButtonPress-1>',self.pulsar_contenido,add='+')
+        ventana.bind('<Unmap>',self.cancelar_arrastre,add='+')
+        ventana.bind('<FocusOut>',self.cancelar_arrastre,add='+')
+        ventana.bind('<Destroy>',self.cancelar_arrastre,add='+')
         ventana.bind('<Escape>',lambda e:self.cerrar(),add='+')
         self.dibujar()
         separar_bordes(ventana)
@@ -39,48 +53,113 @@ class VentanaCyber:
         registrar_apoyo(ventana)
 
     def dibujar(self,e=None):
-        c=self.canvas;w=max(100,c.winfo_width());h=max(100,c.winfo_height());c.delete('chrome')
-        c.create_polygon(16,1,w-16,1,w-1,16,w-1,h-16,w-16,h-1,1,h-1,1,16,
-                         fill=FONDO,outline='#b72e4e',width=2,tags='chrome')
-        c.create_polygon(17,4,w-17,4,w-4,17,w-4,38,4,38,4,17,fill='#35101d',outline='',tags='chrome')
-        c.create_text(22,21,text='CAPRI // '+self.titulo,anchor='w',fill='#ffbdca',font=(FAMILIA,10,'bold'),tags='chrome')
-        c.create_polygon(w-59,8,w-20,8,w-12,16,w-12,32,w-59,32,fill='#5e1a30',outline='',tags='chrome')
-        c.create_line(w-39,16,w-31,24,fill=TEXTO,width=2,tags='chrome')
-        c.create_line(w-39,24,w-31,16,fill=TEXTO,width=2,tags='chrome')
+        c=self.canvas;w=c.winfo_width();h=c.winfo_height()
+        if w<=1 or h<=1:return
+        if self._tamano_marco==(w,h):return
+        self._tamano_marco=(w,h)
+        def figura(nombre,tipo,coordenadas,**opciones):
+            if nombre not in self._chrome:self._chrome[nombre]=getattr(c,'create_'+tipo)(*coordenadas,tags='chrome',**opciones)
+            else:c.coords(self._chrome[nombre],*coordenadas)
+        figura('contorno','polygon',(16,1,w-16,1,w-1,16,w-1,h-16,w-16,h-1,1,h-1,1,16),fill=FONDO,outline='#b72e4e',width=2)
+        figura('cabecera','polygon',(17,4,w-17,4,w-4,17,w-4,38,4,38,4,17),fill='#35101d',outline='')
+        figura('titulo','text',(22,21),text='CAPRI // '+self.titulo,anchor='w',fill='#ffbdca',font=(FAMILIA,10,'bold'))
+        figura('cerrar','polygon',(w-59,8,w-20,8,w-12,16,w-12,32,w-59,32),fill='#5e1a30',outline='')
+        figura('cruz1','line',(w-39,16,w-31,24),fill=TEXTO,width=2)
+        figura('cruz2','line',(w-39,24,w-31,16),fill=TEXTO,width=2)
         if self.minimizar:
-            c.create_polygon(w-96,8,w-65,8,w-65,32,w-96,32,fill='#35101d',outline='',tags='chrome')
-            c.create_line(w-86,23,w-74,23,fill=TEXTO,width=2,tags='chrome')
-        c.create_line(14,40,w-14,40,fill='#5d2134',tags='chrome')
-        c.create_line(18,h-8,min(w-30,150),h-8,fill='#f60031',width=3,tags='chrome')
-        c.create_line(w-23,h-9,w-10,h-22,fill='#ff829e',width=2,tags='chrome')
-        c.itemconfigure(self.item,width=max(1,w-28),height=max(1,h-68));c.tag_lower('chrome')
+            figura('minimizar','polygon',(w-96,8,w-65,8,w-65,32,w-96,32),fill='#35101d',outline='')
+            figura('guion','line',(w-86,23,w-74,23),fill=TEXTO,width=2)
+        figura('separador','line',(14,40,w-14,40),fill='#5d2134')
+        figura('pie','line',(18,h-8,min(w-30,150),h-8),fill='#f60031',width=3)
+        figura('tirador','line',(w-23,h-9,w-10,h-22),fill='#ff829e',width=2)
+        c.tag_lower('chrome')
+        from ventanas import recortar_marco
+        recortar_marco(self.ventana,(16,0,w-16,0,w,16,w,h-16,w-16,h,16,h,0,h-16,0,16))
+        self.pedir_repintado()
+
+    def pedir_repintado(self):
+        if not (self._preparando or self._repintando) and self._repintado is None:self._repintado=self.reloj.after_idle(self.repintar)
+
+    def repintar(self):
+        if self._preparando or self._repintando:return
+        if self._repintado is not None:self.reloj.after_cancel(self._repintado);self._repintado=None
+        from ventanas import repintar_ventana
+        self._repintando=True
+        try:repintar_ventana(self.ventana)
+        finally:self._repintando=False
+
+    def mostrar_completa(self):
+        """Resuelve el tamaño y el reflujo antes de hacer visible una ventana nueva."""
+        from ventanas import ocultar_para_preparar,preparar_presentacion
+        v=self.ventana;self._preparando+=1
+        if self._repintado is not None:self.reloj.after_cancel(self._repintado);self._repintado=None
+        try:
+            ocultar_para_preparar(v);v.deiconify()
+            # Conserva Configure/Map sin ejecutar aquí los timers de animación,
+            # red o poll: continuarán en el bucle normal al acabar la apertura.
+            preparar_presentacion(v)
+        finally:self._preparando-=1
+        if not v.winfo_exists():return
+        self.repintar();v.attributes('-alpha',1)
+        from ventanas import terminar_opaca
+        terminar_opaca(v);v.lift();self.repintar()
+
+    @contextmanager
+    def cambio_de_vista(self):
+        from ventanas import ocultar_para_preparar
+        self._preparando+=1
+        if self._repintado is not None:self.reloj.after_cancel(self._repintado);self._repintado=None
+        if self._preparando==1:ocultar_para_preparar(self.ventana)
+        try:yield
+        finally:
+            self._preparando-=1
+            if not self._preparando and self.ventana.winfo_exists():self.mostrar_completa()
 
     def iniciar(self,e):
-        self.drag=None;self.resize=None
+        self.terminar_arrastre()
         borde=self.borde(e.x,e.y)
         if borde:
+            from companera import area_trabajo
+            self._area_resize=area_trabajo()
             self.resize=(e.x_root,e.y_root,self.ventana.winfo_x(),self.ventana.winfo_y(),
-                         self.ventana.winfo_width(),self.ventana.winfo_height(),borde);return
+                         self.ventana.winfo_width(),self.ventana.winfo_height(),borde)
+            self.cursor_borde(e);self.capturar_raton();return
         if e.y>37:return
         if e.x>self.canvas.winfo_width()-62:self.cerrar();return
         if self.minimizar and e.x>self.canvas.winfo_width()-100:self.minimizar();return
         self.drag=(e.x_root,e.y_root,self.ventana.winfo_x(),self.ventana.winfo_y())
+        self.capturar_raton()
+
+    def capturar_raton(self):
+        if self.canvas.grab_current() is None:
+            self.canvas.grab_set();self._captura=True
+
+    def pedir_geometria(self,geometria):
+        # Conserva la posición más reciente: no pinta cada evento intermedio.
+        self._geometria_pendiente=geometria
+        if self._geometria_tarea is None:self._geometria_tarea=self.reloj.after(0,self.aplicar_geometria)
+
+    def aplicar_geometria(self):
+        if self._geometria_tarea is not None:
+            self.reloj.after_cancel(self._geometria_tarea);self._geometria_tarea=None
+        geometria=self._geometria_pendiente;self._geometria_pendiente=None
+        if geometria is not None:
+            self.ventana.geometry(geometria)
 
     def mover(self,e):
         if self.resize:
             rx,ry,x,y,w,h,borde=self.resize;minw,minh=self.ventana.minsize()
-            from companera import area_trabajo
-            l,t,r,b=area_trabajo();derecha=x+w;abajo=y+h;dx=e.x_root-rx;dy=e.y_root-ry
+            l,t,r,b=self._area_resize;derecha=x+w;abajo=y+h;dx=e.x_root-rx;dy=e.y_root-ry
             if 'w' in borde:x=max(l,min(x+dx,derecha-minw))
             if 'e' in borde:derecha=max(x+minw,min(r,derecha+dx))
             if 'n' in borde:y=max(t,min(y+dy,abajo-minh))
             if 's' in borde:abajo=max(y+minh,min(b,abajo+dy))
-            self.ventana.geometry(f'{derecha-x}x{abajo-y}{x:+d}{y:+d}');return
+            self.pedir_geometria(f'{derecha-x}x{abajo-y}{x:+d}{y:+d}');return
         if not self.drag:return
         x,y,a,b=self.drag;w=self.ventana.winfo_width();h=self.ventana.winfo_height()
         a=max(0,min(self.ventana.winfo_screenwidth()-w,a+e.x_root-x))
         b=max(0,min(self.ventana.winfo_screenheight()-h,b+e.y_root-y))
-        self.ventana.geometry(f'+{a}+{b}')
+        self.pedir_geometria(f'+{a}+{b}')
 
     def borde(self,x,y):
         w,h=self.canvas.winfo_width(),self.canvas.winfo_height()
@@ -90,14 +169,41 @@ class VentanaCyber:
         return vertical+horizontal
 
     def cursor_borde(self,e):
-        borde=self.borde(e.x,e.y)
+        borde=self.resize[-1] if self.resize else self.borde(e.x,e.y)
         cursor={'n':'sb_v_double_arrow','s':'sb_v_double_arrow','e':'sb_h_double_arrow','w':'sb_h_double_arrow',
                 'nw':'size_nw_se','se':'size_nw_se','ne':'size_ne_sw','sw':'size_ne_sw'}.get(borde,'')
-        try:self.canvas.configure(cursor=cursor)
-        except tk.TclError:self.canvas.configure(cursor='sizing' if borde else '')
+        self.fijar_cursor(cursor)
 
-    def terminar_arrastre(self,e):
-        self.drag=None;self.resize=None;self.cursor_borde(e)
+    def fijar_cursor(self,cursor):
+        if cursor==self._cursor_actual:return
+        try:self.canvas.configure(cursor=cursor)
+        except tk.TclError:self.canvas.configure(cursor='sizing' if cursor else '')
+        self._cursor_actual=cursor
+
+    def cursor_contenido(self,e):
+        if (self.drag or self.resize) and not (e.state&0x100):self.terminar_arrastre()
+        if e.widget is not self.canvas and not (self.drag or self.resize):self.fijar_cursor('')
+
+    def pulsar_contenido(self,e):
+        if e.widget is not self.canvas:self.terminar_arrastre()
+
+    def terminar_arrastre(self,e=None):
+        self.aplicar_geometria();self.drag=None;self.resize=None
+        if self._captura:
+            if self.canvas.grab_current() is self.canvas:self.canvas.grab_release()
+            self._captura=False
+        self.fijar_cursor('')
+
+    def cancelar_arrastre(self,e):
+        if e.widget is not self.ventana:return
+        if e.type==tk.EventType.Destroy and self._repintado is not None:
+            self.reloj.after_cancel(self._repintado);self._repintado=None
+        if self._geometria_tarea is not None:
+            self.reloj.after_cancel(self._geometria_tarea);self._geometria_tarea=None
+        self._geometria_pendiente=None;self.drag=None;self.resize=None;self._captura=False
+        if self.canvas.winfo_exists():
+            if self.canvas.grab_current() is self.canvas:self.canvas.grab_release()
+            self.fijar_cursor('')
 
 class PanelAjustes:
     def __init__(self,ventana):
@@ -117,14 +223,19 @@ class PanelAjustes:
         estilo.map('TCheckbutton',background=[('active',TARJETA)],foreground=[('active',VERDE)])
         estilo.configure('Capri.Vertical.TScrollbar',background='#7b293e',troughcolor=FONDO,
                          arrowcolor=ACENTO,bordercolor=FONDO)
-        cabecera=CanvasUI(ventana,height=72,bg=FONDO,highlightthickness=0)
+        cabecera=CanvasUI(ventana,height=72,bg=FONDO,highlightthickness=0);figuras_cabecera=[]
         cabecera.pack(fill='x')
         def pintar_cabecera(e):
-            cabecera.delete('all');w=e.width
-            cabecera.create_polygon(12,4,w-28,4,w-12,20,w-12,62,12,62,fill='#261019',outline='')
-            cabecera.create_text(28,25,text='ENLACE PERSONAL',anchor='w',fill=TEXTO,font=(FAMILIA,17,'bold'))
-            cabecera.create_text(28,47,text='AJUSTES DEL CONSTRUCTO',anchor='w',fill=ACENTO,font=(FAMILIA,9))
-            cabecera.create_line(w-120,47,w-28,47,fill='#ef4668',width=2)
+            w=e.width
+            if not figuras_cabecera:
+                figuras_cabecera.extend((
+                    cabecera.create_polygon(12,4,w-28,4,w-12,20,w-12,62,12,62,fill='#261019',outline=''),
+                    cabecera.create_line(w-120,47,w-28,47,fill='#ef4668',width=2)))
+                cabecera.create_text(28,25,text='ENLACE PERSONAL',anchor='w',fill=TEXTO,font=(FAMILIA,17,'bold'))
+                cabecera.create_text(28,47,text='AJUSTES DEL CONSTRUCTO',anchor='w',fill=ACENTO,font=(FAMILIA,9))
+            else:
+                cabecera.coords(figuras_cabecera[0],12,4,w-28,4,w-12,20,w-12,62,12,62)
+                cabecera.coords(figuras_cabecera[1],w-120,47,w-28,47)
         cabecera.bind('<Configure>',pintar_cabecera)
         self.titulo=tk.StringVar();self.detalle=tk.StringVar()
         cuerpo=tk.Frame(ventana,bg=FONDO);cuerpo.pack(fill='both',expand=True)
@@ -167,6 +278,9 @@ class PanelAjustes:
     def adaptar_menu(self,altura):
         if altura<100 or not self.botones:return
         alto=min(46,max(28,(altura-60)//len(self.botones)-4));margen=3 if alto==46 else 2
+        formato=(alto,margen,len(self.botones))
+        if getattr(self,'_formato_menu',None)==formato:return
+        self._formato_menu=formato
         for boton in self.botones.values():
             if int(boton.cget('height'))!=alto:boton.configure(height=alto)
             boton.pack_configure(pady=margen)
@@ -201,6 +315,8 @@ class PanelAjustes:
                 if not w.winfo_exists():return
                 padre=w.master;ancho=padre.winfo_width()
                 if ancho<100:return
+                if getattr(w,'_capri_ancho_padre',None)==ancho:return
+                w._capri_ancho_padre=ancho
                 if 'padx' in padre.keys():ancho-=2*padre.winfo_pixels(padre.cget('padx'))
                 try:
                     margen=w.pack_info().get('padx',0)
@@ -621,9 +737,23 @@ class BotonCyber(CanvasUI):
         from tkinter import font as tkfont
         self.fuente=font or (FAMILIA,10,'bold');self.texto=text;self.command=command
         self.color=bg;self.tinta=fg;self.estado=kw.pop('state','normal');self.hover=False;self.estilo=estilo
+        self._figura_boton=None;self._texto_boton=None;self._pintura_boton=None
         for k in ('activebackground','activeforeground','relief','bd','cursor','disabledforeground','highlightthickness'):kw.pop(k,None)
         from idiomas import ui
-        ancho=max(tkfont.Font(root=padre,font=self.fuente).measure(ui(text,k)) for k in ('es','en','pt','ja'))+padx*2+12
+        raiz=padre._root();textos=tuple(ui(text,k) for k in ('es','en','pt','ja'))
+        medidas=getattr(raiz,'_capri_medidas_botones',None)
+        if medidas is None:medidas=raiz._capri_medidas_botones={}
+        # Las fuentes con nombre pueden cambiar sus propiedades; medirlas de
+        # nuevo. Las tuplas fijas comparten ancho por texto y escala de Tk.
+        llave=(self.fuente,textos,float(raiz.tk.call('tk','scaling'))) if isinstance(self.fuente,tuple) else None
+        ancho=medidas.get(llave) if llave is not None else None
+        if ancho is None:
+            fuente=tkfont.Font(root=padre,font=self.fuente)
+            ancho=max(fuente.measure(t) for t in textos)
+            if llave is not None:
+                if len(medidas)>=512:medidas.clear()
+                medidas[llave]=ancho
+        ancho+=padx*2+12
         super().__init__(padre,width=ancho,height=max(28,20+pady*2),bg=padre.cget('bg'),highlightthickness=0,takefocus=True,**kw)
         self.bind('<Configure>',lambda e:self.dibujar());self.bind('<Button-1>',lambda e:self.invoke())
         self.bind('<Return>',lambda e:self.invoke());self.bind('<space>',lambda e:self.invoke())
@@ -645,17 +775,27 @@ class BotonCyber(CanvasUI):
         if self.estado!='disabled' and self.command:return self.command()
     def resaltar(self,valor):self.hover=valor;self.dibujar()
     def dibujar(self):
-        self.delete('all');w=max(40,self.winfo_width());h=max(28,self.winfo_height())
+        w=max(40,self.winfo_width());h=max(28,self.winfo_height())
         des=self.estado=='disabled';borde='#603340' if des else ('#ff97ae' if self.hover else '#a43c57')
         if self.estilo in ('principal','secundario'):
             r=5;relleno='#28151d' if des else ('#ff7898' if self.hover and self.estilo=='principal' else self.color)
-            self.create_polygon(2+r,2,w-2-r,2,w-2,2,w-2,2+r,w-2,h-2-r,w-2,h-2,w-2-r,h-2,
-                                2+r,h-2,2,h-2,2,h-2-r,2,2+r,2,2,
-                                fill=relleno,outline='' if self.estilo=='principal' else borde,smooth=True,splinesteps=18)
+            coordenadas=(2+r,2,w-2-r,2,w-2,2,w-2,2+r,w-2,h-2-r,w-2,h-2,w-2-r,h-2,
+                         2+r,h-2,2,h-2,2,h-2-r,2,2+r,2,2)
+            opciones=dict(fill=relleno,outline='' if self.estilo=='principal' else borde,smooth=True,splinesteps=18)
         else:
             from disenos_pantalla import chaflan
-            self.create_polygon(*chaflan(2,2,w-2,h-2,7),fill='#28151d' if des else self.color,outline=borde)
-        self.create_text(w/2,h/2,text=self.texto,fill='#916e79' if des else self.tinta,font=self.fuente)
+            coordenadas=chaflan(2,2,w-2,h-2,7)
+            opciones=dict(fill='#28151d' if des else self.color,outline=borde,smooth=False)
+        pintura=(self.texto,self.fuente,self.tinta,des,self.hover,self.estilo,self.color)
+        if self._figura_boton is None:
+            self._figura_boton=self.create_polygon(*coordenadas,**opciones)
+            self._texto_boton=self.create_text(w/2,h/2,text=self.texto,fill='#916e79' if des else self.tinta,font=self.fuente)
+        else:
+            self.coords(self._figura_boton,*coordenadas);self.coords(self._texto_boton,w/2,h/2)
+            if pintura!=self._pintura_boton:
+                self.itemconfigure(self._figura_boton,**opciones)
+                self.itemconfigure(self._texto_boton,text=self.texto,fill='#916e79' if des else self.tinta,font=self.fuente)
+        self._pintura_boton=pintura
 
 class MarcoTransmision(CanvasUI):
     """Marco de chat con cabecera, sin fondos rectangulares en los recortes."""

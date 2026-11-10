@@ -68,6 +68,7 @@ class PanelValorant:
         self.config=normalizar(config);self.guardar=guardar;self.enviar=enviar;self.control=control
         self.activa=0;self.cerrado=False;self._stop=threading.Event();self._consulta_error=None;self._eventos=queue.Queue()
         from paneles_integrados import preparar_panel
+        integrado=contenedor is not None
         self.ventana,marco=preparar_panel(padre,'Valorant',self,(960,900),(800,620),ocultar,contenedor)
         w=self.ventana
         self.catalogo=CatalogoAgentes(w)
@@ -94,11 +95,11 @@ class PanelValorant:
         self.cola=tk.StringVar(value=ui(control.cola_estado))
         tk.Label(f,textvariable=self.cola,bg=FONDO,fg=CIAN,font=(FAMILIA,10,'bold'),wraplength=850,justify='left').pack(anchor='w',padx=22,pady=(0,14))
         tk.Label(f,text=ui('TRES PREFERENCIAS'),bg=FONDO,fg=SUAVE,font=(FAMILIA,10,'bold')).pack(anchor='w',padx=22)
-        tarjetas=tk.Frame(f,bg=FONDO);tarjetas.pack(fill='x',padx=20,pady=(7,4));self.slots=[]
+        tarjetas=tk.Frame(f,bg=FONDO);tarjetas.pack(fill='x',padx=20,pady=(7,4));self.slots=[];self._slots_pintados={}
         for i in range(3):
             cv=LienzoUI(tarjetas,bg=FONDO,highlightthickness=0,height=100,takefocus=True,cursor='hand2')
             cv.grid(row=0,column=i,sticky='ew',padx=(0,8) if i<2 else 0);tarjetas.columnconfigure(i,weight=1,uniform='preferencias')
-            cv.bind('<Configure>',lambda e:self.dibujar());cv.bind('<Button-1>',lambda e,n=i:self.activar(n))
+            cv.bind('<Configure>',lambda e,n=i:self.dibujar_slot(n));cv.bind('<Button-1>',lambda e,n=i:self.activar(n))
             cv.bind('<Return>',lambda e,n=i:self.activar(n));cv.bind('<space>',lambda e,n=i:self.activar(n));self.slots.append(cv)
         instrucciones=tk.Frame(f,bg=FONDO);instrucciones.pack(fill='x',padx=22)
         tk.Label(instrucciones,text=ui('Selecciona una prioridad y pulsa un agente. Si está ocupado, Capri pasa a la siguiente.'),
@@ -120,7 +121,9 @@ class PanelValorant:
         tk.Label(f,text=ui('Si se agotan tus preferencias, no se selecciona ningún agente.'),bg=FONDO,fg=SUAVE,
                  font=(FAMILIA,9),wraplength=850,justify='left').pack(anchor='w',padx=22,pady=(12,0))
         tk.Label(f,text=ui('Tus cambios se guardan al instante'),bg=FONDO,fg=SUAVE,font=(FAMILIA,9)).pack(anchor='w',padx=22,pady=(0,10))
-        self.dibujar();self.refrescar();w.update_idletasks();ajustar();w.deiconify()
+        self.dibujar();self.refrescar()
+        if not integrado:w.update_idletasks();ajustar()
+        w.deiconify()
         if consultar:threading.Thread(target=PanelValorant._consultar,args=(control,self._stop,self._eventos),daemon=True).start()
 
     def activar(self,indice):self.activa=indice;self.dibujar()
@@ -133,14 +136,22 @@ class PanelValorant:
     def persistir(self):self.guardar('valorant',copy.deepcopy(self.config))
     def cambiar_auto(self):self.config['auto_pick']=self.automatico.get();self.persistir()
     def dibujar(self):
-        for i,cv in enumerate(self.slots):
-            cv.delete('all');ancho=max(230,cv.winfo_width());id=self.config['preferencias'][i];agente=self.catalogo.agentes.get(id)
-            cv.create_polygon(1,1,ancho-12,1,ancho-1,12,ancho-1,99,12,99,1,88,fill=TARJETA,outline=CIAN if i==self.activa else '#55313e',width=2)
-            if agente:cv.create_image(42,50,image=self.catalogo.foto(id))
-            else:cv.create_text(42,48,text='+',font=(FAMILIA,26),fill=CIAN)
-            cv.create_text(84,22,text=ui('Prioridad '+str(i+1)),anchor='w',fill=SUAVE,font=(FAMILIA,9))
-            cv.create_text(84,46,text=agente['name'] if agente else ui('Elegir agente'),anchor='w',fill=TEXTO,font=(FAMILIA,13,'bold'))
-            if agente:cv.create_text(84,70,text=ui(agente['role']),anchor='w',fill=SUAVE,font=(FAMILIA,9))
+        for i in range(len(self.slots)):self.dibujar_slot(i)
+    def dibujar_slot(self,i):
+        cv=self.slots[i];ancho=cv.winfo_width()
+        if ancho<=1:return
+        id=self.config['preferencias'][i];agente=self.catalogo.agentes.get(id)
+        prioridad=ui('Prioridad '+str(i+1));nombre=agente['name'] if agente else ui('Elegir agente')
+        rol=ui(agente['role']) if agente else '';marca=(ancho,id,i==self.activa,prioridad,nombre,rol)
+        if self._slots_pintados.get(i)==marca:return
+        cv.delete('all')
+        cv.create_polygon(1,1,ancho-12,1,ancho-1,12,ancho-1,99,12,99,1,88,fill=TARJETA,outline=CIAN if i==self.activa else '#55313e',width=2)
+        if agente:cv.create_image(42,50,image=self.catalogo.foto(id))
+        else:cv.create_text(42,48,text='+',font=(FAMILIA,26),fill=CIAN)
+        cv.create_text(84,22,text=prioridad,anchor='w',fill=SUAVE,font=(FAMILIA,9))
+        cv.create_text(84,46,text=nombre,anchor='w',fill=TEXTO,font=(FAMILIA,13,'bold'))
+        if agente:cv.create_text(84,70,text=rol,anchor='w',fill=SUAVE,font=(FAMILIA,9))
+        self._slots_pintados[i]=marca
     def filtrar(self):
         for hijo in self.grid.winfo_children():hijo.destroy()
         self.botones={}

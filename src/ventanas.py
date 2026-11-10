@@ -5,6 +5,86 @@ from ctypes import wintypes as w
 APOYOS_PROPIOS=set()
 
 
+def hwnd_propio(ventana):
+    if os.name!='nt':return None
+    u=ctypes.windll.user32
+    u.GetAncestor.argtypes=[w.HWND,w.UINT];u.GetAncestor.restype=w.HWND
+    return u.GetAncestor(w.HWND(ventana.winfo_toplevel().winfo_id()),2) or ventana.winfo_toplevel().winfo_id()
+
+
+def recortar_marco(ventana,puntos):
+    """Contorno nativo sin hacer transparente el fondo de todos los controles Tk."""
+    if os.name!='nt':return False
+    puntos=tuple(round(n) for n in puntos)
+    if getattr(ventana,'_capri_contorno',None)==puntos:return True
+    u=ctypes.windll.user32;g=ctypes.windll.gdi32
+    g.CreatePolygonRgn.argtypes=[ctypes.POINTER(w.POINT),ctypes.c_int,ctypes.c_int];g.CreatePolygonRgn.restype=w.HRGN
+    g.DeleteObject.argtypes=[w.HGDIOBJ];g.DeleteObject.restype=w.BOOL
+    u.SetWindowRgn.argtypes=[w.HWND,w.HRGN,w.BOOL];u.SetWindowRgn.restype=ctypes.c_int
+    vertices=(w.POINT*(len(puntos)//2))(*(w.POINT(*puntos[i:i+2]) for i in range(0,len(puntos),2)))
+    region=g.CreatePolygonRgn(vertices,len(vertices),2)
+    if not region:return False
+    if not u.SetWindowRgn(hwnd_propio(ventana),region,False):g.DeleteObject(region);return False
+    # Tras SetWindowRgn, Windows es dueño del HRGN y lo libera al reemplazarlo.
+    ventana._capri_contorno=puntos;return True
+
+
+def repintar_ventana(ventana):
+    """Actualiza el layout y expone los controles Tk, no solo el HWND exterior."""
+    if not ventana.winfo_exists():return
+    # Primero resuelve el reflujo: pintar con posiciones antiguas deja copias
+    # de etiquetas/campos cuando el marco cambia continuamente de tamaño.
+    ventana.update_idletasks()
+    def visibles(widget,limites=None):
+        if not widget.winfo_viewable():return
+        x,y=widget.winfo_rootx(),widget.winfo_rooty();ancho,alto=widget.winfo_width(),widget.winfo_height()
+        rect=(x,y,x+ancho,y+alto)
+        clip=rect if limites is None else (max(x,limites[0]),max(y,limites[1]),min(x+ancho,limites[2]),min(y+alto,limites[3]))
+        if clip[0]>=clip[2] or clip[1]>=clip[3]:return
+        yield widget
+        for hijo in widget.winfo_children():
+            if hijo.winfo_toplevel() is ventana:yield from visibles(hijo,clip)
+    for widget in visibles(ventana):
+        # También los controles cuya geometría no cambió necesitan renovar
+        # su superficie. Invalidar solo el marco HWND no refresca el dibujo Tk.
+        widget.event_generate('<Expose>',x=0,y=0,width=widget.winfo_width(),height=widget.winfo_height())
+    ventana.update_idletasks()
+
+
+def preparar_presentacion(ventana):
+    """Resuelve layout y eventos nativos sin ejecutar temporizadores ajenos."""
+    from _tkinter import WINDOW_EVENTS,DONT_WAIT
+    # update() también ejecutaría animación/poll durante la apertura. El
+    # repintado posterior resolverá el reflujo generado por Configure/Map.
+    if not ventana.winfo_exists():return
+    ventana.update_idletasks()
+    for _ in range(4096):
+        if not ventana.tk.dooneevent(WINDOW_EVENTS|DONT_WAIT):break
+
+
+def terminar_opaca(ventana):
+    if os.name!='nt' or not getattr(ventana,'_capri_opaca',False):return
+    if float(ventana.attributes('-alpha'))<1:return
+    u=ctypes.windll.user32;hwnd=hwnd_propio(ventana)
+    u.GetWindowLongPtrW.argtypes=[w.HWND,ctypes.c_int];u.GetWindowLongPtrW.restype=ctypes.c_ssize_t
+    u.SetWindowLongPtrW.argtypes=[w.HWND,ctypes.c_int,ctypes.c_ssize_t];u.SetWindowLongPtrW.restype=ctypes.c_ssize_t
+    estilo=u.GetWindowLongPtrW(hwnd,-20)
+    if estilo&0x80000:u.SetWindowLongPtrW(hwnd,-20,estilo&~0x80000)
+
+
+def ocultar_para_preparar(ventana):
+    ventana.attributes('-alpha',0)
+    if os.name!='nt':return
+    u=ctypes.windll.user32;hwnd=hwnd_propio(ventana)
+    u.GetWindowLongPtrW.argtypes=[w.HWND,ctypes.c_int];u.GetWindowLongPtrW.restype=ctypes.c_ssize_t
+    u.SetWindowLongPtrW.argtypes=[w.HWND,ctypes.c_int,ctypes.c_ssize_t];u.SetWindowLongPtrW.restype=ctypes.c_ssize_t
+    u.SetLayeredWindowAttributes.argtypes=[w.HWND,w.COLORREF,w.BYTE,w.DWORD];u.SetLayeredWindowAttributes.restype=w.BOOL
+    # Tk conserva su estilo anterior en caché. Asegura el bit nativo al volver
+    # a preparar una ventana que ya terminó opaca mediante terminar_opaca.
+    u.SetWindowLongPtrW(hwnd,-20,u.GetWindowLongPtrW(hwnd,-20)|0x80000)
+    u.SetLayeredWindowAttributes(hwnd,0,0,2)
+
+
 def registrar_apoyo(ventana):
     if os.name!='nt':return
     ventana.update_idletasks();u=ctypes.windll.user32

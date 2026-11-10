@@ -41,6 +41,18 @@ class Panel(PruebasTk):
                 with self.subTest(texto=texto,idioma=idioma):
                     self.assertIn(texto,catalogo());self.assertTrue(ui(texto,idioma).strip())
 
+    def test_cambiar_una_prioridad_conserva_el_dibujo_de_las_otras_tarjetas(self):
+        root=tk.Tk();root.withdraw()
+        p=PanelLoL(root,{},Mock(),Mock(),ControlLoL(),ControlSeleccion(),consultar=False)
+        try:
+            root.update();antes={k:cv.find_all() for k,cv in p.slots.items()}
+            self.assertTrue(all(antes.values()))
+            p.elegir('pick',0,86);root.update()
+            self.assertNotEqual(p.slots['pick',0].find_all(),antes['pick',0])
+            for llave,cv in p.slots.items():
+                if llave!=('pick',0):self.assertEqual(cv.find_all(),antes[llave])
+        finally:p.cerrar();root.destroy()
+
     def test_app_guarda_perfiles_y_limpia_monitor_al_cerrar(self):
         import test_companera_control as fixtures
         with fixtures.ModoPersonaje.capri(self) as (c,_):

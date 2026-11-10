@@ -49,6 +49,7 @@ class PanelLoL:
         self.config=normalizar(config);self.guardar=guardar;self.enviar=enviar;self.control=control;self.seleccion=seleccion
         self.rol=ROLES[0];self.cerrado=False;self.selector=None;self._stop=threading.Event();self._eventos=queue.Queue()
         from paneles_integrados import preparar_panel
+        integrado=contenedor is not None
         self.ventana,marco=preparar_panel(padre,'League of Legends',self,(980,890),(850,670),ocultar,contenedor)
         w=self.ventana
         # Conserva accesibles los controles en portátiles y con escalado de Windows.
@@ -100,7 +101,7 @@ class PanelLoL:
         tk.Label(zona,text=ui('Se usa la línea que te asigne LoL. Si una opción no está disponible, pasa a la siguiente.'),
                  bg=FONDO,fg=SUAVE,wraplength=650,justify='left',font=(FAMILIA,9)).pack(anchor='w',pady=(4,10))
         columnas=tk.Frame(zona,bg=FONDO);columnas.pack(fill='both',expand=True)
-        self.slots={};self.automaticos={}
+        self.slots={};self.automaticos={};self._slots_pintados={}
         for columna,tipo,color in ((0,'pick',CIAN),(1,'ban',ACENTO)):
             panel=tk.Frame(columnas,bg=FONDO);panel.grid(row=0,column=columna,sticky='nsew',padx=(0,12) if columna==0 else 0)
             columnas.columnconfigure(columna,weight=1,uniform='draft')
@@ -108,7 +109,7 @@ class PanelLoL:
             for indice in range(3):
                 cv=LienzoUI(panel,height=70,bg=FONDO,highlightthickness=0,takefocus=True,cursor='hand2')
                 cv.pack(fill='x',pady=(0,7));self.slots[tipo,indice]=cv
-                cv.bind('<Configure>',lambda e:self.dibujar())
+                cv.bind('<Configure>',lambda e,t=tipo,i=indice:self.dibujar_slot((t,i)))
                 cv.bind('<Button-1>',lambda e,t=tipo,i=indice:self.abrir_selector(t,i))
                 cv.bind('<Return>',lambda e,t=tipo,i=indice:self.abrir_selector(t,i))
                 cv.bind('<space>',lambda e,t=tipo,i=indice:self.abrir_selector(t,i))
@@ -121,7 +122,9 @@ class PanelLoL:
         pie=tk.Frame(f,bg=FONDO);pie.pack(fill='x',padx=22,pady=(0,5))
         tk.Label(pie,text=ui('Tus cambios se guardan al instante'),bg=FONDO,fg=SUAVE,font=(FAMILIA,9)).pack(side='left')
         tk.Label(pie,text='DATA DRAGON / '+self.catalogo.version,bg=FONDO,fg=SUAVE,font=(FAMILIA,8)).pack(side='right')
-        self.elegir_rol(self.rol);self.refrescar();w.update_idletasks();ajustar();w.deiconify()
+        self.elegir_rol(self.rol);self.refrescar()
+        if not integrado:w.update_idletasks();ajustar()
+        w.deiconify()
         if consultar:threading.Thread(target=self._consultar,daemon=True).start()
 
     def elegir_rol(self,rol):
@@ -130,17 +133,25 @@ class PanelLoL:
         self.dibujar()
 
     def dibujar(self):
-        for (tipo,i),cv in self.slots.items():
-            cv.delete('all');w=max(240,cv.winfo_width());color=CIAN if tipo=='pick' else ACENTO
-            identificador=self.config['roles'][self.rol][tipo][i];campeon=self.catalogo.campeones.get(identificador)
-            cv.create_polygon(1,1,w-10,1,w-1,10,w-1,69,10,69,1,60,fill=TARJETA,outline='#55313e')
-            cv.create_line(1,12,1,57,fill=color,width=3)
-            if campeon:cv.create_image(34,35,image=self.catalogo.foto(identificador))
-            else:
-                cv.create_rectangle(12,13,57,57,outline='#55313e')
-                cv.create_text(34,34,text='+',fill=color,font=(FAMILIA,22))
-            cv.create_text(70,19,text=ui('Prioridad '+str(i+1)),anchor='w',fill=SUAVE,font=(FAMILIA,8))
-            cv.create_text(70,40,text=campeon['name'] if campeon else ui('Elegir campeón'),anchor='w',fill=TEXTO,font=(FAMILIA,12,'bold'))
+        for llave in self.slots:self.dibujar_slot(llave)
+
+    def dibujar_slot(self,llave):
+        tipo,i=llave;cv=self.slots[llave];w=cv.winfo_width()
+        if w<=1:return
+        identificador=self.config['roles'][self.rol][tipo][i];campeon=self.catalogo.campeones.get(identificador)
+        prioridad=ui('Prioridad '+str(i+1));nombre=campeon['name'] if campeon else ui('Elegir campeón')
+        marca=(w,identificador,prioridad,nombre)
+        if self._slots_pintados.get(llave)==marca:return
+        cv.delete('all');color=CIAN if tipo=='pick' else ACENTO
+        cv.create_polygon(1,1,w-10,1,w-1,10,w-1,69,10,69,1,60,fill=TARJETA,outline='#55313e')
+        cv.create_line(1,12,1,57,fill=color,width=3)
+        if campeon:cv.create_image(34,35,image=self.catalogo.foto(identificador))
+        else:
+            cv.create_rectangle(12,13,57,57,outline='#55313e')
+            cv.create_text(34,34,text='+',fill=color,font=(FAMILIA,22))
+        cv.create_text(70,19,text=prioridad,anchor='w',fill=SUAVE,font=(FAMILIA,8))
+        cv.create_text(70,40,text=nombre,anchor='w',fill=TEXTO,font=(FAMILIA,12,'bold'))
+        self._slots_pintados[llave]=marca
 
     def cambiar_auto(self,tipo):
         self.config['auto_'+tipo]=self.automaticos[tipo].get();self.persistir()
