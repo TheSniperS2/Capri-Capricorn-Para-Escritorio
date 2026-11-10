@@ -6,10 +6,14 @@ import json
 import os
 import re
 import subprocess
+import tempfile
+import threading
+from datetime import datetime
 import unicodedata
 from escritorio import HIDDEN
 
 BASE=Path(__file__).resolve().parent
+_cerrojo=threading.RLock()
 
 def interpretar_solicitud_playlist(texto):
     """Conserva la restricción aunque falte el nombre de la lista o del tema."""
@@ -46,18 +50,79 @@ def uri_playlist(enlace):
         if m:return 'spotify:playlist:'+m[1]
     raise ValueError('Pega el enlace de una playlist de open.spotify.com o su URI spotify:playlist:.')
 
-def cargar(carpeta=None):
-    try:
-        datos=((carpeta or BASE)/'playlists.json').read_text(encoding='utf-8')
-        valor=json.loads(datos)
-        return valor if isinstance(valor,dict) else {}
-    except (OSError,ValueError):return {}
+def _leer(carpeta=None):
+    try:valor=json.loads(((carpeta or BASE)/'playlists.json').read_text(encoding='utf-8-sig'))
+    except FileNotFoundError:return {}
+    if not isinstance(valor,dict):raise ValueError('Formato de playlists inválido.')
+    if isinstance(valor.get('version'),int):
+        if valor['version']!=2 or not isinstance(valor.get('listas'),dict):raise ValueError('Versión de playlists no compatible.')
+        valor=valor['listas']
+    registros={}
+    for k,v in valor.items():
+        if not isinstance(k,str) or not k:raise ValueError('Nombre de playlist inválido.')
+        registro=dict(v) if isinstance(v,dict) else {'nombre':k,'uri':v}
+        if not isinstance(registro.get('nombre',k),str) or not isinstance(registro.get('uri'),str):raise ValueError('Playlist inválida.')
+        registro['nombre']=registro.get('nombre',k);registro['uri']=uri_playlist(registro['uri'])
+        registros[k]=registro
+    return registros
 
-def vincular(nombre,enlace,carpeta=None):
-    if not nombre.strip():raise ValueError('Falta el nombre de la playlist.')
-    uri=uri_playlist(enlace)
-    listas=cargar(carpeta);listas[clave(nombre)]=uri
-    ((carpeta or BASE)/'playlists.json').write_text(json.dumps(listas,ensure_ascii=False,indent=2),encoding='utf-8')
+
+def _escribir(registros,carpeta=None):
+    carpeta=Path(carpeta or BASE)
+    fd,temporal=tempfile.mkstemp(prefix='.playlists-',suffix='.tmp',dir=carpeta)
+    try:
+        with os.fdopen(fd,'w',encoding='utf-8') as archivo:
+            json.dump({'version':2,'listas':registros},archivo,ensure_ascii=False,indent=2)
+            archivo.flush();os.fsync(archivo.fileno())
+        os.replace(temporal,carpeta/'playlists.json')
+    finally:
+        Path(temporal).unlink(missing_ok=True)
+
+
+def cargar(carpeta=None):
+    """Mantiene el contrato nombre normalizado→URI de los controles musicales."""
+    with _cerrojo:
+        try:return {k:v['uri'] for k,v in _leer(carpeta).items()}
+        except (OSError,ValueError):return {}
+
+
+def listar_vinculadas(carpeta=None):
+    with _cerrojo:
+        registros=_leer(carpeta)
+        return [dict(v,clave=k) for k,v in sorted(registros.items(),key=lambda p:p[1]['nombre'].casefold())]
+
+
+def vincular(nombre,enlace,carpeta=None,*,anterior=None):
+    nombre=' '.join(nombre.split())
+    if not nombre or len(nombre)>200:raise ValueError('Nombre de playlist inválido.')
+    uri=uri_playlist(enlace);k=clave(nombre)
+    with _cerrojo:
+        registros=_leer(carpeta)
+        if anterior and anterior!=k and k in registros:raise ValueError('Ese nombre ya está guardado.')
+        previo=registros.get(anterior or k,{})
+        mismo=previo.get('uri')==uri
+        nuevo=dict(previo) if mismo else {}
+        nuevo.update(nombre=nombre,uri=uri,guardada=datetime.now().astimezone().isoformat(timespec='seconds'))
+        if anterior and anterior!=k:registros.pop(anterior,None)
+        registros[k]=nuevo;_escribir(registros,carpeta)
+
+
+def quitar_vinculo(nombre,carpeta=None):
+    with _cerrojo:
+        registros=_leer(carpeta)
+        if clave(nombre) in registros:
+            del registros[clave(nombre)];_escribir(registros,carpeta)
+
+
+def actualizar_titulo(uri,titulo,carpeta=None):
+    """Enriquece vínculos que aún existen; nunca resucita una lista retirada."""
+    titulo=' '.join(str(titulo).split())[:200]
+    if not titulo:return
+    with _cerrojo:
+        registros=_leer(carpeta);cambio=False
+        for v in registros.values():
+            if v['uri']==uri and v.get('titulo')!=titulo:v['titulo']=titulo;cambio=True
+        if cambio:_escribir(registros,carpeta)
 
 # Descubrir por nombre en Tu biblioteca; nunca buscar una playlist privada en
 # los resultados públicos. Solo se invocan controles de procesos Spotify.
