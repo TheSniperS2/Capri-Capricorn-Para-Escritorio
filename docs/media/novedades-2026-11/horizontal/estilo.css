@@ -1,0 +1,31 @@
+
+@font-face{font-family:Chakra;src:url('../../../../assets/fonts/ChakraPetch-Regular.ttf')}
+@font-face{font-family:Chakra;src:url('../../../../assets/fonts/ChakraPetch-Bold.ttf');font-weight:700}
+*{box-sizing:border-box}html,body{margin:0;width:1920px;height:1080px;overflow:hidden}
+body{font-family:Chakra,sans-serif;background:#090711;color:#f6f4ff}
+.poster{position:relative;width:1920px;height:1080px;overflow:hidden;background:radial-gradient(ellipse at 85% 25%,#26142f,transparent 65%),linear-gradient(155deg,#090b14,#0b0710 70%);--accent:#ef8ad3}
+.poster:after{content:'';position:absolute;inset:28px;border:1px solid #5b315d;clip-path:polygon(24px 0,100% 0,100% calc(100% - 28px),calc(100% - 28px) 100%,0 100%,0 24px);pointer-events:none}
+.ghost{position:absolute;bottom:-430px;right:10px;width:1100px;opacity:.1;filter:saturate(.6)}
+.header{position:absolute;left:90px;right:90px;top:64px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #533455;padding-bottom:22px;font-weight:700;letter-spacing:3px}
+.brand{font-size:37px}.edition{font-size:21px;color:#c3a6c5;letter-spacing:2px}
+.copy{position:absolute;top:240px;left:90px;width:755px}
+h1{font-size:74px;line-height:1.08;letter-spacing:-2px;margin:0 0 36px;font-weight:700}
+em{font-style:normal;color:var(--accent)}.copy p{font-size:31px;line-height:1.4;color:#c9bfd4;margin:0}
+.screen{position:absolute;left:930px;top:176px;width:900px;padding:12px;display:flex;align-items:center;justify-content:center;background:#10090d;border:1px solid #895786;box-shadow:0 26px 70px #0008;clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,18px 100%,0 calc(100% - 18px),0 18px)}
+.screen img{display:block;width:auto;height:auto;max-width:100%;max-height:738px}.screen:before{content:'';position:absolute;top:0;left:24px;width:160px;height:3px;background:var(--accent)}
+.note{position:absolute;left:90px;width:755px;top:860px;font-size:29px;line-height:1.4;color:#e3d8eb}
+.quote{position:absolute;left:90px;top:645px;width:755px;padding:26px 30px;background:#211128;border-left:4px solid var(--accent);font-size:36px;line-height:1.25}
+.quote small{display:block;font-size:20px;letter-spacing:3px;color:var(--accent);margin-bottom:12px}
+.footer{position:absolute;left:90px;right:90px;bottom:52px;border-top:1px solid #58355c;padding-top:20px;display:flex;justify-content:space-between;color:#b6a3bf;font-size:22px;letter-spacing:2px}
+.cover{--accent:#8ff2cc;background:radial-gradient(ellipse at 90% 85%,#1f1633,#0b0616 75%)}
+.cover .hero{position:absolute;left:880px;top:-360px;width:1060px;height:1883px;object-fit:contain;mask-image:linear-gradient(to right,transparent,#000 10%)}
+.cover .copy{top:250px;width:930px}.cover h1{font-size:92px;letter-spacing:-3px}.cover .copy p{font-size:34px}.cover .note{top:790px;width:830px;background:#10091ce8;padding:25px 26px;border-left:4px solid var(--accent);font-size:25px;letter-spacing:2px;font-weight:700}
+.playlists .screen{top:210px}.playlists .screen img,.confirmaciones .screen img{width:100%;max-height:none}
+.juegos{--accent:#93edcc}.juegos .screen{top:170px}.juegos .note{top:690px;font-size:32px}
+.confirmaciones{--accent:#b5a5ff}.confirmaciones .screen{top:210px}
+.benefits{position:absolute;left:90px;top:650px;width:755px;font-size:26px;color:#cbbfd6;display:flex;gap:24px}.benefits span{border-top:2px solid var(--accent);padding-top:15px;flex:1}
+.monitor .screen{left:1050px;top:175px;width:650px;padding:16px}.monitor .screen img{width:100%;max-height:none}.monitor .note{top:690px;font-size:38px}
+.recordatorios{--accent:#93edcc}.recordatorios .screen{top:170px}
+.multimedia .copy{top:205px}.multimedia h1{font-size:72px;margin-bottom:30px}.multimedia .copy p{font-size:29px}
+.music-art{position:absolute;left:990px;top:160px;width:800px;height:445px;object-fit:cover;border:1px solid #895786;clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)}
+.multimedia .screen{left:990px;top:585px;width:800px}.multimedia .screen img{width:100%;max-height:none}.multimedia .note{top:750px;font-size:29px}

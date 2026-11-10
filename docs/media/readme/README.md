@@ -1,6 +1,6 @@
 # Imágenes del README
 
-La [galería vertical de noviembre](../novedades-2026-11/README.md) documenta las nuevas vistas de playlists, juegos, confirmaciones, monitor, agenda y multimedia. Usa capturas actuales con datos de demostración y una ilustración promocional generada con ImageGen; su procedencia se detalla por separado.
+Las [galerías de noviembre](../novedades-2026-11/README.md) documentan las nuevas vistas de playlists, juegos, confirmaciones, monitor, agenda y multimedia: formato horizontal para el README y vertical para TikTok. Usan capturas actuales con datos de demostración y una ilustración promocional generada con ImageGen; su procedencia se detalla por separado.
 
 ## Galería actual · noviembre de 2026
 

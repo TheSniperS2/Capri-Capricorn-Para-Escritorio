@@ -1,6 +1,20 @@
-# Capri · Novedades en vertical
+# Capri · Novedades
 
-Siete láminas **1080 × 1920 (9:16)**, con textos grandes, composición para móvil y estética cyberpunk. La galería usa los mismos archivos que el README principal. Pulsa una imagen para abrirla completa.
+La misma serie tiene dos composiciones: **1920 × 1080 (16:9) para el README** y **1080 × 1920 (9:16) para TikTok**. El texto y las capturas se redistribuyen para cada formato, conservando las proporciones. Pulsa una imagen para abrirla completa.
+
+## Horizontales · README
+
+[![Portada horizontal](horizontal/01-capri.webp)](horizontal/01-capri.webp)
+
+| | |
+| --- | --- |
+| [![Playlists](horizontal/02-playlists.webp)](horizontal/02-playlists.webp) | [![Juegos](horizontal/03-juegos.webp)](horizontal/03-juegos.webp) |
+| [![Confirmaciones](horizontal/04-confirmaciones.webp)](horizontal/04-confirmaciones.webp) | [![Monitor](horizontal/05-monitor.webp)](horizontal/05-monitor.webp) |
+| [![Recordatorios](horizontal/06-recordatorios.webp)](horizontal/06-recordatorios.webp) | [![Multimedia](horizontal/07-multimedia.webp)](horizontal/07-multimedia.webp) |
+
+## Verticales · TikTok
+
+Se conservan las siete imágenes verticales originales.
 
 | | | |
 | --- | --- | --- |
@@ -30,15 +44,16 @@ Siete láminas **1080 × 1920 (9:16)**, con textos grandes, composición para m�
 
 ## Archivos y regeneración
 
-El repositorio guarda **WebP** para reducir el peso, las capturas originales y los HTML/CSS editables de `vertical/`. Puedes abrir `vertical/VER-IMAGENES.html` o cada lámina HTML en un navegador. Para exportar PNG se necesita Chrome o Edge instalado; el script usa un perfil temporal y solo carga documentos locales.
+El repositorio guarda **WebP** para reducir el peso, las capturas originales y los HTML/CSS editables de `horizontal/` y `vertical/`. Cada carpeta tiene su propia `VER-IMAGENES.html`. Para exportar PNG se necesita Chrome o Edge instalado; los scripts usan perfiles temporales y solo cargan documentos locales.
 
 Desde el repositorio, con las dependencias de Capri:
 
 ```powershell
 python scripts/capturar_novedades.py
 python scripts/generar_novedades_verticales.py
+python scripts/generar_novedades_horizontales.py
 ```
 
-La exportación deja los **siete PNG, una galería HTML y un ZIP** en `Pictures/Capri/Novedades-2026-11-09-Vertical`. `--salida` permite elegir otra carpeta. `--sin-render` actualiza solo los HTML/CSS. El arte seleccionado ya está incluido; no se vuelve a generar ni se hace una llamada a un servicio de imágenes al exportar.
+Cada exportación deja **siete PNG, una galería HTML y un ZIP** en su carpeta independiente: `Pictures/Capri/Novedades-2026-11-09-Vertical` o `Pictures/Capri/Novedades-2026-11-09-Horizontal`. Generar las horizontales no modifica las verticales. `--salida` permite elegir otra carpeta y `--sin-render` actualiza solo los HTML/CSS del formato elegido. El arte seleccionado ya está incluido; no se vuelve a generar ni se hace una llamada a un servicio de imágenes al exportar.
 
 Los recursos antiguos de la [galería anterior](../readme/README.md) se conservan y tienen su propia procedencia.

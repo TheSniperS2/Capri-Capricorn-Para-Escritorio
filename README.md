@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/media/readme/capri-intro.webp" width="100%" alt="Capri aparece sujetando la pantalla y saluda: ¡Hola! Capricorn Desktop.">
+  <img src="docs/media/novedades-2026-11/horizontal/01-capri.webp" width="100%" alt="Capri: tu escritorio, más contigo. Portada horizontal de las novedades.">
 </p>
 
 <p align="center">
@@ -32,18 +32,19 @@
 **Playlists con nombres fáciles, ajustes reunidos y ventanas que se adaptan a tu escritorio.** Esta actualización también aclara los cambios de IA y reconocimiento: Capri explica el beneficio, el coste y una recomendación orientativa según los recursos de tu equipo, antes de aplicar nada.
 
 <p align="center">
-  <a href="docs/media/novedades-2026-11/vertical/01-capri.webp"><img src="docs/media/novedades-2026-11/vertical/01-capri.webp" width="23%" alt="Capri: tu escritorio, más contigo."></a>
-  <a href="docs/media/novedades-2026-11/vertical/02-playlists.webp"><img src="docs/media/novedades-2026-11/vertical/02-playlists.webp" width="23%" alt="Guarda una playlist de Spotify con un nombre fácil para pedirla a Capri."></a>
-  <a href="docs/media/novedades-2026-11/vertical/03-juegos.webp"><img src="docs/media/novedades-2026-11/vertical/03-juegos.webp" width="23%" alt="Los cinco juegos se configuran dentro de Ajustes, con navegación hacia atrás."></a>
-  <a href="docs/media/novedades-2026-11/vertical/04-confirmaciones.webp"><img src="docs/media/novedades-2026-11/vertical/04-confirmaciones.webp" width="23%" alt="Confirmaciones que explican el cambio y orientan según los recursos del PC."></a>
+  <a href="docs/media/novedades-2026-11/horizontal/02-playlists.webp"><img src="docs/media/novedades-2026-11/horizontal/02-playlists.webp" width="49%" alt="Guarda una playlist de Spotify con un nombre fácil para pedirla a Capri."></a>
+  <a href="docs/media/novedades-2026-11/horizontal/03-juegos.webp"><img src="docs/media/novedades-2026-11/horizontal/03-juegos.webp" width="49%" alt="Los cinco juegos se configuran dentro de Ajustes, con navegación hacia atrás."></a>
 </p>
 <p align="center">
-  <a href="docs/media/novedades-2026-11/vertical/05-monitor.webp"><img src="docs/media/novedades-2026-11/vertical/05-monitor.webp" width="23%" alt="Monitor opcional de CPU, RAM, GPU y VRAM integrado en Capri."></a>
-  <a href="docs/media/novedades-2026-11/vertical/06-recordatorios.webp"><img src="docs/media/novedades-2026-11/vertical/06-recordatorios.webp" width="23%" alt="Agenda de recordatorios y creación de avisos por voz."></a>
-  <a href="docs/media/novedades-2026-11/vertical/07-multimedia.webp"><img src="docs/media/novedades-2026-11/vertical/07-multimedia.webp" width="23%" alt="Reproductor independiente y Capri disfrutando la música en modo pantalla."></a>
+  <a href="docs/media/novedades-2026-11/horizontal/04-confirmaciones.webp"><img src="docs/media/novedades-2026-11/horizontal/04-confirmaciones.webp" width="49%" alt="Confirmaciones que explican el cambio y orientan según los recursos del PC."></a>
+  <a href="docs/media/novedades-2026-11/horizontal/05-monitor.webp"><img src="docs/media/novedades-2026-11/horizontal/05-monitor.webp" width="49%" alt="Monitor opcional de CPU, RAM, GPU y VRAM integrado en Capri."></a>
+</p>
+<p align="center">
+  <a href="docs/media/novedades-2026-11/horizontal/06-recordatorios.webp"><img src="docs/media/novedades-2026-11/horizontal/06-recordatorios.webp" width="49%" alt="Agenda de recordatorios y creación de avisos por voz."></a>
+  <a href="docs/media/novedades-2026-11/horizontal/07-multimedia.webp"><img src="docs/media/novedades-2026-11/horizontal/07-multimedia.webp" width="49%" alt="Reproductor independiente y Capri disfrutando la música en modo pantalla."></a>
 </p>
 
-<p align="center"><sub>Abre cualquier lámina para verla completa. Formato vertical 1080 × 1920; capturas de la aplicación con datos de demostración y arte promocional. <a href="docs/media/novedades-2026-11/README.md">Galería, procedencia y archivos editables</a>.</sub></p>
+<p align="center"><sub>Abre cualquier imagen para verla completa. Formato horizontal 1920 × 1080 para el README; también se conservan las versiones verticales 1080 × 1920 para TikTok. Capturas de la aplicación con datos de demostración y arte promocional. <a href="docs/media/novedades-2026-11/README.md">Galerías, procedencia y archivos editables</a>.</sub></p>
 
 - **Spotify:** biblioteca de vínculos guardados, búsqueda, edición y portadas. Los nombres fáciles se conservan al reiniciar. Si Spotify no comparte la portada de una playlist privada, puedes seleccionar su imagen con **Portada → Capturar**.
 - **Ajustes y juegos:** LoL, Valorant, Fortnite, Counter-Strike 2 y Roblox en la misma ventana, con **Volver**. Apertura optimizada y contenido adaptable al redimensionar.

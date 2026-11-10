@@ -20,7 +20,7 @@
 | [Comparación de modelos](COMPARACION_MODELOS.md) | Comparar reconocimiento y conversación sin perder preferencias. |
 | [Playlists guardadas](PLAYLISTS_GUARDADAS.md) | Nombres fáciles, biblioteca persistente y captura opcional de portadas privadas. |
 | [Confirmaciones de cambios](CONFIRMACIONES_CAMBIOS.md) | Beneficios, costes y recomendación orientativa según el equipo. |
-| [Galería vertical de novedades](media/novedades-2026-11/README.md) | Siete láminas para móvil, capturas de demostración y procedencia. |
+| [Galerías de novedades](media/novedades-2026-11/README.md) | Imágenes horizontales para el README y verticales para móvil, capturas y procedencia. |
 
 ## Desarrollar
 
