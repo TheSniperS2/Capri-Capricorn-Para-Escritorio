@@ -65,6 +65,9 @@ ARCHIVOS.append('traducciones.json')
 ARCHIVOS.append('REFERENCIAS_VOZ.md')
 ARCHIVOS.append('escucha_activa.py')
 ARCHIVOS.extend(['voz_local.py','voz_local_motor.py','voz_rapida.py','VOZ_LOCAL.md'])
+ARCHIVOS.append('equipo_pc.py')
+ARCHIVOS.append('playlists_metadata.py')
+ARCHIVOS.append('portadas_ui.py')
 ARCHIVOS.extend(['despedida.py','assets/capri-base-hd-v1.png','PROMPT_HD.md'])
 
 def origen(nombre):

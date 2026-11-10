@@ -339,7 +339,7 @@ class Capri:
         tamanos=[(f'{n}%',lambda n=n:self.guardar('escala_avatar',n/100)) for n in (75,100,125,150)]
         juegos=[('Desactivar asomos automáticos' if self.cfg.get('asomos_curiosos') else 'Activar asomos automáticos',lambda:self.guardar('asomos_curiosos',not self.cfg.get('asomos_curiosos')))]
         voz=[('Hablar',self.hablar),('Activar voz' if not self.puede_narrar() else 'Silenciar voz',self.alternar_silencio)]
-        mas=[('YouTube',self.conectar_opera),('Recordatorios',self.abrir_recordatorios),
+        mas=[('Playlists de Spotify',self.vincular_playlist),('YouTube',self.conectar_opera),('Recordatorios',self.abrir_recordatorios),
              ('Minimizar Capri',self.minimizar_capri),('Cerrar Capri',self.cerrar)]
         opciones=[('Ajustes',self.configurar),('Chat',self.abrir_chat),('Travesuras' if self.es_personaje() else 'Color',juegos if self.es_personaje() else self.abrir_colores),('Aspecto',self.abrir_aspectos),
                   ('Modo pantalla' if self.es_personaje() else 'Modo personaje',lambda:self.guardar('modo_visual','pantalla' if self.es_personaje() else 'personaje')),('Tamaño',tamanos),('Voz',voz),('Más',mas)]
@@ -1842,15 +1842,17 @@ class Capri:
 
     def puede_narrar(self):return bool(self.cfg.get('voz')) and normalizar_volumen(self.cfg.get('volumen_voz',100))>0
 
-    def configurar(self):
+    def configurar(self,mostrar=True):
         from fuentes import FAMILIA
         self.ultima_interaccion=time.monotonic()
         if self.asomo and self.asomo.get('curioso'):self.terminar_asomo()
         self.finalizar_intro()
         self.detener_activacion()
         self.escucha_activa.cancelar()
-        if self.ajustes and self.ajustes.winfo_exists():self.ajustes.lift();return
-        p=self.ajustes=tk.Toplevel(self.root);p.title('Capri · Ajustes');p.configure(bg=BG)
+        if self.ajustes and self.ajustes.winfo_exists():
+            if mostrar:self.ajustes.deiconify();self.ajustes.lift();self.marco_ajustes.repintar()
+            return
+        p=self.ajustes=tk.Toplevel(self.root);p.withdraw();p.title('Capri · Ajustes');p.configure(bg=BG)
         p.bind('<Escape>',lambda e:self.volver_de_juego() if getattr(self,'vista_juego',None) else self.interrumpir())
         p.geometry('800x'+str(min(760,max(560,self.root.winfo_screenheight()-100))));p.minsize(720,560)
         from ajustes_ui import PanelAjustes,SelectorCyber,InterruptorCyber,EscalaCyber,CapturadorTecla
@@ -2016,13 +2018,14 @@ class Capri:
                  wraplength=460,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',10)).pack(anchor='w',pady=(7,10))
         self.boton(f,'Activar IA local',self.activar_ia,RED).pack(anchor='w')
         tk.Label(f,text='Playlists de Spotify',bg=BG,fg=GREEN,font=('Chakra Petch',12,'bold')).pack(anchor='w',pady=(22,6))
-        tk.Label(f,text='Vincula un nombre con el enlace de tu playlist para pedírsela a Capri, por ejemplo: «pon mi playlist Capricorn». También sirve si Spotify no permite encontrarla en tu biblioteca.',
+        tk.Label(f,text='Si Capri no entiende el nombre de una playlist, guárdala aquí con uno fácil de decir. Tus playlists guardadas seguirán disponibles al volver a abrir Capri.',
                  wraplength=460,justify='left',bg=BG,fg=MUTED,font=('Chakra Petch',10)).pack(anchor='w')
         self.boton(f,'Vincular playlist de Spotify',self.vincular_playlist).pack(anchor='w',pady=(12,0))
         for widget in (self.micro_combo,self.whisper_combo,self.modelo_combo,motor,forma):widget.configure(style='Capri.TCombobox')
         ui.conectar_rueda()
-        localizar_widgets(self.root,True)
+        localizar_widgets(p,True)
         self.cargar_microfonos()
+        if mostrar:self.marco_ajustes.mostrar_completa()
 
     def configurar_juegos(self,padre):
         from ajustes_ui import InterruptorCyber
@@ -2122,20 +2125,22 @@ class Capri:
         self.micro_estado.set('Guardado: '+nombre+'. Se usará en la siguiente captura.')
 
     def activar_ia(self):
+        from cambios_modelos import informe_activacion
         def activar():
             pythonw=Path(sys.executable).with_name('pythonw.exe')
             subprocess.Popen([str(pythonw if pythonw.exists() else sys.executable),str(BASE/'activar_ia.py')],creationflags=HIDDEN)
         self.confirmar_ajuste('Activar IA local',
             ui('Podrás conversar libremente y hacer preguntas. La primera preparación puede descargar Ollama y un modelo de unos 2 GB; otros modelos pueden necesitar más espacio.')+'\n\n'+
-            ui('Mientras responde, la IA utiliza memoria y procesador o GPU. En equipos con pocos recursos, Capri y otras aplicaciones podrían responder más despacio.'),activar)
+            ui('Mientras responde, la IA utiliza memoria y procesador o GPU. En equipos con pocos recursos, Capri y otras aplicaciones podrían responder más despacio.'),activar,
+            actual=ui('Sin preparar'),nuevo=ui('IA local'),evaluar=informe_activacion)
 
-    def confirmar_ajuste(self,titulo,texto,aceptar,actual=None,nuevo=None):
+    def confirmar_ajuste(self,titulo,texto,aceptar,actual=None,nuevo=None,evaluar=None):
         anterior=getattr(self,'confirmacion_ajustes',None)
         if anterior and not anterior.cerrado:
             anterior.ventana.lift();return
         from confirmaciones_ui import ConfirmarCambio
         padre=self.ajustes if self.ajustes and self.ajustes.winfo_exists() else self.root
-        self.confirmacion_ajustes=ConfirmarCambio(padre,titulo,texto,aceptar,actual=actual,nuevo=nuevo)
+        self.confirmacion_ajustes=ConfirmarCambio(padre,titulo,texto,aceptar,actual=actual,nuevo=nuevo,evaluar=evaluar)
 
     def restaurar_selectores_reconocimiento(self):
         if not self.ajustes or not self.ajustes.winfo_exists():return
@@ -2150,14 +2155,15 @@ class Capri:
         self.restaurar_selectores_reconocimiento()
         if motor==actual_motor and (motor=='rapido' or modelo==actual_modelo):return
         if motor not in ('mixto','rapido') or modelo not in ('base','small'):return
-        from cambios_modelos import comparar_reconocimiento
+        from cambios_modelos import comparar_reconocimiento,informe_reconocimiento
         def nombre(motor,modelo):return 'Vosk' if motor=='rapido' else 'Whisper '+modelo.title()
         def aplicar():
             self.guardar('modelo_whisper',modelo);self.guardar('reconocimiento',motor)
             self.restaurar_selectores_reconocimiento()
         self.confirmar_ajuste('Cambiar reconocimiento de voz',
             comparar_reconocimiento(actual_motor,actual_modelo,motor,modelo),aplicar,
-            nombre(actual_motor,actual_modelo),nombre(motor,modelo))
+            nombre(actual_motor,actual_modelo),nombre(motor,modelo),
+            evaluar=lambda equipo:informe_reconocimiento(actual_motor,actual_modelo,motor,modelo,equipo))
 
     def preparar_reconocimiento(self):
         lanzador=BASE/'Preparar Capri.pyw'
@@ -2193,22 +2199,29 @@ class Capri:
         self.guardar('juego_busqueda',juego)
         if self.visibilidad.oculta:self.visibilidad.mostrar()
         existia=bool(self.ajustes and self.ajustes.winfo_exists())
-        self.configurar();self.ajustes.deiconify();self.ajustes.lift()
+        self.configurar(mostrar=False)
+        if existia:self.ajustes.deiconify();self.ajustes.lift()
         if not existia:
             self.panel_ajustes.mostrar('Juegos');self.ajustes_juegos.mostrar(juego,'Partidas')
         actual=getattr(self,'panel_juego_actual',None)
         if actual and actual[0]==juego and not actual[1].cerrado:
             actual[1].ventana.deiconify();return
+        with self.marco_ajustes.cambio_de_vista():self.crear_vista_juego(juego)
+
+    def crear_vista_juego(self,juego):
         self.volver_de_juego()
         from ajustes_ui import BotonCyber
         nombres={'lol':'League of Legends','valorant':'Valorant','fortnite':'Fortnite','cs2':'Counter-Strike','roblox':'Roblox'}
         minimos={'lol':(850,670),'valorant':(800,620),'fortnite':(720,560),'cs2':(720,560),'roblox':(820,580)}
-        ancho,alto=minimos[juego];self.ajustes.minsize(ancho,alto)
-        self.ajustes.update_idletasks()
-        if self.ajustes.winfo_width()<ancho or self.ajustes.winfo_height()<alto:
-            self.ajustes.geometry(f'{max(ancho,self.ajustes.winfo_width())}x{max(alto,self.ajustes.winfo_height())}')
-        self.ajustes_base.pack_forget()
-        vista=self.vista_juego=tk.Frame(self.marco_ajustes.cuerpo,bg=BG);vista.pack(fill='both',expand=True)
+        preferidos={'lol':(980,900),'valorant':(960,900)}
+        from ventanas import area_trabajo
+        l,t,r,b=area_trabajo();maxw=r-l-32;maxh=b-t-32
+        minw,minh=minimos[juego];self.ajustes.minsize(min(minw,maxw),min(minh,maxh))
+        pw,ph=preferidos.get(juego,minimos[juego])
+        ancho=min(maxw,max(pw,self.ajustes.winfo_width()));alto=min(maxh,max(ph,self.ajustes.winfo_height()))
+        x=max(l+16,min(self.ajustes.winfo_x(),r-ancho-16));y=max(t+16,min(self.ajustes.winfo_y(),b-alto-16))
+        self.ajustes.geometry(f'{ancho}x{alto}{x:+d}{y:+d}')
+        vista=self.vista_juego=tk.Frame(self.marco_ajustes.cuerpo,bg=BG)
         cabecera=tk.Frame(vista,bg=BG);cabecera.pack(fill='x',padx=12,pady=(4,10))
         self.volver_juegos_boton=BotonCyber(cabecera,text='Volver',command=self.volver_de_juego,bg=CARD)
         self.volver_juegos_boton.pack(side='left',padx=(0,16))
@@ -2232,7 +2245,11 @@ class Capri:
             from roblox_ui import PanelRoblox
             panel=PanelRoblox(self.root,self.cfg['roblox'],self.guardar,self.enviar,self.roblox,ocultar=self.minimizar_capri,**opciones)
         setattr(self,juego+'_panel',panel);self.panel_juego_actual=(juego,panel)
-        localizar_widgets(self.ajustes,True)
+        localizar_widgets(vista,True)
+        # Mantiene la vista anterior hasta que el panel nuevo esté construido.
+        self.ajustes_base.pack_forget();vista.pack(fill='both',expand=True)
+        # cambio_de_vista resuelve Map/Configure y repinta el panel completo
+        # una vez construido. No distribuir aquí la vista anterior otra vez.
 
     def volver_de_juego(self):
         actual=getattr(self,'panel_juego_actual',None);self.panel_juego_actual=None
@@ -2241,6 +2258,7 @@ class Capri:
         if vista and vista.winfo_exists():vista.destroy()
         if self.ajustes and self.ajustes.winfo_exists() and getattr(self,'ajustes_base',None):
             self.ajustes.minsize(720,560);self.ajustes_base.pack(fill='both',expand=True)
+            self.marco_ajustes.repintar()
 
     def guardar(self,k,v):
         if k=='bromas_ventanas':v=False
@@ -2412,7 +2430,8 @@ class Capri:
         actual=self.cfg.get('modelo','')
         self.modelo_combo.set(actual)
         if nombre==actual:return
-        from cambios_modelos import comparar_modelos
+        from cambios_modelos import comparar_modelos,informe_modelo
+        detalles=dict(getattr(self.ia,'detalles_modelos',{}))
         def aplicar():
             self.parar();self.guardar('modelo',nombre);self.guardar('ia',True)
             if self.modelo_combo.winfo_exists():
@@ -2421,15 +2440,16 @@ class Capri:
             threading.Thread(target=self.preparar_ia,daemon=True).start()
         self.confirmar_ajuste('Cambiar modelo de IA',
             comparar_modelos(actual,nombre,getattr(self.ia,'detalles_modelos',{})),aplicar,
-            actual or ui('Automático'),nombre)
+            actual or ui('Automático'),nombre,evaluar=lambda equipo:informe_modelo(actual,nombre,detalles,equipo))
 
     def vincular_playlist(self):
+        if self.visibilidad.oculta:self.visibilidad.mostrar()
         dialogo=getattr(self,'playlist_dialogo',None)
         if dialogo and not dialogo.cerrado and dialogo.ventana.winfo_exists():
-            dialogo.ventana.lift();return
+            from ventanas import traer_al_frente
+            traer_al_frente(dialogo.ventana);dialogo.marco.repintar();return
         from playlists_ui import DialogoPlaylist
-        padre=self.ajustes if self.ajustes and self.ajustes.winfo_exists() else self.root
-        self.playlist_dialogo=DialogoPlaylist(padre,BASE)
+        self.playlist_dialogo=DialogoPlaylist(self.root,BASE)
 
     def conectar_opera(self):
         from puente_opera import iniciar
@@ -2661,6 +2681,7 @@ class Capri:
         self.root.after(16,self.pintar_despedida)
 
     def cerrar_inmediato(self):
+        if getattr(self,'playlist_dialogo',None) and not self.playlist_dialogo.cerrado:self.playlist_dialogo.cerrar()
         if getattr(self,'cs2',None):self.cs2.cerrar()
         if getattr(self,'cs2_panel',None) and not self.cs2_panel.cerrado:self.cs2_panel.cerrar()
         if getattr(self,'fortnite_avisos',None):self.fortnite_avisos.cerrar()

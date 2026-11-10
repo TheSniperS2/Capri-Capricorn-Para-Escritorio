@@ -2,6 +2,40 @@
 
 ## En desarrollo
 
+### Biblioteca de playlists de Spotify
+
+- Nueva interfaz con formulario de nombre fácil, enlace completo, botón de pegado y ejemplo de cómo pedirla a Capri. La explicación se centra en playlists cuyo nombre Capri no entiende bien.
+- Biblioteca visible de guardadas: nombre elegido, playlist asociada y fecha; filtro, edición y retirada del vínculo local. Los nombres conservan mayúsculas y acentos y se recuperan al reiniciar.
+- Guardado atómico compatible con los vínculos anteriores. Título y portada de Spotify opcionales, consultados en segundo plano sin impedir el guardado; consulta adicional al reproductor público cuando oEmbed omite la imagen.
+- Campos de nombre y enlace rediseñados sin ejemplos superpuestos; clic y Ctrl + V en ambas entradas. Biblioteca con portadas más grandes y formulario adaptado a pantallas bajas.
+- Biblioteca con buscador compacto y lupa, también vacía; icono y mensajes alineados en el espacio de listas, y acción para limpiar filtros sin resultados.
+- Ayuda visible cuando falta una portada: explica la limitación de playlists privadas y el pantallazo con Portada → Capturar. Se retira al guardar una imagen y al recuperarla al reabrir.
+- Botón Portada para seleccionar la imagen visible en Spotify, también en listas privadas. Guarda solo el recorte elegido y lo recupera al reabrir Capri; cancelar restaura las ventanas.
+
+### Ventanas y apertura de juegos
+
+- Apertura más rápida: construcción y repintados agrupados, sin redistribuir vistas intermedias ni ejecutar timers ajenos mientras se prepara la ventana. LoL y Valorant conservan su dibujo completo y la corrección del redimensionado; medidas de botones reutilizadas por fuente, idioma y escala.
+- Playlists y confirmaciones permiten interactuar con las otras ventanas y moverlas por separado; aplicar cambios sigue requiriendo confirmación explícita.
+- Las vistas de juego se construyen antes de sustituir Ajustes. Las tarjetas de LoL redibujan solo el contenido o tamaño que cambió, evitando repintar las seis por cada evento de una tarjeta.
+- Marcos de formularios con recorte nativo y repintado de todos sus controles, evitando restos de texto y zonas sin dibujar al crecer o cambiar de vista. LoL y Valorant preparan el tamaño y sus tarjetas antes de mostrarse.
+- Playlists permanece abierta al cerrar Ajustes y tiene acceso en Más. Icono de biblioteca nuevo, centrado y con bordes suavizados.
+- Multimedia: textura dentro del marco y escalado sobre fondo opaco para conservar un borde continuo sin trazos oscuros en las esquinas.
+
+### Confirmaciones con orientación del equipo
+
+- Confirmación cyberpunk compacta: opción actual/propuesta, una frase que explica qué mejora y qué empeora, y un consejo corto para tu PC. Retirados del diálogo los paneles de componentes, cifras y explicaciones largas.
+- Sin scroll: la altura se ajusta al contenido al cambiar los mensajes o el idioma. En una pantalla baja puede ganar ancho para mostrar el texto y mantener las acciones visibles.
+- La evaluación interna considera RAM, CPU y tamaño conocido del modelo; distingue equipos limitados, memoria ocupada o datos incompletos. Se puede volver a evaluar sin aplicar cambios.
+- Los mensajes distinguen la dirección del cambio: mejor precisión a cambio de espera, o mayor rapidez con menos precisión/detalle. No garantizan calidad ni velocidad cuando faltan datos.
+- Lectura nativa en segundo plano, sin dependencias adicionales ni envío de componentes. Cancelar, Esc o cerrar conservan la configuración; aplicar mantiene las acciones existentes. Textos en español, inglés, portugués y japonés.
+
+### Redimensionado de Ajustes
+
+- Corregido el repintado de controles de Tk durante el cambio continuo de tamaño: contenido separado del lienzo del marco, reflujo antes de pintar y renovación de los controles visibles. La revisión anterior de tamaños fijos no detectaba los restos de campos y textos durante el movimiento.
+- El arrastre aplica el tamaño más reciente sin esperar a que termine el flujo de movimiento. El marco, la cabecera y los botones reutilizan sus elementos al cambiar de tamaño.
+- Corregido el cursor de redimensionado heredado por los controles interiores. Soltar sobre un control o fuera del borde termina el arrastre; ocultar, cerrar o perder el foco libera la captura y cancela las actualizaciones pendientes.
+- Conservados los tamaños mínimos, los ocho bordes y esquinas, la navegación entre juegos y los cursores propios de los campos de texto.
+
 ### Bordes del reproductor
 
 - Corregidos los halos oscuros de las cuatro esquinas: contorno recortado y transparencia apta para el color transparente de Windows, incluidas escalas de 75% a160%.
@@ -34,7 +68,7 @@
 - Solo en inglés: Capri V1 (opción rápida actual) y Capri V2 (voz de referencia local más lenta), con diferencias explicadas. Se conserva la voz española original y las voces habituales de los otros idiomas. Sin selectores de acento o perfiles adicionales.
 - Volumen cero como único control de silencio; retirado Responder en voz alta. El acceso rápido a silenciar/restaurar recuerda el volumen anterior.
 - Ajustes → Juegos reúne las opciones por juego: partidas y preferencias, skins independientes para Valorant/Fortnite y avisos dentro de Fortnite. La frecuencia de las reacciones se guarda por juego sin sobrescribir las otras preferencias.
-- Más queda limitado a YouTube, Recordatorios, Minimizar y Cerrar. Las interacciones del personaje se llaman Travesuras.
+- Más reúne Playlists de Spotify, YouTube, Recordatorios, Minimizar y Cerrar. Las interacciones del personaje se llaman Travesuras.
 - V1 conserva precarga, audio por fragmentos, caché y cancelación. Los perfiles, modelos y configuración personales permanecen fuera del paquete público.
 
 ### Counter-Strike 2

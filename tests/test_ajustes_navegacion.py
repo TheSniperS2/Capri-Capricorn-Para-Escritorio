@@ -43,6 +43,25 @@ class AjustesNavegacion(PruebasTk):
             self.assertTrue(panel.cerrado);self.assertTrue(panel._stop.is_set())
             c.configurar();c.root.update();self.assertTrue(c.ajustes.winfo_exists())
 
+    def test_lol_construye_oculto_y_muestra_todos_los_picks_y_baneos_al_cambiar_de_vista(self):
+        from lol_ui import PanelLoL
+        from lol_seleccion import normalizar
+        with self.capri() as (c,_),patch('lol_ui.PanelLoL._consultar'):
+            c.configurar();c.root.update();config=normalizar({})
+            config['roles']['TOP']['pick']=[86,103,61];config['roles']['TOP']['ban']=[53,157,25]
+            c.cfg['lol_seleccion']=config
+            def construir(*a,**kw):
+                self.assertTrue(c.ajustes_base.winfo_ismapped())
+                self.assertFalse(c.vista_juego.winfo_ismapped())
+                p=PanelLoL(*a,**kw)
+                self.assertTrue(c.ajustes_base.winfo_ismapped())
+                self.assertFalse(c.vista_juego.winfo_ismapped())
+                return p
+            with patch('lol_ui.PanelLoL',side_effect=construir):c.abrir_lol()
+            self.assertFalse(c.ajustes_base.winfo_ismapped());self.assertTrue(c.vista_juego.winfo_ismapped())
+            for cv in c.lol_panel.slots.values():
+                self.assertTrue(cv.find_all());self.assertIn('image',[cv.type(i) for i in cv.find_all()])
+
     def test_modelo_se_cambia_y_se_precarga_solo_al_confirmar(self):
         with self.capri() as (c,base),patch.object(c.ia,'modelos',return_value=['qwen:2b','llama:3b']):
             c.guardar('modelo','qwen:2b');c.configurar()
