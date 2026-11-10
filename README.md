@@ -27,6 +27,29 @@
 
 ---
 
+## Novedades de esta actualización
+
+**Playlists con nombres fáciles, ajustes reunidos y ventanas que se adaptan a tu escritorio.** Esta actualización también aclara los cambios de IA y reconocimiento: Capri explica el beneficio, el coste y una recomendación orientativa según los recursos de tu equipo, antes de aplicar nada.
+
+<p align="center">
+  <a href="docs/media/novedades-2026-11/vertical/01-capri.webp"><img src="docs/media/novedades-2026-11/vertical/01-capri.webp" width="23%" alt="Capri: tu escritorio, más contigo."></a>
+  <a href="docs/media/novedades-2026-11/vertical/02-playlists.webp"><img src="docs/media/novedades-2026-11/vertical/02-playlists.webp" width="23%" alt="Guarda una playlist de Spotify con un nombre fácil para pedirla a Capri."></a>
+  <a href="docs/media/novedades-2026-11/vertical/03-juegos.webp"><img src="docs/media/novedades-2026-11/vertical/03-juegos.webp" width="23%" alt="Los cinco juegos se configuran dentro de Ajustes, con navegación hacia atrás."></a>
+  <a href="docs/media/novedades-2026-11/vertical/04-confirmaciones.webp"><img src="docs/media/novedades-2026-11/vertical/04-confirmaciones.webp" width="23%" alt="Confirmaciones que explican el cambio y orientan según los recursos del PC."></a>
+</p>
+<p align="center">
+  <a href="docs/media/novedades-2026-11/vertical/05-monitor.webp"><img src="docs/media/novedades-2026-11/vertical/05-monitor.webp" width="23%" alt="Monitor opcional de CPU, RAM, GPU y VRAM integrado en Capri."></a>
+  <a href="docs/media/novedades-2026-11/vertical/06-recordatorios.webp"><img src="docs/media/novedades-2026-11/vertical/06-recordatorios.webp" width="23%" alt="Agenda de recordatorios y creación de avisos por voz."></a>
+  <a href="docs/media/novedades-2026-11/vertical/07-multimedia.webp"><img src="docs/media/novedades-2026-11/vertical/07-multimedia.webp" width="23%" alt="Reproductor independiente y Capri disfrutando la música en modo pantalla."></a>
+</p>
+
+<p align="center"><sub>Abre cualquier lámina para verla completa. Formato vertical 1080 × 1920; capturas de la aplicación con datos de demostración y arte promocional. <a href="docs/media/novedades-2026-11/README.md">Galería, procedencia y archivos editables</a>.</sub></p>
+
+- **Spotify:** biblioteca de vínculos guardados, búsqueda, edición y portadas. Los nombres fáciles se conservan al reiniciar. Si Spotify no comparte la portada de una playlist privada, puedes seleccionar su imagen con **Portada → Capturar**.
+- **Ajustes y juegos:** LoL, Valorant, Fortnite, Counter-Strike 2 y Roblox en la misma ventana, con **Volver**. Apertura optimizada y contenido adaptable al redimensionar.
+- **Cambios de modelos:** confirmaciones breves, sin scroll, con ventajas, costes y consejo para tu PC. Puedes cancelar o volver a evaluar antes de decidir.
+- **Tu escritorio:** monitor de recursos opcional, agenda de recordatorios y reproductor que puedes mover de forma independiente. **Más → Playlists de Spotify** abre la biblioteca sin pasar por Ajustes.
+
 ## Capri en acción
 
 ### Tu música, con tu voz
@@ -37,9 +60,11 @@
   <a href="docs/media/readme/capri-youtube.webp"><img src="docs/media/readme/capri-youtube.webp" width="100%" alt="YouTube con un vídeo musical abierto y la respuesta real de Capri: Reanudé el vídeo de YouTube."></a>
 </p>
 
-**«Pausa Spotify». «Siguiente canción». «Pon mi playlist Cyberpunk».** Usa Spotify desde Capri y [vincula tus playlists](docs/USO.md#elegir-dónde-reproducir-y-qué-resultado-abrir) para pedirlas por su nombre.
+**«Pausa Spotify». «Siguiente canción». «Pon mi playlist Para jugar».** Si el nombre original tiene símbolos o Capri no lo entiende, [guarda un nombre fácil y su enlace](docs/PLAYLISTS_GUARDADAS.md). No cambia el nombre en Spotify y el vínculo se conserva aunque cierres Capri. La biblioteca muestra lo que guardaste y permite editarlo o quitarlo.
 
 En **Ajustes → Multimedia** puedes activar un reproductor flotante con miniatura, título, progreso y controles de Spotify o del navegador. Capri se mueve de forma independiente: puedes sentarla sobre su borde o dejar que se suba durante sus paseos. En modo pantalla disfruta la música dentro del visor. [Cómo usar el panel](docs/USO.md#panel-multimedia).
+
+**Automático** prioriza la sesión que está reproduciendo. Si detecta dos activas, mantiene la primera que observó reproduciendo hasta que se pausa. También puedes elegir Spotify o navegador como fuente preferida. La biblioteca de playlists tiene su propia ventana: cerrar Ajustes no la cierra.
 
 <p align="center">
   <a href="docs/media/readme/capri-spotify.webp"><img src="docs/media/readme/capri-spotify.webp" width="100%" alt="Playlist abierta en Spotify y respuesta real de Capri a la orden Pausa Spotify."></a>
@@ -56,7 +81,11 @@ Activa la **aceptación automática de LoL** y busca desde Capri o desde el prop
 
 ### Una compañera con su propio estilo
 
-Elige **pantalla flotante o personaje de escritorio** desde el clic derecho. Personaliza el aspecto, el tamaño y los colores. En modo personaje puede moverse, caer y sujetarse a ventanas compatibles; también se asoma por los bordes y tiene llamadas con bromas e invitados. Las interacciones y las travesuras se configuran por separado en **Ajustes → Escritorio**.
+Elige **pantalla flotante o personaje de escritorio** desde el clic derecho. Personaliza el aspecto, el tamaño y los colores desde sus accesos. En modo personaje puede moverse, caer y sujetarse a ventanas compatibles; también se asoma por los bordes y tiene llamadas con invitados. En **Ajustes → Escritorio** decides qué interacciones quieres activar.
+
+En modo pantalla, activa **Mostrar recursos del computador** para ver CPU, RAM, GPU y VRAM justo encima del campo de escritura. El monitor forma parte de la misma ventana y acompaña su movimiento. Es opcional; la información disponible depende de lo que Windows pueda leer.
+
+Abre **Más → Recordatorios** para ver tu agenda o di **«Capri, recuérdame en 25 minutos tomar agua»**. Los avisos son generales, se conservan entre sesiones y puedes cancelarlos individualmente. Capri debe estar abierta para entregarlos.
 
 <p align="center">
   <img src="docs/media/readme/visor-actual.webp" width="43%" alt="Interfaz actual de Capri en modo pantalla, con su entrada de voz y texto.">
@@ -76,10 +105,13 @@ La intro aparece sujetando la pantalla y se transforma en el visor. Al cerrar, l
 | | Con Capri |
 | :--- | :--- |
 | **Conversar** | Usa texto o voz y elige un modelo de **Ollama local**. Las órdenes directas funcionan también sin IA. |
-| **Hablar en cuatro idiomas** | Español, inglés, portugués de Brasil y japonés. El idioma y la voz se eligen por separado. |
+| **Hablar en cuatro idiomas** | Español, inglés, portugués de Brasil y japonés, con su voz correspondiente. |
+| **Continuar una conversación** | Escucha opcional después de una pregunta de Capri, para responder sin repetir su nombre. También existe un modo de escucha continua. |
+| **Ver tus recursos** | Monitor opcional de CPU, RAM, GPU y VRAM integrado sobre la entrada de texto. |
+| **Guardar recordatorios** | Pide un aviso por voz o administra su plazo y texto en la agenda. |
 | **Controlar Discord** | Silencia tu micrófono o pide entrar en un canal de voz del servidor abierto. |
 | **Moverte por el escritorio** | Abre aplicaciones y sitios, controla ventanas y gestiona archivos con los permisos correspondientes. |
-| **Elegir sus límites** | El control ampliado es opcional; las acciones sensibles piden confirmación. Las bromas de ventanas vienen desactivadas. |
+| **Elegir sus límites** | El control ampliado es opcional; las acciones sensibles piden confirmación. Puedes desactivar movimientos, asomos y llamadas. |
 
 ## Empieza a usarla
 
@@ -171,6 +203,11 @@ Di «Capri» y la petición en una misma frase, o utiliza la tecla para hablar. 
 | Entrar en un canal de voz | «Únete al canal de voz General del servidor Amigos en Discord». |
 | Vigilar partidas de LoL | «Activa la aceptación automática del LoL». |
 | Usar la cola de LoL | «Busca partida en LoL» o «acepta partida en LoL». |
+| Buscar en Valorant | «Busca partida en Valorant» o «cancela la cola en Valorant». |
+| Abrir un favorito de Roblox | «Abre The Maze en Roblox» — después de guardarlo como favorito. |
+| Pedir un aviso | «Recuérdame en 25 minutos tomar agua». |
+| Ver la agenda | «Abre mis recordatorios». |
+| Opinar sobre una skin | «¿Qué te parece esta skin?» — con su selección visible en Fortnite o Valorant. |
 | Conversar | «Cuéntame algo» — con IA local activada. |
 | Apagar el equipo | «Apaga el computador» — con control ampliado y confirmación. |
 
@@ -178,7 +215,9 @@ Las órdenes dependen de la aplicación y de sus controles disponibles. Capri in
 
 ## Configúrala a tu manera
 
-**Idioma y voz son independientes.** Puedes mantener el texto en español y elegir una voz brasileña, por ejemplo. La elección de voz se conserva al cambiar el idioma; **Seguir el idioma de Capri** devuelve la selección automática. La pronunciación entre idiomas depende de la voz elegida.
+El idioma se elige en **Ajustes → Escritorio**. **Ajustes → Voz** reúne volumen y velocidad; bajar el volumen a cero silencia a Capri. Español conserva la voz Dalia de Capri. En inglés existen las opciones **Capri V1** y **Capri V2**; sus versiones personales requieren recursos preparados. Los perfiles, muestras y modelos personales no se incluyen en la descarga pública. Sin ellos se utiliza la voz habitual del idioma. [Voces y disponibilidad](docs/VOZ_LOCAL.md).
+
+Las opciones de cada juego están en **Ajustes → Juegos**, incluidas sus reacciones a skins y avisos. **Más** reúne accesos generales: playlists, YouTube, recordatorios, minimizar y cerrar. Los cambios de modelo de conversación o reconocimiento muestran una confirmación con sus efectos y una recomendación orientativa para el equipo.
 
 | Integración | Qué necesitas | Guía |
 | :--- | :--- | :--- |
@@ -189,6 +228,11 @@ Las órdenes dependen de la aplicación y de sus controles disponibles. Capri in
 | **Discord** | Cliente de escritorio y sesión iniciada. Sus controles deben ser accesibles; para unirte, deja abierto el servidor. | [Discord](docs/USO.md#discord) |
 | **League of Legends** | Cliente abierto y una sala preparada. Panel de picks y baneos por línea, búsqueda y aceptación automática opcionales. | [Configurar LoL](docs/LEAGUE_OF_LEGENDS.md) |
 | **Valorant** | Juego abierto y sala preparada. Búsqueda, cancelación y tres preferencias de agente; confirmación automática opcional. | [Configurar Valorant](docs/VALORANT.md) |
+| **Fortnite** | Control del lobby y avisos opcionales de rotación de tienda y misiones STW con pavos para fundadores. Algunas acciones requieren mostrar el juego. | [Configurar Fortnite](docs/FORTNITE.md) |
+| **Counter-Strike 2** | Preferencias de mapas de Competitivo y órdenes explícitas para aplicar, buscar o cancelar. Requiere controles del cliente accesibles. | [Configurar CS2](docs/COUNTER_STRIKE.md) |
+| **Roblox** | Favoritos, acceso a experiencias, comentarios sobre el avatar y acompañamiento según el contexto. | [Configurar Roblox](docs/ROBLOX.md) |
+
+Las reacciones a skins de **Fortnite y Valorant** son opcionales y se ajustan por juego. El reconocimiento puede no identificar todas las selecciones. El acompañamiento en Roblox también depende de la experiencia y de lo que pueda detectar. Las preferencias de campeones, baneos, agentes y mapas son personales y no se distribuyen con el programa.
 
 ## Tus datos y tus permisos
 
@@ -196,7 +240,8 @@ Las órdenes dependen de la aplicación y de sus controles disponibles. Capri in
 | :--- | :--- |
 | Conversación con un modelo instalado | En tu equipo, mediante Ollama local. |
 | Reconocimiento del micrófono | En tu equipo, con los modelos descargados. |
-| Voz natural | Microsoft recibe el texto que Capri va a leer. Requiere conexión. |
+| Voz natural habitual y base de Capri V1 | Microsoft recibe el texto que Capri va a leer. Requiere conexión. La conversión de timbre de V1 se realiza localmente cuando está preparada. |
+| Capri V2, cuando está preparada | Generación local con sus recursos instalados; puede tardar bastante más. |
 | Voz de Windows | En tu equipo, si tienes instalada una voz compatible con el idioma/acento. |
 | Búsquedas y reproducción online | En los servicios que abras o controles. |
 | Sala y agentes de Valorant | En tu cliente de Riot y sus servidores. Los tokens temporales solo permanecen en memoria. |
@@ -224,14 +269,14 @@ Después de descargar las dependencias y modelos, el reconocimiento y la convers
 <details>
 <summary><b>¿Las voces son las del anime?</b></summary>
 
-Son voces sintéticas configuradas para la aplicación, no grabaciones ni reproducciones exactas de los intérpretes. La despedida usa la voz habitual que hayas elegido para Capri. [Perfiles invitados](docs/VOCES_INVITADAS.md).
+Son voces sintéticas y perfiles preparados para la aplicación. No se garantiza una reproducción exacta de los intérpretes. La descarga pública no incluye las muestras ni los perfiles de voz personales; consulta [disponibilidad de las voces](docs/VOZ_LOCAL.md). La despedida usa la voz activa y los [perfiles invitados](docs/VOCES_INVITADAS.md) conservan su función.
 
 </details>
 
 <details>
 <summary><b>¿Puedo apagar las llamadas o las travesuras?</b></summary>
 
-Sí. En Ajustes → Escritorio puedes controlar los asomos, las llamadas y las bromas de ventanas por separado. Las bromas que minimizan ventanas están desactivadas inicialmente. La despedida animada se omite si desactivas las animaciones.
+Sí. En Ajustes → Escritorio puedes controlar los asomos, las llamadas y los paseos. La despedida animada se omite si desactivas las animaciones. Se retiró la opción de bromas que minimizan la ventana activa.
 
 </details>
 

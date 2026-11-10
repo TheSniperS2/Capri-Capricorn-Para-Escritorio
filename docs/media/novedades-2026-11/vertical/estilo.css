@@ -1,0 +1,29 @@
+
+@font-face{font-family:Chakra;src:url('../../../../assets/fonts/ChakraPetch-Regular.ttf')}
+@font-face{font-family:Chakra;src:url('../../../../assets/fonts/ChakraPetch-Bold.ttf');font-weight:700}
+*{box-sizing:border-box}html,body{margin:0;width:1080px;height:1920px;overflow:hidden}
+body{font-family:Chakra,sans-serif;background:#090711;color:#f6f4ff}
+.poster{position:relative;width:1080px;height:1920px;overflow:hidden;background:radial-gradient(ellipse at 94% 35%,#23112e,transparent 65%),linear-gradient(155deg,#090b14,#0b0710 70%);--accent:#ef8ad3}
+.poster:after{content:'';position:absolute;inset:28px;border:1px solid #5b315d;clip-path:polygon(24px 0,100% 0,100% calc(100% - 28px),calc(100% - 28px) 100%,0 100%,0 24px);pointer-events:none}
+.ghost{position:absolute;bottom:0;right:-80px;width:950px;opacity:.12;filter:saturate(.6)}
+.header{position:absolute;left:78px;right:100px;top:96px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #533455;padding-bottom:24px;font-size:23px;letter-spacing:3px;font-weight:700}
+.brand{font-size:37px;letter-spacing:3px}.edition{font-size:20px;color:#c3a6c5;letter-spacing:2px}
+.copy{position:absolute;top:215px;left:78px;right:100px}
+h1{font-size:82px;line-height:1.05;letter-spacing:-2px;margin:0 0 34px;font-weight:700}
+em{font-style:normal;color:var(--accent)}.copy p{font-size:34px;line-height:1.4;color:#c9bfd4;margin:0}
+.screen{position:absolute;left:78px;width:902px;padding:12px;background:#10090d;border:1px solid #895786;box-shadow:0 26px 70px #0008;clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,18px 100%,0 calc(100% - 18px),0 18px)}
+.screen img{display:block;width:100%;height:auto}.screen:before{content:'';position:absolute;top:0;left:24px;width:160px;height:3px;background:var(--accent)}
+.note{position:absolute;left:78px;right:100px;top:1585px;font-size:32px;line-height:1.4;color:#e3d8eb}
+.quote{position:absolute;left:78px;right:100px;padding:28px 32px;background:#211128;border-left:4px solid var(--accent);font-size:41px;line-height:1.25}
+.quote small{display:block;font-size:20px;letter-spacing:3px;color:var(--accent);margin-bottom:14px}
+.footer{position:absolute;left:78px;right:100px;bottom:160px;border-top:1px solid #58355c;padding-top:20px;display:flex;justify-content:space-between;color:#b6a3bf;font-size:22px;letter-spacing:2px}
+.cover{--accent:#8ff2cc;background:#0b0616}.cover .hero{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cover .copy{top:220px}.cover h1{font-size:96px;letter-spacing:-3px}.cover .copy p{font-size:31px}.cover .note{top:1570px;background:#10091ce8;padding:26px 28px;border-left:4px solid var(--accent);font-size:25px;letter-spacing:2px;font-weight:700}
+.playlists .screen{top:600px}.playlists .quote{top:1330px}.playlists .note{top:1585px}
+.juegos{--accent:#93edcc}.juegos .screen{top:590px}.juegos .note{top:1495px;font-size:32px}
+.confirmaciones{--accent:#b5a5ff}.confirmaciones .screen{top:620px}.benefits{position:absolute;left:96px;top:1395px;right:100px;font-size:29px;color:#cbbfd6;display:flex;gap:25px}.benefits span{border-top:2px solid var(--accent);padding-top:14px;flex:1}
+.monitor .screen{top:605px;left:161px;width:728px;padding:16px}.monitor .note{top:1535px;font-size:38px}
+.recordatorios{--accent:#93edcc}.recordatorios .screen{top:600px}.recordatorios .quote{top:1335px;font-size:37px}.recordatorios .note{top:1595px}
+.multimedia .copy{top:210px}.multimedia h1{font-size:76px;margin-bottom:25px}.multimedia .copy p{font-size:30px}
+.music-art{position:absolute;left:78px;top:660px;width:902px;height:570px;object-fit:cover;border:1px solid #895786;clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)}
+.multimedia .screen{top:1210px}.multimedia .note{top:1640px;font-size:29px}

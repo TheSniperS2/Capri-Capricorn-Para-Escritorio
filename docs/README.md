@@ -18,6 +18,9 @@
 | [Recordatorios](USO.md) | Crear avisos generales por voz, conservarlos entre sesiones y cancelarlos individualmente. |
 | [Roblox](ROBLOX.md) | Favoritos, avatar por piezas, perfiles automáticos, acompañamiento y caché local de iconos. |
 | [Comparación de modelos](COMPARACION_MODELOS.md) | Comparar reconocimiento y conversación sin perder preferencias. |
+| [Playlists guardadas](PLAYLISTS_GUARDADAS.md) | Nombres fáciles, biblioteca persistente y captura opcional de portadas privadas. |
+| [Confirmaciones de cambios](CONFIRMACIONES_CAMBIOS.md) | Beneficios, costes y recomendación orientativa según el equipo. |
+| [Galería vertical de novedades](media/novedades-2026-11/README.md) | Siete láminas para móvil, capturas de demostración y procedencia. |
 
 ## Desarrollar
 

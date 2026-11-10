@@ -1,5 +1,7 @@
 # Imágenes del README
 
+La [galería vertical de noviembre](../novedades-2026-11/README.md) documenta las nuevas vistas de playlists, juegos, confirmaciones, monitor, agenda y multimedia. Usa capturas actuales con datos de demostración y una ilustración promocional generada con ImageGen; su procedencia se detalla por separado.
+
 ## Galería actual · noviembre de 2026
 
 Las imágenes de portada son **composiciones de capturas reales**, distribuidas sobre un fondo de presentación. No representan un único pantallazo simultáneo del escritorio. El visor de Capri y los diálogos se capturaron por separado; el visor procede de la misma versión de la aplicación. Las preferencias y conversaciones de la instalación principal no se utilizaron para las tomas de Capri.
