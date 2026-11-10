@@ -181,6 +181,8 @@
 
 ### Presentación e interfaz pública
 
+- Nueva selección de once láminas sobre Valorant, skins, Fortnite, Roblox, CS2, LoL, música, playlists, conversación y escritorio. Portada con el cabello superior de Capri corregido; composiciones horizontales para el README y verticales para móvil, capturas de demostración, galerías y exportador reproducible. Se conserva la primera edición.
+
 - Instalación documentada para principiantes: instalador tradicional de Python 3.12, comprobación de versión, extracción del ZIP, comandos separados y actualización desde `main`. Nueva guía para errores de preparación y registros, incluida la redirección de Microsoft Store.
 
 - README renovado con la intro actual, controles reales de YouTube y Spotify, vigilancia de partidas de LoL, galería de aspectos y despedida con efecto de cámara. Medios WebP y procedencia de las capturas documentada.

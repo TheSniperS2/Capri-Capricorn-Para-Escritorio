@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/media/novedades-2026-11/horizontal/01-capri.webp" width="100%" alt="Capri: tu escritorio, más contigo. Portada horizontal de las novedades.">
+  <img src="docs/media/novedades-2026-11/seleccion-juegos/horizontal/01-capri.webp" width="100%" alt="Nuevos juegos. Misma Capri. Ilustración con su cabello completo.">
 </p>
 
 <p align="center">
@@ -29,25 +29,35 @@
 
 ## Novedades de esta actualización
 
-**Playlists con nombres fáciles, ajustes reunidos y ventanas que se adaptan a tu escritorio.** Esta actualización también aclara los cambios de IA y reconocimiento: Capri explica el beneficio, el coste y una recomendación orientativa según los recursos de tu equipo, antes de aplicar nada.
+**Tres agentes para Valorant, prioridades por línea en LoL y nuevas formas de acompañarte en Fortnite, Roblox y CS2.** Desde la presentación anterior también llegaron las opiniones sobre skins, el reproductor independiente, las playlists con nombres fáciles y la escucha después de una pregunta.
 
 <p align="center">
-  <a href="docs/media/novedades-2026-11/horizontal/02-playlists.webp"><img src="docs/media/novedades-2026-11/horizontal/02-playlists.webp" width="49%" alt="Guarda una playlist de Spotify con un nombre fácil para pedirla a Capri."></a>
-  <a href="docs/media/novedades-2026-11/horizontal/03-juegos.webp"><img src="docs/media/novedades-2026-11/horizontal/03-juegos.webp" width="49%" alt="Los cinco juegos se configuran dentro de Ajustes, con navegación hacia atrás."></a>
+  <a href="docs/media/novedades-2026-11/seleccion-juegos/horizontal/02-valorant.webp"><img src="docs/media/novedades-2026-11/seleccion-juegos/horizontal/02-valorant.webp" width="49%" alt="Valorant: tres preferencias de agente, con alternativas si una está ocupada."></a>
+  <a href="docs/media/novedades-2026-11/seleccion-juegos/horizontal/03-skins.webp"><img src="docs/media/novedades-2026-11/seleccion-juegos/horizontal/03-skins.webp" width="49%" alt="Fortnite y Valorant: Capri tiene gustos propios sobre las skins. Ejemplo del probador con Goku Black."></a>
 </p>
 <p align="center">
-  <a href="docs/media/novedades-2026-11/horizontal/04-confirmaciones.webp"><img src="docs/media/novedades-2026-11/horizontal/04-confirmaciones.webp" width="49%" alt="Confirmaciones que explican el cambio y orientan según los recursos del PC."></a>
-  <a href="docs/media/novedades-2026-11/horizontal/05-monitor.webp"><img src="docs/media/novedades-2026-11/horizontal/05-monitor.webp" width="49%" alt="Monitor opcional de CPU, RAM, GPU y VRAM integrado en Capri."></a>
+  <a href="docs/media/novedades-2026-11/seleccion-juegos/horizontal/04-fortnite.webp"><img src="docs/media/novedades-2026-11/seleccion-juegos/horizontal/04-fortnite.webp" width="49%" alt="Fortnite: elige modo y tamaño de equipo, y aplica las opciones antes de buscar."></a>
+  <a href="docs/media/novedades-2026-11/seleccion-juegos/horizontal/05-roblox.webp"><img src="docs/media/novedades-2026-11/seleccion-juegos/horizontal/05-roblox.webp" width="49%" alt="Roblox: favoritos por voz, perfil según descripción y categoría, y opiniones sobre el avatar."></a>
 </p>
 <p align="center">
-  <a href="docs/media/novedades-2026-11/horizontal/06-recordatorios.webp"><img src="docs/media/novedades-2026-11/horizontal/06-recordatorios.webp" width="49%" alt="Agenda de recordatorios y creación de avisos por voz."></a>
-  <a href="docs/media/novedades-2026-11/horizontal/07-multimedia.webp"><img src="docs/media/novedades-2026-11/horizontal/07-multimedia.webp" width="49%" alt="Reproductor independiente y Capri disfrutando la música en modo pantalla."></a>
+  <a href="docs/media/novedades-2026-11/seleccion-juegos/horizontal/06-counter-strike.webp"><img src="docs/media/novedades-2026-11/seleccion-juegos/horizontal/06-counter-strike.webp" width="49%" alt="CS2: preferencias de mapas de Competitivo y aplicación sin entrar en cola. Integración en pruebas."></a>
+  <a href="docs/media/novedades-2026-11/seleccion-juegos/horizontal/07-lol.webp"><img src="docs/media/novedades-2026-11/seleccion-juegos/horizontal/07-lol.webp" width="49%" alt="LoL: tres picks y tres baneos por línea, con aceptación automática opcional."></a>
+</p>
+<p align="center">
+  <a href="docs/media/novedades-2026-11/seleccion-juegos/horizontal/08-musica.webp"><img src="docs/media/novedades-2026-11/seleccion-juegos/horizontal/08-musica.webp" width="49%" alt="Capri disfruta la música en el visor y el reproductor tiene su propia posición."></a>
+  <a href="docs/media/novedades-2026-11/seleccion-juegos/horizontal/09-playlists.webp"><img src="docs/media/novedades-2026-11/seleccion-juegos/horizontal/09-playlists.webp" width="49%" alt="Playlists de Spotify con un nombre fácil, enlaces guardados y portadas."></a>
+</p>
+<p align="center">
+  <a href="docs/media/novedades-2026-11/seleccion-juegos/horizontal/10-conversacion.webp"><img src="docs/media/novedades-2026-11/seleccion-juegos/horizontal/10-conversacion.webp" width="49%" alt="Escucha opcional después de una pregunta para responder sin repetir Capri."></a>
+  <a href="docs/media/novedades-2026-11/seleccion-juegos/horizontal/11-escritorio.webp"><img src="docs/media/novedades-2026-11/seleccion-juegos/horizontal/11-escritorio.webp" width="49%" alt="Monitor opcional de recursos y agenda de recordatorios generales."></a>
 </p>
 
-<p align="center"><sub>Abre cualquier imagen para verla completa. Formato horizontal 1920 × 1080 para el README; también se conservan las versiones verticales 1080 × 1920 para TikTok. Capturas de la aplicación con datos de demostración y arte promocional. <a href="docs/media/novedades-2026-11/README.md">Galerías, procedencia y archivos editables</a>.</sub></p>
+<p align="center"><sub>Abre cualquier imagen para verla completa. Once horizontales 1920 × 1080 para el README y once verticales 1080 × 1920 para TikTok. Capturas de la aplicación con datos de demostración y arte promocional; no son pruebas de partidas reales. <a href="docs/media/novedades-2026-11/seleccion-juegos/README.md">Galerías, procedencia y archivos editables</a>.</sub></p>
 
 - **Spotify:** biblioteca de vínculos guardados, búsqueda, edición y portadas. Los nombres fáciles se conservan al reiniciar. Si Spotify no comparte la portada de una playlist privada, puedes seleccionar su imagen con **Portada → Capturar**.
 - **Ajustes y juegos:** LoL, Valorant, Fortnite, Counter-Strike 2 y Roblox en la misma ventana, con **Volver**. Apertura optimizada y contenido adaptable al redimensionar.
+- **Con su propio gusto:** opiniones sobre skins de Fortnite y Valorant que conservan el mismo gusto, y comentarios sobre prendas y accesorios del avatar de Roblox. Las reacciones visuales siguen en pruebas y dependen de lo que pueda reconocer.
+- **Conversación:** activa la escucha después de una pregunta para continuar sin repetir su nombre, o elige escucha continua desde Micrófono.
 - **Cambios de modelos:** confirmaciones breves, sin scroll, con ventajas, costes y consejo para tu PC. Puedes cancelar o volver a evaluar antes de decidir.
 - **Tu escritorio:** monitor de recursos opcional, agenda de recordatorios y reproductor que puedes mover de forma independiente. **Más → Playlists de Spotify** abre la biblioteca sin pasar por Ajustes.
 

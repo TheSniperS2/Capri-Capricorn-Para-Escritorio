@@ -1,5 +1,9 @@
 # Capri · Novedades
 
+## Selección actual · juegos, música y conversación
+
+La [**nueva edición de once láminas**](seleccion-juegos/README.md) reemplaza esta primera selección en el README principal: portada con el cabello de Capri corregido, Valorant, skins, Fortnite, Roblox, CS2, LoL, música, playlists, conversación y escritorio. Tiene versiones horizontales y verticales nuevas. Los recursos siguientes se conservan como archivo de la primera edición.
+
 La misma serie tiene dos composiciones: **1920 × 1080 (16:9) para el README** y **1080 × 1920 (9:16) para TikTok**. El texto y las capturas se redistribuyen para cada formato, conservando las proporciones. Pulsa una imagen para abrirla completa.
 
 ## Horizontales · README
